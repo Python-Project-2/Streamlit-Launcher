@@ -85,8 +85,3 @@ This project is licensed under the [MIT License](LICENSE).
 ## Developers
 
 - [Dwi Bakti N Dev](https://github.com/dwidevelopes)
-
-* **Perangkat tidak terdeteksi / Jendela scrcpy langsung tertutup**
-* Periksa kembali koneksi USB.
-* Pastikan pesan dialog izin **USB Debugging** di layar HP sudah Anda setujui (*Allow/Izinkan*).
-* Buka *Command Prompt*, jalankan `adb devices` untuk memastikan perangkat terdaftar.

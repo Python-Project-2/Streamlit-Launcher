@@ -1,0 +1,98 @@
+{
+  "name": "streamlit-launcher",
+  "displayName": "Streamlit Launcher For Vscode",
+  "description": "Automated preview and interactive data analysis for CSV and Excel files with charts, notes, and PDF export",
+  "version": "0.1.0",
+  "author": "dwidevelopes",
+  "publisher": "dwidevelopes",
+  "license": "MIT",
+  "icon": "icon/logo.png",
+  "homepage": "https://github.com/dwidevelopes/streamlit-launcher",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dwidevelopes/streamlit-launcher.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dwidevelopes/streamlit-launcher/issues"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Data Science",
+    "Visualization",
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onCustomEditor:dateSkunder.viewer",
+    "onCommand:date-skunder.openPreview",
+    "onCommand:date-skunder.closePreview",
+    "onDebug"
+  ],
+  "contributes": {
+    "customEditors": [
+      {
+        "viewType": "dateSkunder.viewer",
+        "displayName": "Date Skunder (Preview & Analysis)",
+        "priority": "default",
+        "selector": [
+          {
+            "filenamePattern": "*.csv"
+          },
+          {
+            "filenamePattern": "*.tsv"
+          },
+          {
+            "filenamePattern": "*.xlsx"
+          },
+          {
+            "filenamePattern": "*.xls"
+          },
+          {
+            "filenamePattern": "*.xlsm"
+          }
+        ]
+      }
+    ],
+    "commands": [
+      {
+        "command": "date-skunder.openPreview",
+        "title": "Date Skunder: Open Preview & Analysis"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "date-skunder.openPreview",
+          "when": "resourceExtname =~ /\\.(csv|tsv|xlsx|xls|xlsm)$/",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production"
+  },
+  "recommendations": [
+    "dwidevelopes.streamlit-launcher"
+  ],
+  "dependencies": {
+    "chart.js": "^4.4.1",
+    "pdf": "^0.1.0",
+    "pdfkit": "^0.20.2",
+    "pdfreader": "^3.0.8",
+    "react-pdf": "^11.0.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.19.12",
+    "typescript": "^5.3.0"
+  }
+}

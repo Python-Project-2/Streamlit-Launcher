@@ -12,6 +12,10 @@
 </div>
 
 
+# Journal Generator APA Style
+
+<img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/journal.png?raw=true"/>
+
 
 <div align="center">
 
@@ -20,7 +24,16 @@
 
 </div>
 
-# Streamlit Launcher For VS Code (Date Skunder) - Realease 1.0.0
+# Streamlit Launcher For VS Code (Date Skunder) - Realease 2.4.5
+
+- viture update Export To Docx Word Analyz Detect Vision Decision Tree Algoritma C4.5
+- Visualisasi Decision Tree Algoritma C4.5
+- Detection Accuracy Turnity AI 
+- Tidy up Jurnal Mendeley APA Style
+- APA Style
+- Stock Inventory Items
+- Market Seller Analyz
+- BuY Market Analyz
 
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/apps.gif?raw=true">
 

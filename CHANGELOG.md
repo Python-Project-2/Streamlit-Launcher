@@ -4,6 +4,17 @@ All notable changes to the **Streamlit Launcher For VS Code** (Date Skunder) ext
 
 Check [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) for recommendations on how to structure this file.
 
+## [2.9.7] - Press Release 2026-10-19
+
+### Fixed
+
+- **Excel export**: cell content longer than 32K characters could trigger Excel errors. All formula-driven sheets now compute intermediate values in hidden columns and reference those instead — avoiding long strings in calculations and simplifying formulas.
+
+### Changed
+
+- **Decision Tree entropy detail**: the breakdown of per-value entropy in the Decision Tree tab now shows at most **12 unique values**. Beyond that, a summary line is printed (`... dan 12 nilai lain`), so numeric columns with many distinct values no longer overflow cell limits.
+- **C4.5 discovery: default model now treats high-cardinality integers as categorical**: when the model does **not** see `"number"` or `"date"` explicitly, integer columns with more than 30 unique values are now treated as categorical (discrete), not continuous — which typically results in more interpretable split rules.
+
 ## [2.8.3] - Release 2026-10-16
 
 ### Fixed

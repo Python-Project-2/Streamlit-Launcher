@@ -1,31 +1,31 @@
 /**
- * common
+ * Common utility functions.
  */
 
-/* numeric constants */
+/* Numeric constants for extracting object types */
 const TYPE_FROM = 8;
 const TYPE_TO = -1;
 
 /**
- * get type
- * @param o - object to check
- * @returns type of object
+ * Returns the internal JavaScript type name of the given object.
+ * @param o - The object to check
+ * @returns The string representation of the object's type
  */
 export const getType = (o: unknown): string =>
   Object.prototype.toString.call(o).slice(TYPE_FROM, TYPE_TO);
 
 /**
- * is string
- * @param o - object to check
- * @returns result
+ * Checks whether the given value is a string.
+ * @param o - The value to check
+ * @returns True if the value is a string, false otherwise
  */
 export const isString = (o: unknown): o is string =>
   typeof o === 'string' || o instanceof String;
 
 /**
- * is string or number
- * @param o - object to check
- * @returns result
+ * Checks whether the given value is a string or a number.
+ * @param o - The value to check
+ * @returns True if the value is a string or a number, false otherwise
  */
 export const isStringOrNumber = (o: unknown): o is string | number =>
   isString(o) || typeof o === 'number';

@@ -1,5 +1,5 @@
 /**
- * convert
+ * Color conversion utilities.
  */
 
 import { parseColorFunc, parseColorValue } from '../resolvers/parse-color';
@@ -25,7 +25,7 @@ import {
   convertColorToRgb
 } from './convert-color';
 
-/* constants */
+/* Constants */
 import {
   SYN_FN_CALC,
   SYN_FN_REL,
@@ -34,16 +34,16 @@ import {
 } from '../utils/constant';
 const NAMESPACE = 'convert';
 
-/* regexp */
+/* Regular expressions */
 const REG_FN_CALC = new RegExp(SYN_FN_CALC);
 const REG_FN_REL = new RegExp(SYN_FN_REL);
 const REG_FN_VAR = new RegExp(SYN_FN_VAR);
 
 /**
- * pre process
- * @param value - CSS color value
- * @param opt - options
- * @returns value
+ * Pre-processes, resolves, and normalizes a CSS color value.
+ * @param value - The CSS color value to pre-process.
+ * @param opt - The conversion options.
+ * @returns The resolved color string, or null if invalid.
  */
 export const preProcess = (value: string, opt: Options): string | null => {
   if (!isString(value)) {
@@ -100,11 +100,11 @@ export const preProcess = (value: string, opt: Options): string | null => {
 };
 
 /**
- * converter factory to reduce boilerplate
- * @param name - function name for cache
- * @param format - color format
- * @param convertFn - conversion function
- * @returns color converter function
+ * Factory function to create a cached color converter.
+ * @param name - The function name used for caching.
+ * @param format - The target color format.
+ * @param convertFn - The underlying conversion function.
+ * @returns A color converter function.
  */
 const createColorConverter = (
   name: string,
@@ -138,18 +138,18 @@ const createColorConverter = (
 };
 
 /**
- * convert number to hex string
- * @param value - numeric value
- * @returns hex string: 00..ff
+ * Converts a numeric value to a two-digit hexadecimal string.
+ * @param value - The numeric value to convert.
+ * @returns The hexadecimal string representation (00..ff).
  */
 export const numberToHex = (value: number): string => numberToHexString(value);
 
 /**
- * convert color to hex
- * @param value - CSS color value
- * @param [opt] - options
- * @param [opt.alpha] - enable alpha channel
- * @returns #rrggbb | #rrggbbaa | null
+ * Converts a CSS color value to a hexadecimal color string.
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @param [opt.alpha] - Whether to enable the alpha channel in the output.
+ * @returns The hexadecimal color string (#rrggbb | #rrggbbaa), or null if invalid.
  */
 export const colorToHex = (value: string, opt: Options = {}): string | null => {
   if (!isString(value)) {
@@ -185,10 +185,10 @@ export const colorToHex = (value: string, opt: Options = {}): string | null => {
 };
 
 /**
- * convert color to hsl
- * @param value - CSS color value
- * @param [opt] - options
- * @returns ColorChannels - [h, s, l, alpha]
+ * Converts a CSS color value to HSL color channels.
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @returns The color channels array: [h, s, l, alpha].
  */
 export const colorToHsl = createColorConverter(
   'colorToHsl',
@@ -197,10 +197,10 @@ export const colorToHsl = createColorConverter(
 );
 
 /**
- * convert color to hwb
- * @param value - CSS color value
- * @param [opt] - options
- * @returns ColorChannels - [h, w, b, alpha]
+ * Converts a CSS color value to HWB color channels.
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @returns The color channels array: [h, w, b, alpha].
  */
 export const colorToHwb = createColorConverter(
   'colorToHwb',
@@ -209,10 +209,10 @@ export const colorToHwb = createColorConverter(
 );
 
 /**
- * convert color to lab
- * @param value - CSS color value
- * @param [opt] - options
- * @returns ColorChannels - [l, a, b, alpha]
+ * Converts a CSS color value to CIELAB color channels.
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @returns The color channels array: [l, a, b, alpha].
  */
 export const colorToLab = createColorConverter(
   'colorToLab',
@@ -221,10 +221,10 @@ export const colorToLab = createColorConverter(
 );
 
 /**
- * convert color to lch
- * @param value - CSS color value
- * @param [opt] - options
- * @returns ColorChannels - [l, c, h, alpha]
+ * Converts a CSS color value to CIELCH color channels.
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @returns The color channels array: [l, c, h, alpha].
  */
 export const colorToLch = createColorConverter(
   'colorToLch',
@@ -233,10 +233,10 @@ export const colorToLch = createColorConverter(
 );
 
 /**
- * convert color to oklab
- * @param value - CSS color value
- * @param [opt] - options
- * @returns ColorChannels - [l, a, b, alpha]
+ * Converts a CSS color value to Oklab color channels.
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @returns The color channels array: [l, a, b, alpha].
  */
 export const colorToOklab = createColorConverter(
   'colorToOklab',
@@ -245,10 +245,10 @@ export const colorToOklab = createColorConverter(
 );
 
 /**
- * convert color to oklch
- * @param value - CSS color value
- * @param [opt] - options
- * @returns ColorChannels - [l, c, h, alpha]
+ * Converts a CSS color value to Oklch color channels.
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @returns The color channels array: [l, c, h, alpha].
  */
 export const colorToOklch = createColorConverter(
   'colorToOklch',
@@ -257,10 +257,10 @@ export const colorToOklch = createColorConverter(
 );
 
 /**
- * convert color to rgb
- * @param value - CSS color value
- * @param [opt] - options
- * @returns ColorChannels - [r, g, b, alpha]
+ * Converts a CSS color value to sRGB color channels.
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @returns The color channels array: [r, g, b, alpha].
  */
 export const colorToRgb = createColorConverter(
   'colorToRgb',
@@ -269,10 +269,10 @@ export const colorToRgb = createColorConverter(
 );
 
 /**
- * convert color to xyz
- * @param value - CSS color value
- * @param [opt] - options
- * @returns ColorChannels - [x, y, z, alpha]
+ * Converts a CSS color value to XYZ color channels (D65).
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @returns The color channels array: [x, y, z, alpha].
  */
 export const colorToXyz = (value: string, opt: Options = {}): ColorChannels => {
   if (!isString(value)) {
@@ -306,10 +306,10 @@ export const colorToXyz = (value: string, opt: Options = {}): ColorChannels => {
 };
 
 /**
- * convert color to xyz-d50
- * @param value - CSS color value
- * @param [opt] - options
- * @returns ColorChannels - [x, y, z, alpha]
+ * Converts a CSS color value to XYZ-D50 color channels.
+ * @param value - The CSS color value to convert.
+ * @param [opt] - The conversion options.
+ * @returns The color channels array: [x, y, z, alpha].
  */
 export const colorToXyzD50 = (
   value: string,
@@ -322,7 +322,7 @@ export const colorToXyzD50 = (
   return colorToXyz(value, options);
 };
 
-/* convert */
+/* Export convert */
 export const convert = {
   colorToHex,
   colorToHsl,

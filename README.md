@@ -10,6 +10,8 @@
 
 **Powerfull Preview ADB Manager Android For Windows**
 
+<img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/thema.png?raw=true">
+
 • [📖 Documentation](https://github.com/extension-publisher-vsx-registry/pdf-cat-view/edit/main/README.md) • [🐛 Report Bug](https://github.com/Python-Project-2/Streamlit-Launcher/issues) • [💡 Request Feature](https://github.com/Python-Project-2/Streamlit-Launcher/pulls)
 
 </div>
@@ -26,6 +28,17 @@
 | :---: | :---: | :---: |
 
 </div>
+
+## [2.9.7] - Press-Release 2026-10-19
+
+### Fixed
+
+- **Excel export**: cell content longer than 32K characters could trigger Excel errors. All formula-driven sheets now compute intermediate values in hidden columns and reference those instead — avoiding long strings in calculations and simplifying formulas.
+
+### Changed
+
+- **Decision Tree entropy detail**: the breakdown of per-value entropy in the Decision Tree tab now shows at most **12 unique values**. Beyond that, a summary line is printed (`... dan 12 nilai lain`), so numeric columns with many distinct values no longer overflow cell limits.
+- **C4.5 discovery: default model now treats high-cardinality integers as categorical**: when the model does **not** see `"number"` or `"date"` explicitly, integer columns with more than 30 unique values are now treated as categorical (discrete), not continuous — which typically results in more interpretable split rules.
 
 ## [2.8.3] - Release 2026-10-16
 
@@ -241,7 +254,7 @@ The third view in the Date Skunder AI sidebar is now **Pet Skin** (it replaces t
 
 Command Palette: **Date Skunder Pet: Buka Ganti Kostum Pet (Skin)** and **Date Skunder Pet: Ganti Kostum Pet (Pilih Cepat)**. Settings: `dateSkunder.spider.skin` plus the existing `dateSkunder.spider.*` options. (The old **Flowchart Canvas** view, its commands, and the `dateSkunder.flow.*` settings were removed.)
 
-## Smarter chat, nonstop spider & complete charts (2.8.1)
+## Smarter chat, nonstop spider & complete charts (2.8.3)
 
 ### 🧠 Chat AI: grounded, duplicate-free, unlimited
 
@@ -262,7 +275,7 @@ Command Palette: **Date Skunder Pet: Buka Ganti Kostum Pet (Skin)** and **Date S
 - New starter cards: a stacked-area-by-series chart and a boxplot appear automatically when your data supports them, and a timeline appears when the file has two date columns.
 - Everything is drawn with the bundled Chart.js build (no extra plugins): the charts are ready to run as soon as the file is opened.
 
-## Spider shortcuts, locked skins & full export control (2.8.2)
+## Spider shortcuts, locked skins & full export control (2.8.3)
 
 ### 🖱️ The spider can click every export — and type, scroll, search, and check
 

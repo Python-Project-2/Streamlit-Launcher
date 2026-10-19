@@ -1,9 +1,10 @@
 /**
- * named-color
+ * Named color definitions and mappings.
  */
 import type { ReadonlyTriColorChannels } from '../typedef';
+
 /**
- * named colors
+ * A dictionary of CSS named colors and their corresponding sRGB channel values.
  */
 export const NAMED_COLORS = {
   aliceblue: [0xf0, 0xf8, 0xff],

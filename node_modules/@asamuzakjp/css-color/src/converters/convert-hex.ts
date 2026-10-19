@@ -1,5 +1,5 @@
 /**
- * convert-hex
+ * Hexadecimal color conversion utilities.
  */
 
 import {
@@ -12,7 +12,7 @@ import { ColorChannels, MatchedRegExp3, MatchedRegExp4 } from '../typedef';
 import { isString } from '../utils/common';
 import { numberToHexString, parseHexAlpha } from '../utils/util';
 
-/* constants */
+/* Constants */
 import {
   MATRIX_D50_TO_D65,
   MATRIX_L_RGB_TO_XYZ,
@@ -21,9 +21,9 @@ import {
 import { HEX, QUAD, MAX_RGB } from '../utils/constant';
 
 /**
- * convert rgb to hex color
- * @param rgb - [r, g, b, alpha] r|g|b: 0..255 alpha: 0..1
- * @returns hex color
+ * Converts sRGB color channels to a hexadecimal color string.
+ * @param rgb - The color channels array: [r, g, b, alpha] (where r, g, b range from 0 to 255, and alpha ranges from 0 to 1).
+ * @returns The resulting hexadecimal color string.
  */
 export const convertRgbToHex = (rgb: ColorChannels): string => {
   const [r, g, b, alpha] = validateColorComponents(rgb, {
@@ -38,10 +38,10 @@ export const convertRgbToHex = (rgb: ColorChannels): string => {
 };
 
 /**
- * convert linear rgb to hex color
- * @param rgb - [r, g, b, alpha] r|g|b|alpha: 0..1
- * @param [skip] - skip validate
- * @returns hex color
+ * Converts linear sRGB color channels to a hexadecimal color string.
+ * @param rgb - The color channels array: [r, g, b, alpha] (where r, g, b, alpha range from 0 to 1).
+ * @param [skip] - Whether to skip validation.
+ * @returns The resulting hexadecimal color string.
  */
 export const convertLinearRgbToHex = (
   rgb: ColorChannels,
@@ -64,9 +64,9 @@ export const convertLinearRgbToHex = (
 };
 
 /**
- * convert xyz to hex color
- * @param xyz - [x, y, z, alpha]
- * @returns hex color
+ * Converts XYZ color channels (D65) to a hexadecimal color string.
+ * @param xyz - The color channels array: [x, y, z, alpha].
+ * @returns The resulting hexadecimal color string.
  */
 export const convertXyzToHex = (xyz: ColorChannels): string => {
   const [x, y, z, alpha] = validateColorComponents(xyz, {
@@ -86,9 +86,9 @@ export const convertXyzToHex = (xyz: ColorChannels): string => {
 };
 
 /**
- * convert xyz D50 to hex color
- * @param xyz - [x, y, z, alpha]
- * @returns hex color
+ * Converts XYZ-D50 color channels to a hexadecimal color string.
+ * @param xyz - The color channels array: [x, y, z, alpha].
+ * @returns The resulting hexadecimal color string.
  */
 export const convertXyzD50ToHex = (xyz: ColorChannels): string => {
   const [x, y, z, alpha] = validateColorComponents(xyz, {
@@ -106,9 +106,9 @@ export const convertXyzD50ToHex = (xyz: ColorChannels): string => {
 };
 
 /**
- * convert hex color to rgb
- * @param value - hex color value
- * @returns ColorChannels - [r, g, b, alpha] r|g|b: 0..255 alpha: 0..1
+ * Converts a hexadecimal color string to sRGB color channels.
+ * @param value - The hexadecimal color string to convert.
+ * @returns The color channels array: [r, g, b, alpha] (where r, g, b range from 0 to 255, and alpha ranges from 0 to 1).
  */
 export const convertHexToRgb = (value: string): ColorChannels => {
   if (isString(value)) {
@@ -165,9 +165,9 @@ export const convertHexToRgb = (value: string): ColorChannels => {
 };
 
 /**
- * convert hex color to linear rgb
- * @param value - hex color value
- * @returns ColorChannels - [r, g, b, alpha] r|g|b|alpha: 0..1
+ * Converts a hexadecimal color string to linear sRGB color channels.
+ * @param value - The hexadecimal color string to convert.
+ * @returns The color channels array: [r, g, b, alpha] (where r, g, b, alpha range from 0 to 1).
  */
 export const convertHexToLinearRgb = (value: string): ColorChannels => {
   const [rr, gg, bb, alpha] = convertHexToRgb(value);
@@ -176,9 +176,9 @@ export const convertHexToLinearRgb = (value: string): ColorChannels => {
 };
 
 /**
- * convert hex color to xyz
- * @param value - hex color value
- * @returns ColorChannels - [x, y, z, alpha]
+ * Converts a hexadecimal color string to XYZ color channels.
+ * @param value - The hexadecimal color string to convert.
+ * @returns The color channels array: [x, y, z, alpha].
  */
 export const convertHexToXyz = (value: string): ColorChannels => {
   const [r, g, b, alpha] = convertHexToLinearRgb(value);

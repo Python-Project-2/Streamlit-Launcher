@@ -1,5 +1,5 @@
 /**
- * color
+ * Color conversion and transformation functions.
  */
 
 import {
@@ -38,7 +38,7 @@ import {
 } from '../typedef';
 import { isString } from '../utils/common';
 
-/* constants */
+/* Constants */
 import { MATRIX_XYZ_TO_L_RGB } from '../matrix/matrix';
 import {
   FN_COLOR,
@@ -53,7 +53,7 @@ import {
   VAL_MIX
 } from '../utils/constant';
 
-/* regexp */
+/* Regular expressions */
 const REG_FN_COLOR = new RegExp(`^color\\(\\s*(${SYN_FN_COLOR})\\s*\\)$`);
 const REG_HSL = new RegExp(`^hsla?\\(\\s*(${SYN_HSL}|${SYN_HSL_LV3})\\s*\\)$`);
 const REG_HWB = new RegExp(`^hwb\\(\\s*(${SYN_HSL})\\s*\\)$`);
@@ -63,10 +63,10 @@ const REG_OKLAB = new RegExp(`^oklab\\(\\s*(${SYN_MOD})\\s*\\)$`);
 const REG_OKLCH = new RegExp(`^oklch\\(\\s*(${SYN_LCH})\\s*\\)$`);
 
 /**
- * convert color value to linear rgb
- * @param value - CSS color value
- * @param opt - options
- * @returns ColorChannels | null - [r, g, b, alpha] r|g|b|alpha: 0..1
+ * Converts a CSS color value to linear sRGB channels.
+ * @param value - The CSS color value to convert.
+ * @param opt - The linear RGB options.
+ * @returns The color channels array: [r, g, b, alpha] (where r, g, b, alpha range from 0 to 1), or null if invalid.
  */
 export const convertColorToLinearRgb = (
   value: string,
@@ -119,10 +119,10 @@ export const convertColorToLinearRgb = (
 };
 
 /**
- * convert color value to rgb
- * @param value - CSS color value
- * @param opt - options
- * @returns ColorChannels | null - [r, g, b, alpha] r|g|b: 0..255 alpha: 0..1
+ * Converts a CSS color value to standard sRGB channels.
+ * @param value - The CSS color value to convert.
+ * @param opt - The conversion options.
+ * @returns The color channels array: [r, g, b, alpha] (where r, g, b range from 0 to 255, and alpha ranges from 0 to 1), or null if invalid.
  */
 export const convertColorToRgb = (
   value: string,
@@ -171,10 +171,10 @@ export const convertColorToRgb = (
 };
 
 /**
- * convert color value to xyz
- * @param value - CSS color value
- * @param opt - options
- * @returns ColorChannels | null - [x, y, z, alpha]
+ * Converts a CSS color value to XYZ color channels.
+ * @param value - The CSS color value to convert.
+ * @param opt - The conversion options.
+ * @returns The color channels array: [x, y, z, alpha], or null if invalid.
  */
 export const convertColorToXyz = (
   value: string,
@@ -226,10 +226,10 @@ export const convertColorToXyz = (
 };
 
 /**
- * convert color value to hsl
- * @param value - CSS color value
- * @param opt - options
- * @returns ColorChannels | null - [h, s, l, alpha], hue may be powerless
+ * Converts a CSS color value to HSL color channels.
+ * @param value - The CSS color value to convert.
+ * @param opt - The conversion options.
+ * @returns The color channels array: [h, s, l, alpha] (hue may be marked as powerless if applicable), or null if invalid.
  */
 export const convertColorToHsl = (
   value: string,
@@ -276,10 +276,10 @@ export const convertColorToHsl = (
 };
 
 /**
- * convert color value to hwb
- * @param value - CSS color value
- * @param opt - options
- * @returns ColorChannels | null - [h, w, b, alpha], hue may be powerless
+ * Converts a CSS color value to HWB color channels.
+ * @param value - The CSS color value to convert.
+ * @param opt - The conversion options.
+ * @returns The color channels array: [h, w, b, alpha] (hue may be marked as powerless if applicable), or null if invalid.
  */
 export const convertColorToHwb = (
   value: string,
@@ -326,10 +326,10 @@ export const convertColorToHwb = (
 };
 
 /**
- * convert color value to lab
- * @param value - CSS color value
- * @param opt - options
- * @returns ColorChannels | null - [l, a, b, alpha]
+ * Converts a CSS color value to CIELAB color channels.
+ * @param value - The CSS color value to convert.
+ * @param opt - The conversion options.
+ * @returns The color channels array: [l, a, b, alpha], or null if invalid.
  */
 export const convertColorToLab = (
   value: string,
@@ -378,10 +378,10 @@ export const convertColorToLab = (
 };
 
 /**
- * convert color value to lch
- * @param value - CSS color value
- * @param opt - options
- * @returns ColorChannels | null - [l, c, h, alpha], hue may be powerless
+ * Converts a CSS color value to CIELCH color channels.
+ * @param value - The CSS color value to convert.
+ * @param opt - The conversion options.
+ * @returns The color channels array: [l, c, h, alpha] (hue may be marked as powerless if applicable), or null if invalid.
  */
 export const convertColorToLch = (
   value: string,
@@ -430,10 +430,10 @@ export const convertColorToLch = (
 };
 
 /**
- * convert color value to oklab
- * @param value - CSS color value
- * @param opt - options
- * @returns ColorChannels | null - [l, a, b, alpha]
+ * Converts a CSS color value to Oklab color channels.
+ * @param value - The CSS color value to convert.
+ * @param opt - The conversion options.
+ * @returns The color channels array: [l, a, b, alpha], or null if invalid.
  */
 export const convertColorToOklab = (
   value: string,
@@ -474,10 +474,10 @@ export const convertColorToOklab = (
 };
 
 /**
- * convert color value to oklch
- * @param value - CSS color value
- * @param opt - options
- * @returns ColorChannels | null - [l, c, h, alpha], hue may be powerless
+ * Converts a CSS color value to Oklch color channels.
+ * @param value - The CSS color value to convert.
+ * @param opt - The conversion options.
+ * @returns The color channels array: [l, c, h, alpha] (hue may be marked as powerless if applicable), or null if invalid.
  */
 export const convertColorToOklch = (
   value: string,

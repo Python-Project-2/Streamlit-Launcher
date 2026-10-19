@@ -1,5 +1,5 @@
 /**
- * resolve-color
+ * CSS color resolution and processing utilities.
  */
 
 import { convertHexToRgb, convertRgbToHex } from '../converters/convert-hex';
@@ -65,11 +65,10 @@ const REG_MIX = new RegExp(SYN_MIX);
 const REG_SPEC = /^(?:specifi|comput)edValue$/;
 
 /**
- * resolve color value
- * @param value - CSS color value
- * @param opt - options
- * @returns resolved color
- *   - [cs, v1, v2, v3, alpha], value, '(empty)', null
+ * Resolves a CSS color value into its specified or computed channel representation.
+ * @param value - The CSS color value string to resolve.
+ * @param opt - The resolution options.
+ * @returns The resolved color channels array, a string representation, an empty string, or null.
  */
 export const resolveColorValue = (
   value: string,
@@ -227,10 +226,10 @@ export const resolveColorValue = (
 };
 
 /**
- * resolve color()
- * @param value - color function value
- * @param opt - options
- * @returns resolved color - [cs, v1, v2, v3, alpha], '(empty)', null
+ * Resolves a generic color() CSS function value.
+ * @param value - The color function value string to resolve.
+ * @param opt - The resolution options.
+ * @returns The resolved color channels array, an empty string, or null.
  */
 export const resolveColorFunc = (
   value: string,
@@ -290,10 +289,10 @@ export const resolveColorFunc = (
 };
 
 /**
- * resolve color
- * @param value - CSS color value
- * @param opt - options
- * @returns resolved color
+ * Resolves a CSS color string based on the given options.
+ * @param value - The CSS color string to resolve.
+ * @param opt - The resolution options.
+ * @returns The resolved color string, or null if resolution fails.
  */
 export const resolveColor = (
   value: string,
@@ -550,10 +549,10 @@ export const resolveColor = (
 };
 
 /**
- * is valid color
- * @param value - CSS value
- * @param opt - options
- * @returns result
+ * Validates whether a given value is a recognizable and valid CSS color.
+ * @param value - The value to validate.
+ * @param opt - The resolution options.
+ * @returns True if the value is a valid color, otherwise false.
  */
 export const isValidColor = (value: unknown, opt: Options = {}): boolean => {
   if (!isString(value)) {

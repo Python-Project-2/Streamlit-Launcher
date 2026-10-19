@@ -1,8 +1,8 @@
 {
   "name": "streamlit-launcher",
   "displayName": "Streamlit Launcher For Vscode",
-  "description": "Automated preview and interactive data analysis for CSV and Excel files with charts, notes, DOCX/PDF journal export, Excel report export and flowchart workflow image",
-  "version": "2.8.3",
+  "description": "Automated preview and interactive data analysis for CSV and Excel files with charts, notes, DOCX/PDF journal export, Excel report export, flowchart workflow image and EasyCast (presentation view inside the editor for a digital TV / second screen)",
+  "version": "2.9.7",
   "author": "dwidevelopes",
   "publisher": "dwidevelopes",
   "license": "MIT",
@@ -28,11 +28,15 @@
   ],
   "main": "./dist/extension.js",
   "activationEvents": [
-    "onCustomEditor:viewType",
+    "onCustomEditor:dateSkunder.viewer",
     "onView:dateSkunder.chatView",
     "onView:dateSkunder.llamaView",
     "onView:dateSkunder.petView",
-    "onView:dateSkunder.communityView"
+    "onView:dateSkunder.communityView",
+    "onCommand:date-skunder.easycast.toggle",
+    "onCommand:date-skunder.easycast.start",
+    "onCommand:date-skunder.easycast.stop",
+    "onCommand:date-skunder.easycast.newWindow"
   ],
   "contributes": {
     "viewsContainers": {
@@ -100,32 +104,52 @@
       {
         "command": "date-skunder.exportDocx",
         "title": "Date Skunder: Export Jurnal (DOCX)",
-        "icon": "$(file-text)"
+        "icon": "icon/docx.svg"
       },
       {
         "command": "date-skunder.exportPdf",
         "title": "Date Skunder: Export Jurnal (PDF)",
-        "icon": "$(file-pdf)"
+        "icon": "icon/pdf.svg"
       },
       {
         "command": "date-skunder.exportXlsx",
         "title": "Date Skunder: Export Excel (.xlsx)",
-        "icon": "$(table)"
+        "icon": "icon/excel.svg"
       },
       {
         "command": "date-skunder.exportWorkflow",
         "title": "Date Skunder: Generate Gambar Workflow (Flowchart)",
-        "icon": "$(type-hierarchy)"
+        "icon": "icon/flowchart.svg"
       },
       {
         "command": "date-skunder.exportPptx",
         "title": "Date Skunder: Export Presentasi PowerPoint (PPTX)",
-        "icon": "$(screen-normal)"
+        "icon": "icon/pptx.svg"
       },
       {
         "command": "date-skunder.exportPython",
         "title": "Date Skunder: Export Paket Python (Seluruh Data + Skrip)",
-        "icon": "$(code)"
+        "icon": "icon/python.svg"
+      },
+      {
+        "command": "date-skunder.easycast.toggle",
+        "title": "Date Skunder EasyCast: Buka/Tutup Tampilan TV di Editor",
+        "icon": "icon/easycast.svg"
+      },
+      {
+        "command": "date-skunder.easycast.start",
+        "title": "Date Skunder EasyCast: Buka Tampilan TV di Editor",
+        "icon": "icon/easycast.svg"
+      },
+      {
+        "command": "date-skunder.easycast.stop",
+        "title": "Date Skunder EasyCast: Tutup Tampilan TV",
+        "icon": "$(debug-stop)"
+      },
+      {
+        "command": "date-skunder.easycast.newWindow",
+        "title": "Date Skunder EasyCast: Pindahkan ke Jendela Baru (untuk Layar TV)",
+        "icon": "$(multiple-windows)"
       },
       {
         "command": "date-skunder.ai.openChat",
@@ -239,9 +263,19 @@
           "command": "date-skunder.exportJson",
           "when": "resourceExtname =~ /\\.(csv|tsv|xlsx|xls|xlsm)$/",
           "group": "navigation@8"
+        },
+        {
+          "command": "date-skunder.easycast.start",
+          "when": "resourceExtname =~ /\\.(csv|tsv|xlsx|xls|xlsm)$/",
+          "group": "navigation@9"
         }
       ],
       "editor/title": [
+        {
+          "command": "date-skunder.easycast.toggle",
+          "when": "activeCustomEditorId == 'dateSkunder.viewer'",
+          "group": "navigation@0"
+        },
         {
           "command": "date-skunder.exportDocx",
           "when": "activeCustomEditorId == 'dateSkunder.viewer'",
@@ -308,6 +342,22 @@
         },
         {
           "command": "date-skunder.exportPython",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.easycast.toggle",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.easycast.start",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.easycast.stop",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.easycast.newWindow",
           "when": "true"
         },
         {
@@ -406,6 +456,11 @@
         "when": "!terminalFocus"
       },
       {
+        "command": "date-skunder.easycast.toggle",
+        "key": "ctrl+alt+b",
+        "when": "!terminalFocus"
+      },
+      {
         "command": "date-skunder.ai.openChat",
         "key": "ctrl+alt+c",
         "when": "!terminalFocus"
@@ -498,6 +553,11 @@
           "type": "boolean",
           "default": true,
           "description": "Tampilkan file hasil export di file manager (Explorer/Finder) secara otomatis."
+        },
+        "dateSkunder.easycast.slideSeconds": {
+          "type": "number",
+          "default": 12,
+          "description": "Lama tiap slide EasyCast tampil (detik, 5 – 60)."
         },
         "dateSkunder.llama.modelPaths": {
           "type": "array",
@@ -754,8 +814,8 @@
         },
         "dateSkunder.community.webKey": {
           "type": "string",
-          "default": "AIzaSyBIyAz-ZOIL_CzvNHC6PpYNr7NJJgzaVqo",
-          "markdownDescription": "Kunci web Firebase untuk fitur **Community Chat** (view di bawah Pet Skin). Salin dari Firebase Console → Project settings → Your apps → Web app pada proyek `streamlit-launcher-vscode`. Nilai bawaan telah terhubung ke proyek publik `streamlit-launcher-vscode`; alternatifnya set variabel lingkungan `DATASKUNDER_FIREBASE_API_KEY` sebelum VS Code dijalankan. Ruang komunitas bersifat publik: yang tersimpan hanya username, deskripsi profil, isi pesan, dan waktu (gambar tidak diunggah).",
+          "default": "[GCP_API_KEY]",
+          "markdownDescription": "Kunci web Database untuk fitur **Community Chat** (view di bawah Pet Skin). Salin dari Database Console → Project settings → Your apps → Web app pada proyek `streamlit-launcher-vscode`. Nilai bawaan telah terhubung ke proyek publik `streamlit-launcher-vscode`.",
           "scope": "application"
         }
       }
@@ -772,6 +832,7 @@
     "docx": "^9.9.0",
     "exceljs": "^4.4.0",
     "i": "^0.3.7",
+    "jsdom": "^30.1.3",
     "pdf-lib": "^1.17.1",
     "pptxgenjs": "^4.0.1",
     "xlsx": "^0.18.5"

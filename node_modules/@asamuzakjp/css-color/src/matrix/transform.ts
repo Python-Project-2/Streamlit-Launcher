@@ -1,5 +1,5 @@
 /**
- * transform
+ * Color transformation and matrix calculation utilities.
  */
 
 import {
@@ -10,7 +10,7 @@ import {
   ValidateColorComponentsOptions
 } from '../typedef';
 
-/* constants */
+/* Constants */
 import {
   DEG,
   DEG_HALF,
@@ -44,16 +44,16 @@ import {
 } from './matrix';
 
 /**
- * validate color components
- * @param arr - color components
- * @param opt - options
- * @param opt.alpha - alpha channel
- * @param opt.minLength - min length
- * @param opt.maxLength - max length
- * @param opt.minRange - min range
- * @param opt.maxRange - max range
- * @param opt.validateRange - validate range
- * @returns result - validated color components
+ * Validates color component values against specified ranges and length.
+ * @param arr - The color components array.
+ * @param opt - The validation options.
+ * @param opt.alpha - Whether to ensure an alpha channel exists.
+ * @param opt.minLength - The minimum allowed array length.
+ * @param opt.maxLength - The maximum allowed array length.
+ * @param opt.minRange - The minimum allowed value range.
+ * @param opt.maxRange - The maximum allowed value range.
+ * @param opt.validateRange - Whether to validate component value ranges.
+ * @returns The validated color components array.
  */
 export const validateColorComponents = (
   arr: ColorChannels | TriColorChannels,
@@ -105,11 +105,11 @@ export const validateColorComponents = (
 };
 
 /**
- * normalize color components
- * @param colorA - color components [v1, v2, v3, v4]
- * @param colorB - color components [v1, v2, v3, v4]
- * @param [skip] - skip validate
- * @returns result - [colorA, colorB]
+ * Normalizes two color components arrays by handling missing or none values.
+ * @param colorA - The first color components array [v1, v2, v3, v4].
+ * @param colorB - The second color components array [v1, v2, v3, v4].
+ * @param [skip] - Whether to skip validation.
+ * @returns A tuple of normalized color components: [colorA, colorB].
  */
 export const normalizeColorComponents = (
   colorA: NumStrColorChannels,
@@ -153,11 +153,11 @@ export const normalizeColorComponents = (
 };
 
 /**
- * transform matrix
- * @param mtx - 3 * 3 matrix
- * @param vct - vector
- * @param [skip] - skip validate
- * @returns TriColorChannels - [p1, p2, p3]
+ * Transforms a vector using a 3x3 color matrix.
+ * @param mtx - The 3x3 color matrix.
+ * @param vct - The vector to transform.
+ * @param [skip] - Whether to skip validation.
+ * @returns The transformed tri-color channels: [p1, p2, p3].
  */
 export const transformMatrix = (
   mtx: ReadonlyColorMatrix,
@@ -193,10 +193,10 @@ export const transformMatrix = (
 };
 
 /**
- * transform rgb to linear rgb
- * @param rgb - [r, g, b] r|g|b: 0..255
- * @param [skip] - skip validate
- * @returns TriColorChannels - [r, g, b] r|g|b: 0..1
+ * Transforms standard sRGB channels to linear sRGB.
+ * @param rgb - The RGB channels: [r, g, b] (where r, g, b range from 0 to 255).
+ * @param [skip] - Whether to skip validation.
+ * @returns The linear RGB channels: [r, g, b] (ranging from 0 to 1).
  */
 export const transformRgbToLinearRgb = (
   rgb: TriColorChannels,
@@ -234,10 +234,10 @@ export const transformRgbToLinearRgb = (
 };
 
 /**
- * transform rgb to xyz
- * @param rgb - [r, g, b] r|g|b: 0..255
- * @param [skip] - skip validate
- * @returns TriColorChannels - [x, y, z]
+ * Transforms sRGB channels to XYZ color space.
+ * @param rgb - The RGB channels: [r, g, b] (where r, g, b range from 0 to 255).
+ * @param [skip] - Whether to skip validation.
+ * @returns The XYZ color channels: [x, y, z].
  */
 export const transformRgbToXyz = (
   rgb: TriColorChannels,
@@ -255,9 +255,9 @@ export const transformRgbToXyz = (
 };
 
 /**
- * transform rgb to xyz-d50
- * @param rgb - [r, g, b] r|g|b: 0..255 alpha: 0..1
- * @returns TriColorChannels - [x, y, z]
+ * Transforms sRGB channels to XYZ-D50 color space.
+ * @param rgb - The RGB channels: [r, g, b, alpha] (where r, g, b range from 0 to 255, and alpha ranges from 0 to 1).
+ * @returns The XYZ-D50 color channels: [x, y, z].
  */
 export const transformRgbToXyzD50 = (
   rgb: TriColorChannels
@@ -268,10 +268,10 @@ export const transformRgbToXyzD50 = (
 };
 
 /**
- * transform linear rgb to rgb
- * @param rgb - [r, g, b] r|g|b: 0..1
- * @param [round] - round result
- * @returns TriColorChannels - [r, g, b] r|g|b: 0..255
+ * Transforms linear sRGB channels to standard sRGB.
+ * @param rgb - The linear RGB channels: [r, g, b] (ranging from 0 to 1).
+ * @param [round] - Whether to round the resulting values.
+ * @returns The standard RGB channels: [r, g, b] (ranging from 0 to 255).
  */
 export const transformLinearRgbToRgb = (
   rgb: TriColorChannels,
@@ -307,10 +307,10 @@ export const transformLinearRgbToRgb = (
 };
 
 /**
- * transform xyz to rgb
- * @param xyz - [x, y, z]
- * @param [skip] - skip validate
- * @returns TriColorChannels - [r, g, b] r|g|b: 0..255
+ * Transforms XYZ color space channels to standard sRGB.
+ * @param xyz - The XYZ color channels: [x, y, z].
+ * @param [skip] - Whether to skip validation.
+ * @returns The standard RGB channels: [r, g, b] (ranging from 0 to 255).
  */
 export const transformXyzToRgb = (
   xyz: TriColorChannels,
@@ -335,9 +335,9 @@ export const transformXyzToRgb = (
 };
 
 /**
- * transform xyz to xyz-d50
- * @param xyz - [x, y, z]
- * @returns TriColorChannels - [x, y, z]
+ * Transforms XYZ (D65) color channels to XYZ-D50.
+ * @param xyz - The XYZ color channels: [x, y, z].
+ * @returns The XYZ-D50 color channels: [x, y, z].
  */
 export const transformXyzToXyzD50 = (
   xyz: TriColorChannels
@@ -351,10 +351,10 @@ export const transformXyzToXyzD50 = (
 };
 
 /**
- * transform xyz to hsl
- * @param xyz - [x, y, z]
- * @param [skip] - skip validate
- * @returns TriColorChannels - [h, s, l]
+ * Transforms XYZ color channels to HSL.
+ * @param xyz - The XYZ color channels: [x, y, z].
+ * @param [skip] - Whether to skip validation.
+ * @returns The HSL color channels: [h, s, l].
  */
 export const transformXyzToHsl = (
   xyz: TriColorChannels,
@@ -399,10 +399,10 @@ export const transformXyzToHsl = (
 };
 
 /**
- * transform xyz to hwb
- * @param xyz - [x, y, z]
- * @param [skip] - skip validate
- * @returns TriColorChannels - [h, w, b]
+ * Transforms XYZ color channels to HWB.
+ * @param xyz - The XYZ color channels: [x, y, z].
+ * @param [skip] - Whether to skip validation.
+ * @returns The HWB color channels: [h, w, b].
  */
 export const transformXyzToHwb = (
   xyz: TriColorChannels,
@@ -421,10 +421,10 @@ export const transformXyzToHwb = (
 };
 
 /**
- * transform xyz to oklab
- * @param xyz - [x, y, z]
- * @param [skip] - skip validate
- * @returns TriColorChannels - [l, a, b]
+ * Transforms XYZ color channels to Oklab.
+ * @param xyz - The XYZ color channels: [x, y, z].
+ * @param [skip] - Whether to skip validation.
+ * @returns The Oklab color channels: [l, a, b].
  */
 export const transformXyzToOklab = (
   xyz: TriColorChannels,
@@ -449,10 +449,10 @@ export const transformXyzToOklab = (
 };
 
 /**
- * transform xyz to oklch
- * @param xyz - [x, y, z]
- * @param [skip] - skip validate
- * @returns TriColorChannels - [l, c, h]
+ * Transforms XYZ color channels to Oklch.
+ * @param xyz - The XYZ color channels: [x, y, z].
+ * @param [skip] - Whether to skip validation.
+ * @returns The Oklch color channels: [l, c, h].
  */
 export const transformXyzToOklch = (
   xyz: TriColorChannels,
@@ -479,10 +479,10 @@ export const transformXyzToOklch = (
 };
 
 /**
- * transform xyz D50 to rgb
- * @param xyz - [x, y, z]
- * @param [skip] - skip validate
- * @returns TriColorChannels - [r, g, b] r|g|b: 0..255
+ * Transforms XYZ-D50 color channels to standard sRGB.
+ * @param xyz - The XYZ-D50 color channels: [x, y, z].
+ * @param [skip] - Whether to skip validation.
+ * @returns The standard RGB channels: [r, g, b] (ranging from 0 to 255).
  */
 export const transformXyzD50ToRgb = (
   xyz: TriColorChannels,
@@ -500,10 +500,10 @@ export const transformXyzD50ToRgb = (
 };
 
 /**
- * transform xyz-d50 to lab
- * @param xyz - [x, y, z]
- * @param [skip] - skip validate
- * @returns TriColorChannels - [l, a, b]
+ * Transforms XYZ-D50 color channels to CIELAB.
+ * @param xyz - The XYZ-D50 color channels: [x, y, z].
+ * @param [skip] - Whether to skip validation.
+ * @returns The CIELAB color channels: [l, a, b].
  */
 export const transformXyzD50ToLab = (
   xyz: TriColorChannels,
@@ -532,10 +532,10 @@ export const transformXyzD50ToLab = (
 };
 
 /**
- * transform xyz-d50 to lch
- * @param xyz - [x, y, z]
- * @param [skip] - skip validate
- * @returns TriColorChannels - [l, c, h]
+ * Transforms XYZ-D50 color channels to CIELCH.
+ * @param xyz - The XYZ-D50 color channels: [x, y, z].
+ * @param [skip] - Whether to skip validation.
+ * @returns The CIELCH color channels: [l, c, h].
  */
 export const transformXyzD50ToLch = (
   xyz: TriColorChannels,

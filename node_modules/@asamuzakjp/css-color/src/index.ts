@@ -18,7 +18,7 @@ export { convert } from './converters/convert';
 export { resolveGradient } from './gradients/gradient';
 export { resolve } from './resolvers/resolve';
 
-/* utils */
+/* Export utils */
 export const utils = {
   cssCalc,
   cssVar,

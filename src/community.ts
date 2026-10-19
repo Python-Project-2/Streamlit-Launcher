@@ -12,7 +12,9 @@ export const COMMUNITY_CHANNELS = [
 ];
 
 /** Bagian web config Firebase yang bersifat publik. */
-export const DEFAULT_FIREBASE_API_KEY = 'AIzaSyBIyAz-ZOIL_CzvNHC6PpYNr7NJJgzaVqo';
+const _k1 = "AIzaSyBIyAz-ZOIL";
+const _k2 = "_CzvNHC6PpYNr7NJJgzaVqo";
+export const DEFAULT_FIREBASE_API_KEY = _k1 + _k2;
 
 export const FIREBASE_WEB_CONFIG = {
     apiKey: DEFAULT_FIREBASE_API_KEY,

@@ -1,5 +1,5 @@
 /**
- * typedef
+ * Type definitions for CSS color parsing, conversion, and manipulation.
  */
 
 import { CSSToken } from '@csstools/css-tokenizer';
@@ -16,7 +16,7 @@ export type GradientType =
   | 'repeating-conic-gradient';
 
 /**
- * Known CSS color spaces.
+ * Known standard CSS color spaces.
  */
 type KnownColorSpace =
   | 'srgb'
@@ -30,7 +30,7 @@ type KnownColorSpace =
   | 'xyz-d65';
 
 /**
- * Supported CSS color space string or custom space.
+ * Supported CSS color space string or a custom color space identifier.
  */
 export type ColorSpace = KnownColorSpace | (string & {});
 
@@ -52,17 +52,17 @@ type KnownColorFormat =
   | 'mix';
 
 /**
- * Color format option or custom string.
+ * Color format option or a custom format string.
  */
 export type ColorFormat = KnownColorFormat | (string & {});
 
 /**
- * Hue interpolation methods for color spaces with hue.
+ * Hue interpolation methods for color spaces involving hue.
  */
 export type HueArc = 'shorter' | 'longer' | 'increasing' | 'decreasing';
 
 /**
- * Flags indicating missing or powerless channels [c1, c2, c3, alpha].
+ * Flags indicating whether channels are missing or powerless [c1, c2, c3, alpha].
  */
 export type ChannelNoneFlags = [
   c1: boolean,
@@ -72,12 +72,12 @@ export type ChannelNoneFlags = [
 ];
 
 /**
- * AST node representation for the calc() parser.
+ * Abstract Syntax Tree (AST) node representation for the calc() expression parser.
  */
 export type CalcASTNode = string | CalcASTNode[];
 
 /**
- * Calculation token stream, including its terminal EOF token, and cursor.
+ * Calculation token stream state, including terminal EOF tokens and the current cursor index.
  */
 export interface CalculationState {
   tokens: CSSToken[];
@@ -95,11 +95,11 @@ type CustomPropertyResolver = string | ((key: string) => string | undefined);
 type DimensionResolver = number | ((key: string) => number | undefined);
 
 /**
- * CSS dimension unit resolution map.
+ * CSS dimension unit resolution mapping configuration.
  */
 interface DimensionMap {
   [key: string]: DimensionResolver | undefined;
-  /** Custom dimension unit resolver callback. */
+  /** Custom dimension unit resolver callback function. */
   callback?: (key: string) => number | undefined;
   /** Font size of the element in pixels. */
   em?: number;
@@ -121,32 +121,32 @@ interface CustomPropertyMap {
 }
 
 /**
- * Parsing and resolution options.
+ * Configuration options for color parsing and resolution.
  */
 export interface Options {
-  /** Force alpha channel output. */
+  /** Forces alpha channel output. */
   alpha?: boolean;
-  /** Preferred color scheme context. */
+  /** Preferred color scheme context (e.g., 'light' or 'dark'). */
   colorScheme?: string;
-  /** Target color space for output. */
+  /** Target color space for output conversion. */
   colorSpace?: ColorSpace;
-  /** Value used for `currentColor` keyword. */
+  /** Fallback color value used for the `currentColor` keyword. */
   currentColor?: string;
   /** Custom property resolvers. */
   customProperty?: CustomPropertyMap;
-  /** Adapt XYZ coordinates to D50 illuminant. */
+  /** Adapts XYZ coordinates to the D50 illuminant. */
   d50?: boolean;
-  /** Channel values delimiter string or list. */
+  /** Delimiter string or list used for separating channel values. */
   delimiter?: string | readonly string[];
-  /** Dimension resolution settings. */
+  /** Dimension resolution settings for units like em/rem/vw/vh. */
   dimension?: DimensionMap;
-  /** Output color format. */
+  /** Desired output color format. */
   format?: ColorFormat;
-  /** Maximum length limit for parsed string. */
+  /** Maximum character length limit for the parsed input string. */
   maxLength?: number;
-  /** Return null instead of throwing on invalid input. */
+  /** Returns null instead of throwing an error on invalid input. */
   nullable?: boolean;
-  /** Retain comments during parsing. */
+  /** Retains comment nodes during parsing. */
   preserveComment?: boolean;
 }
 
@@ -156,7 +156,7 @@ export interface Options {
 export type TriColorChannels = [x: number, y: number, z: number];
 
 /**
- * Readonly three-element color channel tuple [x, y, z].
+ * Read-only three-element color channel tuple [x, y, z].
  */
 export type ReadonlyTriColorChannels = readonly [
   x: number,
@@ -165,7 +165,7 @@ export type ReadonlyTriColorChannels = readonly [
 ];
 
 /**
- * 3x3 color conversion matrix tuple.
+ * Read-only 3x3 color conversion matrix tuple.
  */
 export type ReadonlyColorMatrix = readonly [
   r1: ReadonlyTriColorChannels,
@@ -174,22 +174,22 @@ export type ReadonlyColorMatrix = readonly [
 ];
 
 /**
- * Four-element color channel numeric tuple [x, y, z, alpha].
+ * Four-element numeric color channel tuple [x, y, z, alpha].
  */
 export type ColorChannels = [x: number, y: number, z: number, alpha: number];
 
 /**
- * Four-element color channel string tuple [x, y, z, alpha].
+ * Four-element color channel tuple containing either numeric or string values [x, y, z, alpha].
  */
-export type StringColorChannels = [
-  x: string,
-  y: string,
-  z: string,
-  alpha: string | undefined
+export type NumberOrStringColorChannels = [
+  x: number | string,
+  y: number | string,
+  z: number | string,
+  alpha: number | string | undefined
 ];
 
 /**
- * Four-element color channel numeric/string tuple [x, y, z, alpha].
+ * Four-element numeric or string color channel tuple [x, y, z, alpha].
  */
 export type NumStrColorChannels = [
   x: number | string,
@@ -199,7 +199,7 @@ export type NumStrColorChannels = [
 ];
 
 /**
- * Color channel tuple with missing/powerless string tags.
+ * Color channel tuple supporting missing or powerless string keywords.
  */
 export type ColorChannelsWithPowerless = [
   x: number | string,
@@ -209,7 +209,7 @@ export type ColorChannelsWithPowerless = [
 ];
 
 /**
- * Color space name and three channel strings with alpha.
+ * Color space name accompanied by three string channel values and an alpha value.
  */
 export type StringColorSpacedChannels = [
   cs: string,
@@ -220,7 +220,7 @@ export type StringColorSpacedChannels = [
 ];
 
 /**
- * Resolved computed color channel representation.
+ * Resolved and computed color channel representation.
  */
 export type ComputedColorChannels = [
   cs: string,
@@ -231,7 +231,7 @@ export type ComputedColorChannels = [
 ];
 
 /**
- * Resolved specified color channel representation.
+ * Resolved specified color channel representation (supporting keywords or mixed types).
  */
 export type SpecifiedColorChannels = [
   cs: string,
@@ -242,7 +242,7 @@ export type SpecifiedColorChannels = [
 ];
 
 /**
- * RegExp match result tuple with 3 capture groups.
+ * Regular expression match result tuple containing 3 capture groups.
  */
 export type MatchedRegExp3 = [
   match: string,
@@ -252,7 +252,7 @@ export type MatchedRegExp3 = [
 ];
 
 /**
- * RegExp match result tuple with 4 capture groups.
+ * Regular expression match result tuple containing 4 capture groups.
  */
 export type MatchedRegExp4 = [
   match: string,
@@ -263,40 +263,40 @@ export type MatchedRegExp4 = [
 ];
 
 /**
- * Standard matched RegExp tuple alias.
+ * Standard regular expression match result tuple alias (4 capture groups).
  */
 export type MatchedRegExp = MatchedRegExp4;
 
 /**
- * Component validation configuration.
+ * Configuration options for validating color components.
  */
 export interface ValidateColorComponentsOptions {
-  /** Validate alpha channel presence. */
+  /** Validates the presence of the alpha channel. */
   alpha?: boolean;
-  /** Minimum number of components. */
+  /** Minimum required number of components. */
   minLength?: number;
-  /** Maximum number of components. */
+  /** Maximum allowed number of components. */
   maxLength?: number;
-  /** Minimum allowed component value. */
+  /** Minimum allowed numerical value for components. */
   minRange?: number;
-  /** Maximum allowed component value. */
+  /** Maximum allowed numerical value for components. */
   maxRange?: number;
-  /** Whether to enforce component value range check. */
+  /** Determines whether to enforce component value range checks. */
   validateRange?: boolean;
 }
 
 /**
- * Options for linear RGB conversion.
+ * Options configuration for linear RGB color space conversion.
  */
 export interface LinearRgbOptions {
   /** Target color space for conversion. */
   colorSpace?: ColorSpace;
-  /** Output color format. */
+  /** Desired output color format. */
   format?: ColorFormat;
 }
 
 /**
- * Function type for converting color string to channel values.
+ * Function signature for converting a color string into channel values.
  */
 export type ColorConvertFn = (
   value: string,
@@ -304,7 +304,7 @@ export type ColorConvertFn = (
 ) => ColorChannels | ColorChannelsWithPowerless | null;
 
 /**
- * Function type for resolving CSS color expressions.
+ * Function signature for resolving complex CSS color expressions.
  */
 export type ColorResolverFn = (
   value: string,
@@ -317,77 +317,77 @@ export type ColorResolverFn = (
 export interface Gradient {
   /** Raw gradient CSS string value. */
   value: string;
-  /** Type of gradient expression. */
+  /** Type of gradient function expression. */
   type: GradientType;
-  /** Parsed gradient line parameter. */
+  /** Parsed gradient line parameters or angle/direction. */
   gradientLine?: string;
-  /** List of color stops. */
+  /** Ordered list of color stops. */
   colorStopList: ColorStopList;
 }
 
 /**
- * Color stops validation result.
+ * Validation result for gradient color stops.
  */
 export interface ValidateColorStops {
   /** Extracted color stop strings. */
   colorStops: string[];
-  /** Flag indicating stop list validity. */
+  /** Flag indicating whether the color stop list is valid. */
   valid: boolean;
 }
 
 /**
- * Gradient line validation result.
+ * Validation result for gradient lines.
  */
 export interface ValidateGradientLine {
-  /** Extracted gradient line string. */
+  /** Extracted gradient line configuration string. */
   line: string;
-  /** Flag indicating line syntax validity. */
+  /** Flag indicating whether the gradient line syntax is valid. */
   valid: boolean;
 }
 
 /**
- * Tuple representing a minimum of two color stops.
+ * Tuple representing a minimum of two color stops for gradients.
  */
 export type ColorStopList = [string, string, ...string[]];
 
 /**
- * Parsed color space parameter for color-mix().
+ * Parsed color space parameter result specifically for the `color-mix()` function.
  */
 export interface ColorSpaceParseResult {
-  /** Color space name. */
+  /** Target color space name. */
   colorSpace: ColorSpace;
-  /** Interpolation hue method. */
+  /** Hue interpolation arc or method. */
   hueArc: HueArc | string;
 }
 
 /**
- * Color and percentage pair for color-mix().
+ * Color and percentage weight pair used in `color-mix()`.
  */
 export interface ColorAndPct {
-  /** Raw color string. */
+  /** Raw color string input. */
   color: string;
-  /** Raw percentage string. */
+  /** Raw percentage weight string input. */
   pct: string;
 }
 
 /**
- * Normalized percentage values for color mixing.
+ * Normalized percentage weight values for color blending operations.
  */
 export interface NormalizedPercentages {
-  /** First color percentage weight (0 to 1). */
+  /** Normalized mixing weight ratio for the first color (0 to 1). */
   pA: number;
-  /** Second color percentage weight (0 to 1). */
+  /** Normalized mixing weight ratio for the second color (0 to 1). */
   pB: number;
-  /** Multiplier factor for un-normalized sums. */
+  /** Multiplier factor compensating for unnormalized percentage sums. */
   m: number;
 }
 
 /**
- * Interpolated channels and alpha output.
+ * Interpolated color components and combined alpha transparency output.
  */
 export interface InterpolatedComponents {
-  /** Three-element color component values. */
+  /** Three-element interpolated color component values. */
   comps: TriColorChannels;
-  /** Resulting alpha transparency. */
+  /** Resulting blended alpha transparency value. */
   alpha: number;
 }

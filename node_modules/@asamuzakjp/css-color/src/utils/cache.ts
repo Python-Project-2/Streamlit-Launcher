@@ -1,40 +1,49 @@
 /**
- * cache
+ * Cache module.
  */
 
 import { LRUCache } from 'lru-cache';
 import { Options } from '../typedef';
 
-/* constants */
+/* Constants */
 const CACHE_SIZE = 4096;
 
 /**
- * CacheItem
+ * Wrapper class representing a cached item.
+ * @template T - The type of the cached item.
  */
 export class CacheItem<T = unknown> {
-  /* private */
   #item: T;
 
+  /**
+   * Creates an instance of CacheItem.
+   * @param item - The item to be cached.
+   */
   constructor(item: T) {
     this.#item = item;
   }
 
+  /**
+   * Gets the cached item.
+   * @returns The cached item.
+   */
   get item(): T {
     return this.#item;
   }
 }
 
-/*
- * lru cache instance
+/**
+ * LRU cache instance.
  */
 export const lruCache = new LRUCache<string, CacheItem<any>>({
   max: CACHE_SIZE
 });
 
 /**
- * set cache
- * @param key - cache key
- * @param value - value to cache
+ * Sets an item in the cache.
+ * @template T - The type of the value being cached.
+ * @param key - The cache key.
+ * @param value - The value or CacheItem instance to cache.
  */
 export const setCache = <T>(key: string, value: T | CacheItem<T>): void => {
   if (!key) {
@@ -48,9 +57,10 @@ export const setCache = <T>(key: string, value: T | CacheItem<T>): void => {
 };
 
 /**
- * get cache
- * @param key - cache key
- * @returns cached item or false otherwise
+ * Retrieves an item from the cache.
+ * @template T - The expected type of the cached value.
+ * @param key - The cache key.
+ * @returns The cached item, or `false` if the key is empty or not found.
  */
 export const getCache = <T = unknown>(key: string): CacheItem<T> | false => {
   if (!key) {
@@ -64,9 +74,9 @@ export const getCache = <T = unknown>(key: string): CacheItem<T> | false => {
 };
 
 /**
- * helper function to sort object keys alphabetically
- * @param obj - Object
- * @returns stringified JSON
+ * Helper function to stringify an object with its keys sorted alphabetically.
+ * @param obj - The object to stringify.
+ * @returns A formatted string representation of the object's sorted keys and values.
  */
 const stringifySorted = (obj: Record<string, unknown>): string => {
   const keys = Object.keys(obj);
@@ -82,10 +92,10 @@ const stringifySorted = (obj: Record<string, unknown>): string => {
 };
 
 /**
- * create cache key
- * @param keyData - key data
- * @param [opt] - options
- * @returns cache key
+ * Creates a unique cache key based on key data and options.
+ * @param keyData - The data containing namespace, name, and value.
+ * @param opt - Configuration options affecting the key generation.
+ * @returns The generated cache key, or an empty string if invalid or uncacheable.
  */
 export const createCacheKey = (
   keyData: Record<string, string>,

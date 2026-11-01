@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f7f4">
+  <meta name="description" content="Streamlit Launcher — launcher aplikasi dan toolkit statistik serta analisis data.">
+  <title>Streamlit Launcher — Data, charts, research.</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+  <link rel = "stylesheet" href = "www/scss/ui.css">
+</head>
+
+<body>
+
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <header id="siteHeader">
+    <div class="wrap nav">
+      <a class="brand" href="#"><img src="https://dwidevelopes.github.io/Streamlit-Launcher/icon.jpg"
+          alt="Logo Streamlit Launcher" data-i18n-attr="alt:hero.logoAlt"><span>Streamlit Launcher</span></a>
+      <nav class="navlinks"><a href="#fitur" data-i18n="nav.fitur">Fitur</a><a href="#readme">v4.0.1</a><a href="#demo"
+          data-i18n="nav.demo">Demo</a><a href="#video" data-i18n="nav.video">Video</a><a href="#analitik"
+          data-i18n="nav.statistik">Statistik</a><a href="#download" data-i18n="nav.download">Download</a></nav>
+      <div class="nav-right">
+        <div class="lang-switch" role="group" aria-label="Pilih bahasa" data-i18n-aria="a11y.langSwitch">
+          <button type="button" class="lang-btn active" data-lang="id">ID</button>
+          <button type="button" class="lang-btn" data-lang="zh">中文</button>
+        </div>
+        <a class="btn alt" href="https://pypi.org/project/streamlit-launcher/" target="_blank" rel="noreferrer">PyPI
+          ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="wrap hero">
+      <div>
+        <div class="eyebrow"><i class="dot"></i><span data-i18n="hero.eyebrow">Statistik · Analisis · Visualisasi</span>
+        </div>
+        <h1><span data-i18n="hero.h1a">Data yang rumit.</span><br><span class="dim" data-i18n="hero.h1b">Insight yang
+            jelas.</span></h1>
+        <p class="lead" data-i18n="hero.lead">Streamlit Launcher membantu workflow analisis data dan penelitian—mulai
+          dari statistik, visualisasi, hingga machine learning—dalam satu pengalaman yang berfokus pada pekerjaan.</p>
+        <div class="actions"><a class="btn" href="#demo" data-i18n-html="hero.ctaDemo">Coba demo upload
+            <span>↓</span></a><a class="btn alt" href="https://stremlit-launcher.streamlit.app/" target="_blank"
+            rel="noreferrer" data-i18n="hero.openDemo">Buka demo ↗</a></div>
+        <div class="micro"><span data-i18n="hero.micro1">↳ Analisis CSV & Excel</span><span data-i18n="hero.micro2">↳
+            Business KPI otomatis</span><span data-i18n="hero.micro3">↳ Statistik lengkap</span></div>
+      </div>
+      <div class="heroimage"><img src="https://dwidevelopes.github.io/Streamlit-Launcher/foter/2.png"
+          alt="Screenshot Streamlit Launcher menampilkan visualisasi grafik dan panel analisis" loading="eager"
+          data-i18n-attr="alt:hero.imgAlt">
+        <div class="image-caption"><b data-i18n="hero.capTitle">Workspace analisis</b><span
+            data-i18n="hero.capSub">Screenshot dari situs proyek ↗</span></div>
+      </div>
+    </section>
+
+    <!-- FITUR DASAR -->
+    <section class="block" id="fitur">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker" data-i18n="fitur.kicker">Kapabilitas</div>
+            <h2 data-i18n="fitur.h2">Analisis statistik, bukan sekadar dashboard.</h2>
+          </div>
+          <p data-i18n="fitur.p">Fokus pada alat yang membantu membaca data, menguji pola, dan menyajikan hasil dengan
+            visual yang dapat dieksplorasi.</p>
+        </div>
+        <div class="grid3">
+          <article class="feature reveal">
+            <div class="icon"><svg viewBox="0 0 24 24">
+                <path d="M4 19V5M4 19h17" />
+                <path d="m7 15 4-5 3 2 5-7" />
+              </svg></div>
+            <h3 data-i18n="fitur.f1h">Statistik & korelasi</h3>
+            <p data-i18n="fitur.f1p">Ringkasan statistik, distribusi, varians, standar deviasi, korelasi, dan metrik
+              untuk membantu mengevaluasi data.</p>
+          </article>
+          <article class="feature reveal delay-1">
+            <div class="icon"><svg viewBox="0 0 24 24">
+                <path d="M4 4h16v16H4z" />
+                <path d="M8 16v-4m4 4V7m4 9v-6" />
+              </svg></div>
+            <h3 data-i18n="fitur.f2h">Visualisasi interaktif</h3>
+            <p data-i18n="fitur.f2p">Grafik dan chart untuk mengeksplorasi pola pada data CSV atau Excel, dengan
+              tampilan yang mudah dibaca.</p>
+          </article>
+          <article class="feature reveal delay-2">
+            <div class="icon"><svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="3" />
+                <path
+                  d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.7 2.9-.2-.1a1.7 1.7 0 0 0-1.8.3l-.1.1h-3.4l-.1-.2a1.7 1.7 0 0 0-1.5-1.1 1.7 1.7 0 0 0-1.2.4l-.2.1-2.9-1.7.1-.2a1.7 1.7 0 0 0-.3-1.8l-.1-.2v-3.3l.2-.1a1.7 1.7 0 0 0 1.1-1.5 1.7 1.7 0 0 0-.4-1.2l-.1-.2 1.7-2.9.2.1a1.7 1.7 0 0 0 1.8-.3l.2-.1h3.3l.1.2a1.7 1.7 0 0 0 1.5 1.1 1.7 1.7 0 0 0 1.2-.4l.2-.1 2.9 1.7-.1.2a1.7 1.7 0 0 0 .3 1.8l.1.2z" />
+              </svg></div>
+            <h3 data-i18n="fitur.f3h">Analisis lanjutan</h3>
+            <p data-i18n="fitur.f3p">Halaman proyek menampilkan kapabilitas tambahan seperti machine learning, peta
+              data, dan tools penelitian.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- README V4.0.1 -->
+    <section class="block" id="readme">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker" data-i18n="readme.kicker">README · Versi 4.0.1</div>
+            <h2 data-i18n="readme.h2">Yang baru di rilis 4.0.1.</h2>
+          </div>
+          <p data-i18n="readme.p">Stock charts, analisis DNA, Face & Health, Map, Security, API server, dan instalasi
+            Termux dalam satu update besar.</p>
+        </div>
+        <div class="readme-preview reveal">
+          <div class="readme-head">
+            <span class="version">v4.0.1</span>
+            <div>
+              <h3 data-i18n="readme.h3">Streamlit Launcher — Update V4</h3>
+              <p data-i18n="readme.sub">Analisis lengkap: saham, DNA, Face, Doctor, Map, Security, API Server, dan
+                Termux.</p>
+            </div>
+          </div>
+          <div class="readme-body">
+            <div class="v4-grid">
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <polyline points="3 17 9 11 13 15 21 7" />
+                    <polyline points="14 7 21 7 21 14" />
+                  </svg></div>
+                <h4 data-i18n="r.c1h">Grafik Saham</h4>
+                <p data-i18n="r.c1p">Candlestick & line chart saham lengkap dengan analisis tren.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" />
+                  </svg></div>
+                <h4 data-i18n="r.c2h">Pencarian</h4>
+                <p data-i18n="r.c2p">Search cepat di seluruh tabel, kolom, dan analisis.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="3" />
+                    <path
+                      d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.7 2.9-.2-.1a1.7 1.7 0 0 0-1.8.3l-.1.1h-3.4l-.1-.2a1.7 1.7 0 0 0-1.5-1.1 1.7 1.7 0 0 0-1.2.4l-.2.1-2.9-1.7.1-.2a1.7 1.7 0 0 0-.3-1.8l-.1-.2v-3.3l.2-.1a1.7 1.7 0 0 0 1.1-1.5 1.7 1.7 0 0 0-.4-1.2l-.1-.2 1.7-2.9.2.1a1.7 1.7 0 0 0 1.8-.3l.2-.1h3.3l.1.2a1.7 1.7 0 0 0 1.5 1.1 1.7 1.7 0 0 0 1.2-.4l.2-.1 2.9 1.7-.1.2a1.7 1.7 0 0 0 .3 1.8l.1.2z" />
+                  </svg></div>
+                <h4 data-i18n="r.c3h">Pengaturan</h4>
+                <p data-i18n="r.c3p">Panel settings + pengaturan pengguna (profil, preferensi, tema).</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <path d="M4 20c0-3 4-4 8-4s8 1 8 4" />
+                    <circle cx="12" cy="8" r="4" />
+                  </svg></div>
+                <h4 data-i18n="r.c4h">Analisis Face</h4>
+                <p data-i18n="r.c4p">Face detection, recognition, verification, quality, clustering, similarity.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <path d="M12 21s-7-4.5-7-11a7 7 0 0 1 14 0c0 6.5-7 11-7 11z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg></div>
+                <h4 data-i18n="r.c5h">Analisis DNA</h4>
+                <p data-i18n="r.c5p">Komposisi basa, motif pattern, biophysical properties, sequence features.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <path d="M3 12h4l2-7 4 14 2-7h4" />
+                  </svg></div>
+                <h4 data-i18n="r.c6h">Doctor Healthy Human</h4>
+                <p data-i18n="r.c6p">Blood pressure, blood health, berat badan, diet, health pattern, usia, target
+                  berat.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <path d="M12 2 4 7v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V7z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg></div>
+                <h4 data-i18n="r.c7h">Keamanan CSV</h4>
+                <p data-i18n="r.c7p">Enkripsi & dekripsi data, sistem keamanan, data terenkripsi.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9" />
+                    <path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z" />
+                  </svg></div>
+                <h4 data-i18n="r.c8h">Map Data</h4>
+                <p data-i18n="r.c8p">Peta interaktif, satelit, dark, marker cluster, tooltip, internasional.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <rect x="3" y="4" width="18" height="6" rx="1" />
+                    <rect x="3" y="14" width="18" height="6" rx="1" />
+                    <circle cx="7" cy="7" r="1" />
+                    <circle cx="7" cy="17" r="1" />
+                  </svg></div>
+                <h4 data-i18n="r.c9h">API Key & Server</h4>
+                <p data-i18n="r.c9p">API key, API server (Flask), test endpoint, generated key.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <circle cx="7" cy="17" r="2" />
+                    <circle cx="17" cy="7" r="2" />
+                    <circle cx="17" cy="17" r="2" />
+                    <circle cx="7" cy="7" r="2" />
+                    <path d="M9 7h6M7 9v6M17 9v6M9 17h6" />
+                  </svg></div>
+                <h4 data-i18n="r.c10h">Scatterplot Interval</h4>
+                <p data-i18n="r.c10p">Korelasi Pearson, effect size, varians, std dev, mean/median/mode, IQR, CI.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <path d="M4 20V10M10 20V4M16 20V13M22 20V7" />
+                  </svg></div>
+                <h4 data-i18n="r.c11h">Chart Visualisasi</h4>
+                <p data-i18n="r.c11p">Chart utama, analisis CSV/xlsx, konfigurasi, plugin, data mentah.</p>
+              </div>
+              <div class="v4-card">
+                <div class="v4-icon"><svg viewBox="0 0 24 24">
+                    <rect x="6" y="2" width="12" height="20" rx="2" />
+                    <line x1="12" y1="18" x2="12" y2="18" />
+                  </svg></div>
+                <h4 data-i18n="r.c12h">Termux Support</h4>
+                <p data-i18n="r.c12p">Instalasi lengkap di Termux (Android) dengan script otomatis.</p>
+              </div>
+            </div>
+          </div>
+          <div class="readme-foot">
+            <span data-i18n="readme.lic">MIT License · Developers: Dwi Bakti N Dev &amp; friend help project</span>
+            <a href="https://github.com/Python-Project-2/Streamlit-Launcher" target="_blank" rel="noreferrer"
+              data-i18n="readme.more">Baca README lengkap ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEMO UPLOAD CSV / EXCEL -->
+    <section class="block" id="demo">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker" data-i18n="demo.kicker">Demo langsung</div>
+            <h2 data-i18n="demo.h2">Upload CSV / Excel — analisis instan.</h2>
+          </div>
+          <p data-i18n="demo.p">Drag & drop file Anda. Business KPI, statistik, dan chart dihitung langsung di browser.
+            Tidak ada data yang dikirim ke server.</p>
+        </div>
+        <div class="demo-shell reveal">
+          <div class="demo-top">
+            <span class="label" data-i18n="demo.label">Analisis Bisnis & Statistik</span>
+            <div class="demo-actions">
+              <button class="btn lime" type="button" id="loadSampleBtn" data-i18n="demo.sample">Muat data
+                contoh</button>
+              <button class="btn alt" type="button" id="triggerUploadBtn" data-i18n="demo.pick">Pilih file</button>
+            </div>
+          </div>
+
+          <div class="demo-drop" id="dropZone" role="button" tabindex="0"
+            aria-label="Pilih atau tarik file CSV atau Excel" data-i18n-aria="demo.dropAria">
+            <svg viewBox="0 0 24 24">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            <strong data-i18n="demo.dropTitle">Tarik & lepas file CSV atau Excel Anda</strong>
+            <small data-i18n="demo.dropSub">.csv · .xlsx · .xls · maksimal 10 MB — diproses lokal di browser</small>
+            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls">
+          </div>
+
+          <div class="demo-results" id="demoResults">
+            <div class="demo-meta">
+              <div class="file-info">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#83b83d" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
+                <strong id="fileName">file.csv</strong>
+                <small id="fileMeta">—</small>
+              </div>
+              <button class="reset-btn" type="button" id="resetDemoBtn" data-i18n="demo.reset">Reset</button>
+            </div>
+
+            <div class="kpi-grid" id="kpiGrid"></div>
+
+            <div class="demo-cols">
+              <div class="demo-panel">
+                <h4 data-i18n="demo.summary">Ringkasan Statistik</h4>
+                <div id="summaryStats"></div>
+              </div>
+              <div class="demo-panel">
+                <h4 data-i18n="demo.quality">Kualitas Data</h4>
+                <div id="qualityStats"></div>
+              </div>
+            </div>
+
+            <div class="chart-wrap">
+              <h4 data-i18n="demo.dist">Distribusi kolom numerik</h4>
+              <div class="chart-body"><canvas id="demoChart"></canvas>
+                <div class="demo-empty" id="chartEmpty"></div>
+              </div>
+            </div>
+
+            <div class="preview-wrap">
+              <h4 data-i18n="demo.percCol">Ringkasan per kolom</h4>
+              <div class="col-table-wrap">
+                <table class="col-table" id="colTable"></table>
+              </div>
+            </div>
+
+            <div class="preview-wrap">
+              <h4 data-i18n="demo.preview">Preview data (10 baris pertama)</h4>
+              <div class="preview-scroll">
+                <table id="previewTable"></table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEO -->
+    <section class="block" id="video">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker" data-i18n="video.kicker">Video & demo</div>
+            <h2 data-i18n="video.h2">Lihat aplikasi bekerja.</h2>
+          </div>
+          <p data-i18n="video.p">Klik kartu untuk memutar demo animasi langsung di halaman—tanpa berpindah situs.</p>
+        </div>
+        <div class="videos">
+          <article class="video-card reveal">
+            <button class="video-cover" data-video-type="gif"
+              data-video-src="https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/contoh.gif?raw=true"
+              data-video-title="Demo Streamlit Launcher — contoh animasi aplikasi" aria-label="Putar demo aplikasi"
+              data-i18n-attr="data-video-title:video.v1Title" data-i18n-aria="video.v1Aria">
+              <img src="https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/thema.png?raw=true"
+                alt="Pratinjau demo Streamlit Launcher" loading="lazy" data-i18n-attr="alt:video.v1Alt">
+              <span class="play"><svg viewBox="0 0 24 24">
+                  <polygon points="6 4 20 12 6 20" />
+                </svg></span>
+            </button>
+            <div class="video-body">
+              <h3 data-i18n="video.v1h">01 — Demo aplikasi</h3>
+              <p data-i18n="video.v1p">Animasi demo resmi dari repository proyek.</p>
+              <button class="link-btn" data-video-type="gif"
+                data-video-src="https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/contoh.gif?raw=true"
+                data-video-title="Demo Streamlit Launcher — contoh animasi aplikasi"
+                data-i18n-attr="data-video-title:video.v1Title" data-i18n="video.play">Putar demo ▶</button>
+            </div>
+          </article>
+          <article class="video-card reveal delay-1">
+            <button class="video-cover" data-video-type="gif"
+              data-video-src="https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/apps.gif?raw=true"
+              data-video-title="Demo aplikasi — alur kerja di editor" aria-label="Putar demo alur kerja"
+              data-i18n-attr="data-video-title:video.v2Title" data-i18n-aria="video.v2Aria">
+              <img src="https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/journal.png?raw=true"
+                alt="Pratinjau alur kerja" loading="lazy" data-i18n-attr="alt:video.v2Alt">
+              <span class="play"><svg viewBox="0 0 24 24">
+                  <polygon points="6 4 20 12 6 20" />
+                </svg></span>
+            </button>
+            <div class="video-body">
+              <h3 data-i18n="video.v2h">02 — Alur kerja</h3>
+              <p data-i18n="video.v2p">Animasi alur kerja aplikasi di dalam editor.</p>
+              <button class="link-btn" data-video-type="gif"
+                data-video-src="https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/apps.gif?raw=true"
+                data-video-title="Demo aplikasi — alur kerja di editor" data-i18n-attr="data-video-title:video.v2Title"
+                data-i18n="video.play">Putar demo ▶</button>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ANALITIK -->
+    <section class="block" id="analitik">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker" data-i18n="an.kicker">Statistik & analitik</div>
+            <h2 data-i18n="an.h2">Pantau paket. Pahami data.</h2>
+          </div>
+          <p data-i18n="an.p">Statistik unduhan disematkan langsung dari sumber resmi masing-masing marketplace.</p>
+        </div>
+        <div class="stats">
+          <div class="stat-panel reveal">
+            <h3 data-i18n="an.pypiH">Statistik unduhan PyPI</h3>
+            <p data-i18n="an.pypiP">Badge diambil langsung dari Pepy dan PyPI Stats—angka mengikuti data real-time,
+              bukan diketik manual.</p>
+            <div class="badges">
+              <a href="https://pepy.tech/projects/streamlit-launcher?timeRange=threeMonths&category=version&includeCIDownloads=true&granularity=weekly&viewType=line&versions=Total%2C4.*%2C3.*"
+                target="_blank" rel="noreferrer"><img src="https://pepy.tech/badge/streamlit-launcher"
+                  alt="Total unduhan Pepy" data-i18n-attr="alt:an.b1Alt"></a>
+              <a href="https://pepy.tech/projects/streamlit-launcher" target="_blank" rel="noreferrer"><img
+                  src="https://pepy.tech/badge/streamlit-launcher/month" alt="Unduhan bulanan Pepy"
+                  data-i18n-attr="alt:an.b2Alt"></a>
+              <a href="https://pypi.org/project/streamlit-launcher/" target="_blank" rel="noreferrer"><img
+                  src="https://img.shields.io/pypi/v/streamlit-launcher?label=versi%20PyPI" alt="Versi PyPI"
+                  data-i18n-attr="alt:an.b3Alt"></a>
+            </div>
+            <div class="bar-chart">
+              <div class="bar" style="height:45%"></div>
+              <div class="bar" style="height:68%"></div>
+              <div class="bar" style="height:54%"></div>
+              <div class="bar" style="height:83%"></div>
+              <div class="bar" style="height:62%"></div>
+              <div class="bar" style="height:94%"></div>
+              <div class="bar" style="height:72%"></div>
+              <div class="bar" style="height:86%"></div>
+            </div>
+            <div class="chart-note"><span data-i18n="an.note">Visual ilustratif — bukan data
+                unduhan</span><span>↗</span></div>
+          </div>
+          <div class="stat-panel reveal delay-1">
+            <h3 data-i18n="an.areaH">Area analisis</h3>
+            <p data-i18n="an.areaP">Contoh jenis analisis yang dijelaskan di materi proyek.</p>
+            <div class="metric-grid">
+              <div class="metric"><strong data-i18n="an.m1h">Deskriptif</strong><span data-i18n="an.m1s">Mean, median,
+                  varians</span></div>
+              <div class="metric"><strong data-i18n="an.m2h">Korelasi</strong><span data-i18n="an.m2s">Hubungan
+                  antarvariabel</span></div>
+              <div class="metric"><strong data-i18n="an.m3h">Visual</strong><span data-i18n="an.m3s">Chart &
+                  distribusi</span></div>
+              <div class="metric"><strong data-i18n="an.m4h">ML</strong><span data-i18n="an.m4s">Prediksi &
+                  klasifikasi</span></div>
+              <div class="metric"><strong data-i18n="an.m5h">Geospasial</strong><span data-i18n="an.m5s">Peta &
+                  lokasi</span></div>
+              <div class="metric"><strong data-i18n="an.m6h">Ekspor</strong><span data-i18n="an.m6s">Laporan &
+                  data</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="stat-embed">
+          <div class="stat-embed-card reveal"><span class="lbl">Open VSX</span>
+            <div class="val"><img
+                src="https://img.shields.io/open-vsx/dt/dwidevelopes/streamlit-launcher?label=downloads"
+                alt="Open VSX downloads"><img
+                src="https://img.shields.io/open-vsx/v/dwidevelopes/streamlit-launcher?label=version"
+                alt="Open VSX version"></div>
+            <p class="desc" data-i18n="an.e1d">Statistik unduhan dan versi ekstensi pada marketplace Open VSX.</p><a
+              class="more" href="https://open-vsx.org/extension/dwidevelopes/streamlit-launcher" target="_blank"
+              rel="noreferrer" data-i18n="an.e1more">Lihat halaman Open VSX ↗</a>
+          </div>
+          <div class="stat-embed-card reveal delay-1"><span class="lbl">VS Code Marketplace</span>
+            <div class="val"><img
+                src="https://img.shields.io/visual-studio-marketplace/i/dwidevelopes.streamlit-launcher?label=installs"
+                alt="VS Code installs"><img
+                src="https://img.shields.io/visual-studio-marketplace/v/dwidevelopes.streamlit-launcher?label=version"
+                alt="VS Code version"></div>
+            <p class="desc" data-i18n="an.e2d">Jumlah instalasi dan versi terbaru ekstensi pada marketplace resmi VS
+              Code.</p><a class="more"
+              href="https://marketplace.visualstudio.com/items?itemName=dwidevelopes.streamlit-launcher" target="_blank"
+              rel="noreferrer" data-i18n="an.e2more">Buka VS Code Marketplace ↗</a>
+          </div>
+          <div class="stat-embed-card reveal delay-2"><span class="lbl">PiWheels</span>
+            <div class="val"><img
+                src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fwww.piwheels.org%2Fproject%2Fstreamlit-launcher.json&label=piwheels&query=%24%5B0%5D.version&color=blue"
+                alt="PiWheels version"><img
+                src="https://img.shields.io/badge/raspberry%20pi-ready-b9f36a?labelColor=20231f"
+                alt="Raspberry Pi ready"></div>
+            <p class="desc" data-i18n="an.e3d">Ketersediaan wheel untuk Raspberry Pi—berguna bila ingin menjalankan di
+              perangkat ARM.</p><a class="more" href="https://www.piwheels.org/project/streamlit-launcher"
+              target="_blank" rel="noreferrer" data-i18n="an.e3more">Lihat PiWheels ↗</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EKOSISTEM -->
+    <section class="block" id="ekosistem">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker" data-i18n="eko.kicker">Ekosistem</div>
+            <h2 data-i18n="eko.h2">Semua pintasan, satu tempat.</h2>
+          </div>
+          <p data-i18n="eko.p">Marketplace, statistik unduhan, dependensi, dan cermin paket—semua tautan resmi proyek
+            dikumpulkan di sini.</p>
+        </div>
+        <div class="ecosystem">
+          <a class="eco-link reveal"
+            href="https://marketplace.visualstudio.com/items?itemName=dwidevelopes.streamlit-launcher" target="_blank"
+            rel="noreferrer"><span class="eco-ico"><svg viewBox="0 0 24 24">
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg></span><span>VS Code Marketplace<small data-i18n="eko.s1">Ekstensi resmi</small></span></a>
+          <a class="eco-link reveal" href="https://open-vsx.org/extension/dwidevelopes/streamlit-launcher"
+            target="_blank" rel="noreferrer"><span class="eco-ico"><svg viewBox="0 0 24 24">
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+              </svg></span><span>Open VSX<small data-i18n="eko.s2">Alternatif open source</small></span></a>
+          <a class="eco-link reveal"
+            href="https://pepy.tech/projects/streamlit-launcher?timeRange=threeMonths&category=version&includeCIDownloads=true&granularity=weekly&viewType=line&versions=Total%2C4.*%2C3.*"
+            target="_blank" rel="noreferrer"><span class="eco-ico"><svg viewBox="0 0 24 24">
+                <path d="M3 3v18h18" />
+                <path d="m7 12 4-4 4 4 5-6" />
+              </svg></span><span>PePy Downloads<small data-i18n="eko.s3">Statistik unduhan</small></span></a>
+          <a class="eco-link reveal" href="https://pypi.org/project/streamlit-launcher/" target="_blank"
+            rel="noreferrer"><span class="eco-ico"><svg viewBox="0 0 24 24">
+                <path d="M12 2 2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg></span><span>PyPI<small data-i18n="eko.s4">Paket Python</small></span></a>
+          <a class="eco-link reveal" href="https://deps.dev/pypi/streamlit-launcher/4.0.1" target="_blank"
+            rel="noreferrer"><span class="eco-ico"><svg viewBox="0 0 24 24">
+                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+              </svg></span><span>deps.dev<small data-i18n="eko.s5">Dependensi & keamanan</small></span></a>
+          <a class="eco-link reveal" href="https://dwidevelopes.github.io/Streamlit-Launcher/" target="_blank"
+            rel="noreferrer"><span class="eco-ico"><svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M3 12h18M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18z" />
+              </svg></span><span><span data-i18n="eko.s6h">Situs Proyek</span><small data-i18n="eko.s6">Halaman
+                referensi</small></span></a>
+          <a class="eco-link reveal" href="https://libraries.io/pypi/streamlit-launcher" target="_blank"
+            rel="noreferrer"><span class="eco-ico"><svg viewBox="0 0 24 24">
+                <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
+              </svg></span><span>Libraries.io<small data-i18n="eko.s7">Metadata paket</small></span></a>
+          <a class="eco-link reveal" href="https://www.piwheels.org/project/streamlit-launcher" target="_blank"
+            rel="noreferrer"><span class="eco-ico"><svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M8 12h8M12 8v8" />
+              </svg></span><span>PiWheels<small data-i18n="eko.s8">Wheel Raspberry Pi</small></span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOWNLOAD UTAMA -->
+    <section class="block" id="download">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="kicker" data-i18n="dl.kicker">Unduh & mulai</div>
+            <h2 data-i18n="dl.h2">Pilih cara instalasi Anda.</h2>
+          </div>
+          <p data-i18n-html="dl.p">Dua jalur resmi: <b>Open VSX</b> untuk editor dan <b>PyPI</b> untuk paket Python.</p>
+        </div>
+        <div class="downloads">
+          <article class="download featured reveal">
+            <span class="badge-primary" data-i18n="dl.badge1">Editor Extension</span>
+            <div class="icon"><svg viewBox="0 0 24 24">
+                <polyline points="16 18 22 12 16 6" />
+                <polyline points="8 6 2 12 8 18" />
+              </svg></div>
+            <h3>Open VSX</h3>
+            <p class="subtitle">dwidevelopes.streamlit-launcher</p>
+            <p class="desc" data-i18n="dl.ovsxDesc">Ekstensi open source untuk VS Code, VSCodium, Gitpod, dan editor
+              turunan VS Code lainnya.</p>
+            <div class="chip-row">
+              <span class="chip"><img src="https://img.shields.io/open-vsx/v/dwidevelopes/streamlit-launcher?label="
+                  alt="versi"> <span data-i18n="dl.chipVer">versi</span></span>
+              <span class="chip"><img src="https://img.shields.io/open-vsx/dt/dwidevelopes/streamlit-launcher?label="
+                  alt="unduhan"> <span data-i18n="dl.chipDl">unduhan</span></span>
+            </div>
+            <code>ovsx install dwidevelopes.streamlit-launcher</code>
+            <div class="actions-row">
+              <a class="btn lime" href="https://open-vsx.org/extension/dwidevelopes/streamlit-launcher" target="_blank"
+                rel="noreferrer" data-i18n="dl.ovsxCta">Buka Open VSX ↗</a>
+              <a class="btn alt" href="https://open-vsx.org/extension/dwidevelopes/streamlit-launcher" target="_blank"
+                rel="noreferrer" data-i18n="dl.detailCta">Detail ↗</a>
+            </div>
+          </article>
+          <article class="download featured reveal delay-1">
+            <span class="badge-primary" data-i18n="dl.badge2">Python Package</span>
+            <div class="icon"><svg viewBox="0 0 24 24">
+                <path d="M12 2 2 7l10 5 10-5-10-5z" />
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
+              </svg></div>
+            <h3>PyPI</h3>
+            <p class="subtitle">streamlit-launcher</p>
+            <p class="desc" data-i18n-html="dl.pypiDesc">Pasang sebagai paket Python melalui <code>pip</code>—jalankan
+              toolkit analisis dari terminal, notebook, atau script otomatis.</p>
+            <div class="chip-row">
+              <span class="chip"><img src="https://img.shields.io/pypi/v/streamlit-launcher?label=" alt="versi"> <span
+                  data-i18n="dl.chipVer">versi</span></span>
+              <span class="chip"><img src="https://img.shields.io/pypi/pyversions/streamlit-launcher?label="
+                  alt="python"> Python</span>
+              <span class="chip"><img src="https://pepy.tech/badge/streamlit-launcher" alt="unduhan"></span>
+            </div>
+            <code>python -m pip install streamlit-launcher</code>
+            <div class="actions-row">
+              <a class="btn lime" href="https://pypi.org/project/streamlit-launcher/" target="_blank" rel="noreferrer"
+                data-i18n="dl.pypiCta">Buka PyPI ↗</a>
+              <a class="btn alt" href="https://pepy.tech/projects/streamlit-launcher" target="_blank" rel="noreferrer"
+                data-i18n="dl.statCta">Statistik ↗</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="section-head" style="margin-top:48px;margin-bottom:0">
+          <div>
+            <div class="kicker" data-i18n="dl.platKicker">Download per platform</div>
+            <h2 style="font-size:clamp(22px,3vw,30px)">Windows, macOS, Linux, Mobile.</h2>
+          </div>
+          <p data-i18n="dl.platP">Pilih platform Anda. Installer native, ekstensi editor, atau akses web untuk mobile.
+          </p>
+        </div>
+        <div class="platforms">
+          <article class="platform reveal">
+            <div class="plat-icon"><svg viewBox="0 0 24 24">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg></div>
+            <h4>Windows</h4>
+            <p data-i18n="dl.winP">Installer desktop + VS Code extension.</p>
+            <div class="plat-actions">
+              <a class="btn lime"
+                href="https://marketplace.visualstudio.com/items?itemName=dwidevelopes.streamlit-launcher"
+                target="_blank" rel="noreferrer" data-i18n="dl.viaCode">Install via VS Code ↗</a>
+              <span class="link-sec"><span data-i18n="dl.or">atau</span> <a
+                  href="https://pypi.org/project/streamlit-launcher/" target="_blank" rel="noreferrer">pip install
+                  ↗</a></span>
+            </div>
+          </article>
+          <article class="platform reveal delay-1">
+            <div class="plat-icon"><svg viewBox="0 0 24 24">
+                <rect x="3" y="4" width="18" height="12" rx="2" />
+                <path d="M2 20h20l-2-4H4z" />
+              </svg></div>
+            <h4>macOS</h4>
+            <p data-i18n="dl.macP">Via VS Code Marketplace (native macOS).</p>
+            <div class="plat-actions">
+              <a class="btn" href="https://marketplace.visualstudio.com/items?itemName=dwidevelopes.streamlit-launcher"
+                target="_blank" rel="noreferrer" data-i18n="dl.viaCode">Install via VS Code ↗</a>
+              <span class="link-sec"><span data-i18n="dl.or">atau</span> <a
+                  href="https://open-vsx.org/extension/dwidevelopes/streamlit-launcher" target="_blank"
+                  rel="noreferrer">Open VSX ↗</a></span>
+            </div>
+          </article>
+          <article class="platform reveal delay-2">
+            <div class="plat-icon"><svg viewBox="0 0 24 24">
+                <polyline points="4 17 10 11 4 5" />
+                <line x1="12" y1="19" x2="20" y2="19" />
+              </svg></div>
+            <h4>Linux</h4>
+            <p data-i18n="dl.linuxP">Open VSX (open source) atau VS Code.</p>
+            <div class="plat-actions">
+              <a class="btn" href="https://open-vsx.org/extension/dwidevelopes/streamlit-launcher" target="_blank"
+                rel="noreferrer" data-i18n="dl.viaOvsx">Install via Open VSX ↗</a>
+              <span class="link-sec"><span data-i18n="dl.or">atau</span> <a
+                  href="https://pypi.org/project/streamlit-launcher/" target="_blank" rel="noreferrer">pip install
+                  ↗</a></span>
+            </div>
+          </article>
+          <article class="platform reveal delay-3">
+            <div class="plat-icon"><svg viewBox="0 0 24 24">
+                <rect x="6" y="2" width="12" height="20" rx="2" />
+                <line x1="12" y1="18" x2="12" y2="18" />
+              </svg></div>
+            <h4>Mobile</h4>
+            <p data-i18n="dl.mobP">Termux (Android) atau Web App (iOS/Android).</p>
+            <div class="plat-actions">
+              <a class="btn lime" href="https://stremlit-launcher.streamlit.app/" target="_blank" rel="noreferrer"
+                data-i18n="dl.webAppCta">Buka Web App ↗</a>
+              <span class="link-sec"><span data-i18n="dl.or">atau</span> <a
+                  href="https://github.com/DwiDevelopes/Launcher" target="_blank" rel="noreferrer"
+                  data-i18n="dl.termuxGuide">Termux guide ↗</a></span>
+            </div>
+          </article>
+        </div>
+
+        <p class="note" data-i18n-html="dl.note">Instalasi PyPI: <code>python -m pip install streamlit-launcher</code> ·
+          Open VSX: <code>ovsx install dwidevelopes.streamlit-launcher</code> · VS Code:
+          <code>code --install-extension dwidevelopes.streamlit-launcher</code> · Termux: lihat panduan di README.</p>
+      </div>
+    </section>
+
+    <section class="wrap" style="padding:25px 0 68px">
+      <div class="cta reveal">
+        <div>
+          <h2 data-i18n="cta.h">Mulai dari data Anda.</h2>
+          <p data-i18n="cta.p">Coba demo upload di atas, atau pasang via Open VSX, PyPI, VS Code Marketplace.</p>
+        </div><a class="btn" href="#demo" data-i18n="cta.btn">Coba demo upload ↑</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap foot"><span data-i18n="foot.tag">Streamlit Launcher · landing page komunitas</span>
+      <div class="footlinks"><a href="https://pypi.org/project/streamlit-launcher/" target="_blank"
+          rel="noreferrer">PyPI</a><a href="https://github.com/DwiDevelopes/Launcher" target="_blank"
+          rel="noreferrer">GitHub</a><a href="https://dwidevelopes.github.io/Streamlit-Launcher/" target="_blank"
+          rel="noreferrer" data-i18n="foot.ref">Situs referensi</a><a
+          href="https://marketplace.visualstudio.com/items?itemName=dwidevelopes.streamlit-launcher" target="_blank"
+          rel="noreferrer">VS Code</a><a href="https://open-vsx.org/extension/dwidevelopes/streamlit-launcher"
+          target="_blank" rel="noreferrer">Open VSX</a><a href="https://pepy.tech/projects/streamlit-launcher"
+          target="_blank" rel="noreferrer">PePy</a></div>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="Kembali ke atas" data-i18n-aria="a11y.backTop"><svg
+      viewBox="0 0 24 24">
+      <path d="m18 15-6-6-6 6" />
+    </svg></button>
+
+  <div class="video-modal" id="videoModal" aria-hidden="true">
+    <div class="video-modal-backdrop" data-close></div>
+    <div class="video-modal-content">
+      <button class="video-modal-close" data-close aria-label="Tutup" data-i18n-aria="a11y.close">×</button>
+      <div class="video-modal-body" id="videoModalBody"></div>
+      <p class="video-modal-title" id="videoModalTitle"></p>
+    </div>
+  </div>
+  <script src = "www/cjs/csv_upload.js"></script>
+  <script src = "www/cjs/i8_engine.js"></script>
+  <script src = "www/cjs/scroll.js"></script>
+  <script src = "www/cjs/parallax.js"></script>
+</body>
+
+</html>

@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const esbuild = require("esbuild");
 
-// Salin chart.umd.js ke folder media jika belum ada agar webview mandiri dan ikut ter-package ke VSIX
 const srcChart = path.join(__dirname, 'node_modules', 'chart.js', 'dist', 'chart.umd.js');
 const destChart = path.join(__dirname, 'media', 'chart.umd.js');
 if (fs.existsSync(srcChart) && !fs.existsSync(destChart)) {

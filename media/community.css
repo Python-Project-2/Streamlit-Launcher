@@ -1,0 +1,243 @@
+/* Gaya untuk view "Community Chat" (ruang chat komunitas) — sidebar Date Skunder AI.
+   Semua warna mengikuti tema VS Code yang aktif lewat variabel --vscode-*. */
+:root {
+    --cw-border: var(--vscode-panel-border, rgba(128, 128, 128, .35));
+    --cw-soft: rgba(128, 128, 128, .1);
+    --cw-accent: var(--vscode-button-background, #0e639c);
+    --cw-ok: rgba(89, 161, 79, .18);
+    --cw-bad: rgba(226, 87, 90, .2);
+    --cw-skin: rgba(255, 165, 0, .12);
+    --cw-ai: rgba(99, 102, 241, .12);
+}
+
+body.cw-body {
+    margin: 0;
+    padding: 0;
+    color: var(--vscode-foreground);
+    font-family: var(--vscode-font-family, sans-serif);
+    font-size: 12px;
+}
+
+.cw-root {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    min-width: 0;
+    box-sizing: border-box;
+}
+
+/* ── kepala & bilah ruang ─────────────────────────────────────────────────── */
+.cw-head { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.cw-head strong { font-size: 12px; white-space: nowrap; }
+.cw-state { flex: 1 1 auto; text-align: right; font-size: 10px; opacity: .7; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cw-state.bad { opacity: 1; color: var(--vscode-errorForeground, #f48771); }
+
+.cw-bar { display: flex; align-items: center; gap: 5px; }
+.cw-bar select {
+    flex: 1 1 0;
+    min-width: 0;
+    font-family: inherit;
+    font-size: 11px;
+    padding: 3px 5px;
+    color: var(--vscode-dropdown-foreground, inherit);
+    background: var(--vscode-dropdown-background, var(--cw-soft));
+    border: 1px solid var(--vscode-dropdown-border, var(--cw-border));
+    border-radius: 6px;
+}
+
+.cw-ib {
+    font-family: inherit;
+    font-size: 11px;
+    line-height: 1;
+    padding: 3px 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: inherit;
+    background: transparent;
+    border: 1px solid var(--cw-border);
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+.cw-ib:hover:not(:disabled) { background: var(--cw-soft); }
+.cw-ib:disabled { opacity: .45; cursor: default; }
+.cw-ib.spin { animation: cw-spin .8s linear infinite; }
+@keyframes cw-spin { to { transform: rotate(360deg); } }
+
+/* ── panel profil ─────────────────────────────────────────────────────────── */
+.cw-me, .cw-rules {
+    border: 1px solid var(--cw-border);
+    border-radius: 8px;
+    padding: 6px 8px;
+    background: var(--cw-soft);
+    min-width: 0;
+}
+.cw-me > summary, .cw-rules > summary { cursor: pointer; font-weight: 600; font-size: 11px; }
+
+.cw-avatar-row { display: flex; align-items: center; gap: 7px; margin: 6px 0; flex-wrap: wrap; }
+.cw-avatar {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--cw-border);
+    background: #fff;
+}
+
+.cw-me label { display: block; margin-top: 5px; font-size: 10px; opacity: .85; }
+.cw-me input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 3px;
+    font-family: inherit;
+    font-size: 11px;
+    padding: 3px 6px;
+    color: var(--vscode-input-foreground, inherit);
+    background: var(--vscode-input-background, transparent);
+    border: 1px solid var(--vscode-input-border, var(--cw-border));
+    border-radius: 5px;
+}
+
+.cw-btn {
+    margin-top: 6px;
+    font-family: inherit;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    color: var(--vscode-button-foreground, #fff);
+    background: var(--cw-accent);
+    white-space: nowrap;
+    flex: 0 0 auto;
+}
+.cw-btn:hover { background: var(--vscode-button-hoverBackground, #1177bb); }
+.cw-btn:disabled { cursor: default; opacity: .6; background: transparent; color: inherit; border-color: var(--cw-border); }
+
+/* ── daftar pesan ─────────────────────────────────────────────────────────── */
+.cw-msgs {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-height: 100px;
+    max-height: 42vh;
+    overflow-y: auto;
+    padding: 2px 0;
+}
+
+.cw-empty, .cw-loading {
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 11px;
+    opacity: .75;
+}
+
+.cw-msg { display: flex; gap: 6px; align-items: flex-start; min-width: 0; }
+.cw-msg .cw-avatar { width: 24px; height: 24px; flex: 0 0 24px; }
+
+.cw-bubble {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 5px 7px;
+    border-radius: 10px;
+    border: 1px solid var(--cw-border);
+    background: var(--cw-soft);
+}
+/* Pesan sendiri: warna aksen lembut supaya mudah dibedakan. */
+.cw-msg.mine .cw-bubble {
+    border-color: var(--cw-accent);
+    background: color-mix(in srgb, var(--cw-accent) 14%, transparent);
+}
+/* Pesan skin share */
+.cw-msg.skin-share .cw-bubble {
+    border-color: rgba(255, 165, 0, .5);
+    background: var(--cw-skin);
+}
+/* Pesan AI share */
+.cw-msg.ai-share .cw-bubble {
+    border-color: rgba(99, 102, 241, .5);
+    background: var(--cw-ai);
+}
+
+.cw-top { display: flex; align-items: baseline; gap: 5px; min-width: 0; }
+.cw-name { font-weight: 700; font-size: 11px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+.cw-when { margin-left: auto; flex: 0 0 auto; font-size: 10px; opacity: .6; }
+.cw-bio {
+    font-size: 10px;
+    opacity: .7;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 3px;
+    min-width: 0;
+}
+.cw-text { font-size: 11px; line-height: 1.4; white-space: pre-wrap; overflow-wrap: anywhere; min-width: 0; }
+
+/* Badge skin dan AI */
+.cw-skin-badge {
+    font-size: 10.5px;
+    padding: 2px 0;
+    color: #b87a00;
+    margin-bottom: 2px;
+}
+.cw-ai-badge {
+    font-size: 10.5px;
+    padding: 2px 0;
+    color: #6366f1;
+    margin-bottom: 2px;
+}
+
+/* ── extra action bar ─────────────────────────────────────────────────────── */
+.cw-extra-bar {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+.cw-extra-btn {
+    font-size: 10.5px;
+    padding: 3px 7px;
+    border-radius: 6px;
+    flex: 0 0 auto;
+}
+
+/* ── kotak tulis ──────────────────────────────────────────────────────────── */
+.cw-input { display: flex; gap: 5px; align-items: flex-end; min-width: 0; }
+.cw-input textarea {
+    flex: 1 1 0;
+    min-width: 0;
+    resize: vertical;
+    min-height: 38px;
+    font-family: inherit;
+    font-size: 11px;
+    line-height: 1.4;
+    padding: 4px 6px;
+    color: var(--vscode-input-foreground, inherit);
+    background: var(--vscode-input-background, transparent);
+    border: 1px solid var(--vscode-input-border, var(--cw-border));
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+.cw-input .cw-btn { margin-top: 0; }
+
+.cw-note {
+    margin-top: 5px;
+    padding: 4px 6px;
+    border-radius: 7px;
+    font-size: 10px;
+    line-height: 1.45;
+    background: var(--cw-ok);
+}
+.cw-note.bad { background: var(--cw-bad); }
+
+.cw-muted { font-size: 10px; line-height: 1.45; opacity: .75; }
+.cw-rules pre {
+    overflow-x: auto;
+    padding: 5px 7px;
+    border-radius: 6px;
+    background: var(--vscode-textCodeBlock-background, rgba(0, 0, 0, .2));
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 10px;
+}
+.cw-rules code { font-family: var(--vscode-editor-font-family, monospace); }

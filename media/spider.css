@@ -1,0 +1,300 @@
+/* Gaya untuk Spider (laba-laba pemandu visualisasi) — dimuat setelah main.css.
+   Rangka kaki (femur/tibia) dianimasikan dari spider.js; berkas ini hanya mengatur bentuk,
+   posisi, balon kata, dan panel. */
+:root {
+    /* Panel pet mengikuti tema halaman (--sk-* dari media/main.css); bila tidak ada, ikuti VS Code. */
+    --sp-bg: var(--sk-card, var(--vscode-editorWidget-background, #21262d));
+    --sp-border: var(--sk-border, var(--vscode-panel-border, rgba(128, 128, 128, .4)));
+}
+
+#spider-agent {
+    position: fixed;
+    width: 96px;
+    height: 96px;
+    z-index: 900;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    filter: drop-shadow(0 5px 9px rgba(0, 0, 0, .34));
+}
+
+#spider-agent.dragging { cursor: grabbing; filter: drop-shadow(0 14px 20px rgba(0, 0, 0, .45)); }
+#spider-agent.flip .sp-svg { transform: scaleX(-1); }
+#spider-agent.hop { animation: sp-hop .64s ease; }
+
+.sp-svg { width: 100%; height: 100%; overflow: visible; display: block; }
+
+/* Rangka kaki: dua ruas (femur → tibia) dengan lutut sebagai titik putar.
+   Warnanya mengikuti kostum aktif (view "Pet Skin") lewat variabel di bawah ini. */
+.sp-svg .seg {
+    fill: none;
+    stroke: var(--sp-leg, #22262c);
+    stroke-width: 5;
+    stroke-linecap: round;
+}
+
+.sp-svg .tibia .seg { stroke-width: 4.1; }
+
+.sp-svg .sp-body { fill: var(--sp-body, #2b3038); stroke: var(--sp-outline, #4b5563); stroke-width: 1.4; }
+.sp-svg .sp-back { fill: var(--sp-back, #3a4149); }
+.sp-svg .sp-head { fill: var(--sp-head, #343a42); stroke: var(--sp-outline, #4b5563); stroke-width: 1.2; }
+.sp-svg .sp-eye { fill: var(--sp-eye, #e8f6ff); }
+.sp-svg .sp-pupil { fill: var(--sp-pupil, #17324a); }
+
+/* Aksesori kostum: `.sp-acc` = isi warna aksen, `.sp-acc.ring` = garis saja, `.sp-acc-band` = pita. */
+.sp-svg .sp-accessory { pointer-events: none; }
+.sp-svg .sp-acc { fill: var(--sp-acc, #8fa3b8); stroke: rgba(0, 0, 0, .32); stroke-width: .9; stroke-linejoin: round; }
+.sp-svg .sp-acc.ring { fill: none; stroke: var(--sp-acc, #8fa3b8); stroke-width: 2.4; }
+.sp-svg .sp-acc-band { fill: rgba(0, 0, 0, .28); stroke: none; }
+
+.sp-svg .sp-eyes {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: sp-blink 4.8s steps(1) infinite;
+}
+
+@keyframes sp-blink {
+    0%, 91%, 100% { opacity: 1; }
+    93%, 97% { opacity: .12; }
+}
+
+@keyframes sp-hop {
+    0%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-12px) rotate(-5deg); }
+}
+
+/* Balon kata di atas laba-laba (termasuk status “menyusun rencana…”). */
+#spider-bubble {
+    position: fixed;
+    z-index: 905;
+    max-width: 330px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    background: var(--sp-bg);
+    color: var(--vscode-foreground, #e5e7eb);
+    border: 1px solid var(--sp-border);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .38);
+    font-size: 12.5px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    pointer-events: none;
+}
+
+#spider-bubble::after {
+    content: '';
+    position: absolute;
+    left: 44%;
+    bottom: -7px;
+    width: 13px;
+    height: 13px;
+    background: var(--sp-bg);
+    border-right: 1px solid var(--sp-border);
+    border-bottom: 1px solid var(--sp-border);
+    transform: rotate(45deg);
+}
+
+#spider-bubble.thinking { font-style: italic; opacity: .92; }
+
+#spider-bubble.thinking::before {
+    content: '…';
+    display: inline-block;
+    width: 1.1em;
+    animation: sp-dots 1.2s steps(4) infinite;
+}
+
+@keyframes sp-dots {
+    0% { content: '·'; }
+    33% { content: '··'; }
+    66% { content: '···'; }
+}
+
+/* Panel instruksi dan catatan langkah. */
+#spider-panel {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    z-index: 910;
+    width: 360px;
+    max-width: calc(100vw - 28px);
+    /* Panel tidak boleh melebihi layar: isi yang panjang digulir di dalam panel. */
+    max-height: min(80vh, 660px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 10px;
+    border-radius: 12px;
+    background: var(--sp-bg);
+    border: 1px solid var(--sp-border);
+    box-shadow: 0 16px 38px rgba(0, 0, 0, .42);
+    font-size: 12px;
+    color: var(--vscode-foreground);
+}
+
+#spider-panel.hidden { display: none; }
+
+.sp-head { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.sp-head strong { font-size: 12.5px; }
+.sp-status { flex: 1 1 auto; font-size: 10.5px; opacity: .7; }
+
+.sp-ib {
+    border: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 2px 5px;
+    border-radius: 5px;
+    opacity: .78;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.sp-ib:hover { opacity: 1; background: rgba(128, 128, 128, .22); }
+
+.sp-ib.on {
+    opacity: 1;
+    color: var(--vscode-button-foreground, #fff);
+    background: var(--vscode-button-background, #0e639c);
+}
+
+/* Bilah kemajuan langkah saat spider mengeksekusi rencana. */
+.sp-bar {
+    height: 5px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(128, 128, 128, .24);
+}
+
+.sp-bar > i {
+    display: block;
+    height: 100%;
+    width: 0;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #4e79a7, #59a14f);
+    transition: width .35s ease;
+}
+
+.sp-tools { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.sp-chip.go {
+    background: var(--vscode-button-background, #0e639c);
+    color: var(--vscode-button-foreground, #fff);
+    border-color: transparent;
+    font-weight: 600;
+}
+
+.sp-chip.go:hover { filter: brightness(1.1); background: var(--vscode-button-hoverBackground, #1177bb); }
+
+.sp-row.ok { background: rgba(89, 161, 79, .22); }
+.sp-row.gagal { background: rgba(226, 87, 90, .2); }
+.sp-row.explain { background: rgba(126, 87, 194, .26); }
+
+.sp-chips { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.sp-chip {
+    font-size: 10.5px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--sp-border);
+    background: rgba(128, 128, 128, .12);
+    color: inherit;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.sp-chip:hover { background: rgba(128, 128, 128, .26); }
+
+.sp-log {
+    max-height: min(42vh, 260px);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 6px;
+    border-radius: 8px;
+    background: rgba(128, 128, 128, .1);
+    scrollbar-width: thin;
+}
+
+/* Teks panjang dari otak model dibungkus rapi, tidak melebar keluar panel.
+   Baris “spider” (penjelasan langkah) diberi spasi lega supaya enak dibaca. */
+.sp-row {
+    padding: 5px 8px;
+    border-radius: 8px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    text-align: left;
+    hyphens: auto;
+}
+
+.sp-row.explain {
+    white-space: pre-wrap;
+    background: rgba(126, 87, 194, .26);
+    border-left: 3px solid rgba(126, 87, 194, .8);
+}
+
+/* Layar sempit: panel memakai hampir seluruh lebar dan tombol tetap terlihat. */
+@media (max-width: 480px) {
+    #spider-panel {
+        right: 6px;
+        left: 6px;
+        bottom: 6px;
+        width: auto;
+        max-width: none;
+        max-height: 72vh;
+        padding: 8px;
+    }
+
+    .sp-status { display: none; }
+
+    .sp-log { max-height: 34vh; }
+
+    .sp-tools .sp-chip {
+        flex: 1 1 auto;
+        text-align: center;
+    }
+}
+
+.sp-row.spider { background: rgba(78, 121, 167, .2); }
+
+.sp-row.user {
+    background: var(--vscode-button-background, #0e639c);
+    color: var(--vscode-button-foreground, #fff);
+    align-self: flex-end;
+    max-width: 92%;
+}
+
+.sp-row.note { opacity: .7; font-size: 10.5px; font-style: italic; }
+
+.sp-input { display: flex; gap: 6px; }
+
+.sp-input input {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 5px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--sp-border);
+    background: var(--vscode-input-background, rgba(128, 128, 128, .14));
+    color: inherit;
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.sp-note { font-size: 10.5px; opacity: .72; }
+
+/* Bagian yang sedang ditunjuk laba-laba. */
+.spider-focus {
+    outline: 3px solid #f28e2b !important;
+    outline-offset: 3px;
+    border-radius: 6px;
+    box-shadow: 0 0 0 9px rgba(242, 142, 43, .16) !important;
+    transition: box-shadow .3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #spider-agent.hop { animation: none !important; }
+    .sp-svg .sp-eyes { animation: none !important; }
+}

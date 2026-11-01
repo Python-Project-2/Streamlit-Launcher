@@ -1,0 +1,195 @@
+/* Gaya overlay Join Room di halaman analisis Date Skunder.
+   Kursor peserta lain tampil di bawah spider pemandu (z-index 900) dan coretan pena (9000). */
+
+.sk-room-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 896;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.sk-room-cursor {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 2px;
+    will-change: transform;
+    transition: opacity .25s ease;
+    opacity: 1;
+    pointer-events: none;
+    contain: layout style;
+}
+
+.sk-room-cursor.idle { opacity: .45; }
+
+.sk-room-pointer {
+    width: 18px;
+    height: 18px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .45));
+    flex: 0 0 auto;
+}
+
+.sk-room-pointer path { stroke: rgba(0, 0, 0, .35); stroke-width: .8; }
+
+.sk-room-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    margin-top: 12px;
+    margin-left: -2px;
+    padding: 1px 6px 1px 2px;
+    border-radius: 999px;
+    background: var(--sk-room-color, #38bdf8);
+    color: #08111a;
+    font: 600 10.5px/1.35 var(--vscode-font-family, system-ui, sans-serif);
+    white-space: nowrap;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .35);
+    max-width: 190px;
+}
+
+.sk-room-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+/* Chip nama pindah sisi saat kursor mendekati tepi layar supaya tidak terpotong. */
+.sk-room-chip { transform-origin: left top; }
+.sk-room-cursor.flip-x .sk-room-chip { transform: translateX(calc(-100% - 18px)); }
+.sk-room-cursor.flip-y .sk-room-chip { transform: translateY(calc(-100% - 12px)); }
+.sk-room-cursor.flip-x.flip-y .sk-room-chip { transform: translate(calc(-100% - 18px), calc(-100% - 12px)); }
+
+.sk-room-avatar {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    flex: 0 0 auto;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, .3));
+}
+
+.sk-room-spider { width: 100%; height: 100%; display: block; }
+
+.sk-room-spider .sk-sp-leg {
+    fill: none;
+    stroke: var(--sp-leg, #22262c);
+    stroke-width: 6.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.sk-room-spider .sk-sp-body { fill: var(--sp-body, #2b3038); stroke: var(--sp-outline, #4b5563); stroke-width: 1.6; }
+.sk-room-spider .sk-sp-back { fill: var(--sp-back, #3a4149); }
+.sk-room-spider .sk-sp-head { fill: var(--sp-head, #343a42); stroke: var(--sp-outline, #4b5563); stroke-width: 1.3; }
+.sk-room-spider .sk-sp-eye { fill: var(--sp-eye, #e8f6ff); }
+.sk-room-spider .sk-sp-pupil { fill: var(--sp-pupil, #17324a); }
+.sk-room-spider .sp-acc { fill: var(--sp-acc, #8fa3b8); stroke: rgba(0, 0, 0, .3); stroke-width: 1; }
+.sk-room-spider .sp-acc.ring { fill: none; stroke: var(--sp-acc, #8fa3b8); stroke-width: 2.6; }
+.sk-room-spider .sp-acc-band { fill: rgba(0, 0, 0, .28); stroke: none; }
+
+/* Badge ringkas di kiri bawah: room + jumlah perangkat. */
+.sk-room-badge {
+    position: fixed;
+    left: 12px;
+    bottom: 12px;
+    z-index: 892;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 60vw;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--sk-border, rgba(128, 128, 128, .4));
+    background: var(--sk-card, rgba(30, 30, 36, .92));
+    color: var(--sk-fg, #e8e8ea);
+    font: 600 11px/1.3 var(--vscode-font-family, system-ui, sans-serif);
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .28);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sk-room-badge:hover { border-color: var(--skaccent, #38bdf8); }
+.sk-room-badge.blocked { border-color: rgba(248, 113, 113, .65); color: var(--vscode-errorForeground, #f87171); }
+.sk-room-badge.offline { border-color: rgba(248, 113, 113, .55); color: var(--vscode-errorForeground, #f87171); }
+
+/* Peringatan berkas berbeda dengan berkas room — kartu netral (tanpa blok kuning). */
+.sk-room-banner {
+    position: fixed;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9500;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    width: min(760px, calc(100vw - 28px));
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--sk-border, rgba(128, 128, 128, .45));
+    border-left: 3px solid var(--vscode-errorForeground, #f87171);
+    background: var(--sk-card, rgba(30, 30, 36, .96));
+    color: var(--sk-fg, #e8e8ea);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .4);
+    font: 12px/1.5 var(--vscode-font-family, system-ui, sans-serif);
+}
+
+.sk-room-banner-icon { font-size: 18px; line-height: 1; color: var(--vscode-errorForeground, #f87171); }
+.sk-room-banner-body { flex: 1 1 auto; min-width: 0; }
+.sk-room-banner-title { font-weight: 700; font-size: 12.5px; margin-bottom: 2px; }
+.sk-room-banner-text { opacity: .95; }
+.sk-room-banner-file { margin-top: 4px; font-size: 11px; opacity: .8; }
+.sk-room-banner-actions { display: flex; flex-direction: column; gap: 6px; }
+
+.sk-room-btn {
+    font: 600 11px/1.3 var(--vscode-font-family, system-ui, sans-serif);
+    padding: 5px 10px;
+    border-radius: 7px;
+    border: 1px solid rgba(255, 255, 255, .18);
+    background: rgba(255, 255, 255, .1);
+    color: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+.sk-room-btn:hover { background: rgba(255, 255, 255, .18); }
+.sk-room-btn.danger { background: rgba(248, 113, 113, .18); border-color: rgba(248, 113, 113, .6); color: var(--vscode-errorForeground, #f87171); }
+.sk-room-btn.danger:hover { background: rgba(248, 113, 113, .3); }
+
+.sk-room-toast {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    z-index: 9600;
+    max-width: min(420px, calc(100vw - 28px));
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--sk-border, rgba(128, 128, 128, .4));
+    background: var(--sk-card, rgba(30, 30, 36, .96));
+    color: var(--sk-fg, #e8e8ea);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+    font: 11.5px/1.45 var(--vscode-font-family, system-ui, sans-serif);
+}
+.sk-room-toast.ok { border-color: rgba(34, 197, 94, .6); }
+.sk-room-toast.bad { border-color: rgba(239, 68, 68, .7); }
+.sk-room-toast.info { border-color: rgba(56, 189, 248, .6); }
+
+/* Elemen melayang hanya muncul saat dipakai: `display` di kelasnya menimpa [hidden] bawaan,
+   jadi tanpa aturan ini banner kosong tetap tampil sebagai pil hitam di atas halaman. */
+.sk-room-banner[hidden],
+.sk-room-badge[hidden],
+.sk-room-toast[hidden] { display: none !important; }
+
+@media (prefers-reduced-motion: reduce) {
+    .sk-room-cursor { transition: none; }
+}
+
+@media (max-width: 520px) {
+    .sk-room-badge { font-size: 10px; padding: 3px 8px; max-width: 74vw; }
+    .sk-room-chip { font-size: 10px; padding-right: 5px; }
+    .sk-room-name { max-width: 96px; }
+    .sk-room-banner { flex-wrap: wrap; }
+    .sk-room-banner-actions { flex-direction: row; width: 100%; }
+    .sk-room-banner-actions .sk-room-btn { flex: 1 1 auto; }
+}

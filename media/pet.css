@@ -1,0 +1,401 @@
+/* Gaya untuk view "Pet Skin" (ganti kostum pet Spider) — sidebar Date Skunder AI.
+   Warna rangka dan aksesori mengikuti variabel per kartu yang diisi dari media/pet.js. */
+:root {
+    --pet-border: var(--vscode-panel-border, rgba(128, 128, 128, .35));
+}
+
+body.pet-body {
+    margin: 0;
+    padding: 0;
+    color: var(--vscode-foreground);
+    font-family: var(--vscode-font-family, sans-serif);
+    font-size: 12px;
+    overflow-x: hidden;
+}
+
+.pet-root {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    /* Jadikan panel sebagai container supaya tata letak menyesuaikan lebar sidebar. */
+    container-type: inline-size;
+    min-width: 0;
+}
+
+.pet-head { display: flex; align-items: baseline; gap: 8px; }
+.pet-head strong { font-size: 12.5px; }
+.pet-state { flex: 1 1 auto; text-align: right; font-size: 10.5px; opacity: .7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 62%; }
+/* Status koneksi realtime: hijau = terhubung, kuning = menyambung ulang, merah = terputus. */
+.pet-state.ok { color: var(--vscode-testing-iconPassed, #4ade80); opacity: 1; }
+.pet-state.warn { color: var(--vscode-editorWarning-foreground, #fbbf24); opacity: 1; }
+.pet-state.bad { color: var(--vscode-errorForeground, #f87171); opacity: 1; }
+
+.pet-intro { margin: 0; line-height: 1.5; opacity: .85; }
+
+.pet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+    gap: 8px;
+}
+
+.pet-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid var(--pet-border);
+    background: rgba(128, 128, 128, .08);
+}
+
+.pet-card.active {
+    border-color: var(--vscode-button-background, #0e639c);
+    box-shadow: inset 0 0 0 1px var(--vscode-button-background, #0e639c);
+}
+
+.pet-prev { position: relative; width: 100%; height: 86px; }
+.pet-prev svg { width: 100%; height: 100%; display: block; overflow: visible; }
+
+/* Kostum terkunci: pratinjau diredupkan + gembok, tombol Pakai dimatikan sampai misinya selesai. */
+.pet-card.locked { opacity: .85; border-style: dashed; }
+.pet-card.locked .pet-prev { filter: grayscale(.5) brightness(.85); }
+
+.pet-lock {
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    font-size: 15px;
+    line-height: 1;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .55));
+}
+
+/* Daftar misi pembuka kostum. */
+.pet-missions { display: flex; flex-direction: column; gap: 5px; }
+.pet-missions-head { margin-top: 4px; font-weight: 700; font-size: 11.5px; }
+.pet-mission { padding: 5px 7px; border-radius: 8px; background: rgba(128, 128, 128, .1); border: 1px solid transparent; }
+.pet-mission.done { background: rgba(89, 161, 79, .16); border-color: rgba(89, 161, 79, .4); }
+.pet-mission-name { font-size: 11px; font-weight: 600; }
+.pet-mission-detail { font-size: 10.5px; line-height: 1.4; opacity: .75; }
+
+.pet-name { font-weight: 700; font-size: 11.5px; }
+.pet-tag { flex: 1 1 auto; font-size: 10.5px; line-height: 1.4; opacity: .75; }
+
+.pet-use {
+    font-family: inherit;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    color: var(--vscode-button-foreground, #fff);
+    background: var(--vscode-button-background, #0e639c);
+}
+
+.pet-use:hover { background: var(--vscode-button-hoverBackground, #1177bb); }
+.pet-use:disabled { cursor: default; opacity: .6; background: transparent; color: inherit; border-color: var(--pet-border); }
+
+.pet-note {
+    font-size: 10.5px;
+    line-height: 1.45;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: rgba(89, 161, 79, .18);
+}
+
+.pet-note.bad { background: rgba(226, 87, 90, .2); }
+
+/* ── rangka laba-laba di pratinjau (bentuk sama dengan spider.js) ─────────── */
+.pet-prev .sp-seg { fill: none; stroke: var(--sp-leg, #22262c); stroke-width: 5; stroke-linecap: round; }
+.pet-prev .sp-tibia .sp-seg { stroke-width: 4.1; }
+.pet-prev .sp-body { fill: var(--sp-body, #2b3038); stroke: var(--sp-outline, #4b5563); stroke-width: 1.4; }
+.pet-prev .sp-back { fill: var(--sp-back, #3a4149); }
+.pet-prev .sp-head { fill: var(--sp-head, #343a42); stroke: var(--sp-outline, #4b5563); stroke-width: 1.2; }
+.pet-prev .sp-eye { fill: var(--sp-eye, #e8f6ff); }
+.pet-prev .sp-pupil { fill: var(--sp-pupil, #17324a); }
+
+/* aksesori kostum: `.sp-acc` = isi warna aksen, `.sp-acc.ring` = garis saja. */
+.pet-prev .sp-acc { fill: var(--sp-acc, #8fa3b8); stroke: rgba(0, 0, 0, .32); stroke-width: .9; stroke-linejoin: round; }
+.pet-prev .sp-acc.ring { fill: none; stroke: var(--sp-acc, #8fa3b8); stroke-width: 2.4; }
+.pet-prev .sp-acc-band { fill: rgba(0, 0, 0, .28); stroke: none; }
+
+/* ── Pet Lab: test API JSON, cek kesehatan laptop, riwayat hasil ─────────── */
+.pet-lab {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--pet-border);
+}
+
+.pet-lab-head { display: flex; align-items: baseline; gap: 8px; }
+.pet-lab-head strong { font-size: 12px; }
+
+.pet-lab-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid var(--pet-border);
+    background: rgba(128, 128, 128, .06);
+}
+
+.pet-lab-title { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 11.5px; }
+.pet-lab-sub { font-size: 10.5px; line-height: 1.4; opacity: .72; }
+.pet-lab-row { display: flex; gap: 6px; }
+.pet-lab-row .pet-input { min-width: 0; }
+
+.pet-input {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: inherit;
+    font-size: 11px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px solid var(--pet-border);
+    background: var(--vscode-input-background, rgba(128, 128, 128, .12));
+    color: var(--vscode-input-foreground, inherit);
+}
+
+.pet-input:focus { outline: 1px solid var(--vscode-focusBorder, #0e639c); outline-offset: -1px; }
+.pet-input-sm { flex: 0 0 78px; }
+.pet-code { font-family: var(--vscode-editor-font-family, monospace); font-size: 10.5px; resize: vertical; }
+
+.pet-lab-adv summary { cursor: pointer; font-size: 10.5px; opacity: .8; }
+.pet-lab-adv[open] summary { margin-bottom: 5px; }
+.pet-lab-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.pet-btn {
+    font-family: inherit;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--pet-border);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+.pet-btn:hover { background: rgba(128, 128, 128, .16); }
+.pet-btn.primary { background: var(--vscode-button-background, #0e639c); color: var(--vscode-button-foreground, #fff); border-color: transparent; }
+.pet-btn.primary:hover { background: var(--vscode-button-hoverBackground, #1177bb); }
+.pet-btn.danger { color: var(--vscode-errorForeground, #e2575a); border-color: rgba(226, 87, 90, .45); }
+.pet-btn:disabled { opacity: .55; cursor: default; background: transparent; color: inherit; }
+
+.pet-lab-result {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 7px;
+    border-radius: 8px;
+    background: rgba(128, 128, 128, .1);
+}
+
+.pet-lab-result-head { display: flex; align-items: center; gap: 6px; font-size: 11px; }
+.pet-lab-time { margin-left: auto; font-size: 9.5px; opacity: .6; }
+.pet-lab-badge { font-size: 9.5px; padding: 1px 5px; border-radius: 999px; background: rgba(89, 161, 79, .24); }
+.pet-lab-badge.bad { background: rgba(226, 87, 90, .24); }
+.pet-lab-result-sub { font-size: 10.5px; opacity: .8; }
+
+.pet-lab-pre {
+    margin: 0;
+    max-height: 220px;
+    overflow: auto;
+    padding: 6px;
+    border-radius: 6px;
+    background: var(--vscode-textCodeBlock-background, rgba(0, 0, 0, .25));
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 10px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.pet-badge { font-size: 9.5px; font-weight: 600; padding: 1px 5px; border-radius: 999px; background: rgba(128, 128, 128, .22); }
+.pet-lab-history { display: flex; flex-direction: column; gap: 4px; }
+.pet-lab-empty { font-size: 10.5px; opacity: .65; padding: 4px 2px; }
+
+.pet-lab-entry {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 6px;
+    align-items: center;
+    padding: 5px 6px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: rgba(128, 128, 128, .1);
+}
+
+.pet-lab-entry:hover { border-color: var(--pet-border); }
+.pet-lab-entry.removing { opacity: .4; }
+.pet-lab-dot { font-size: 12px; line-height: 1; }
+.pet-lab-entry-main { min-width: 0; }
+.pet-lab-entry-title { font-size: 11px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pet-lab-entry-sub { font-size: 10px; opacity: .7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pet-lab-entry-actions { display: flex; gap: 2px; opacity: .55; transition: opacity .12s ease; }
+.pet-lab-entry:hover .pet-lab-entry-actions, .pet-lab-entry:focus-within .pet-lab-entry-actions { opacity: 1; }
+
+.pet-lab-icon { border: none; background: transparent; color: inherit; cursor: pointer; font-size: 11px; padding: 2px 3px; border-radius: 4px; }
+.pet-lab-icon:hover { background: rgba(128, 128, 128, .22); }
+.pet-lab-icon.active { background: rgba(128, 128, 128, .3); }
+.pet-lab-entry-preview { grid-column: 1 / -1; max-height: 180px; }
+
+/* ── Join Room: server Socket.IO, perangkat, kursor, CSV bersama ──────────── */
+.pet-room { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; padding-top: 8px; border-top: 1px solid var(--pet-border); }
+.pet-room-head { display: flex; align-items: baseline; gap: 8px; }
+.pet-room-head strong { font-size: 12px; }
+.pet-room-card { display: flex; flex-direction: column; gap: 6px; padding: 8px; border: 1px solid var(--pet-border); border-radius: 10px; background: rgba(128, 128, 128, .07); }
+.pet-room-title { font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 5px; }
+.pet-room-sub { font-size: 10.5px; line-height: 1.4; opacity: .78; overflow-wrap: anywhere; }
+.pet-room-row { display: flex; gap: 5px; align-items: center; flex-wrap: wrap; }
+.pet-room-row .pet-input { flex: 1 1 auto; min-width: 0; }
+.pet-btn.icon { flex: 0 0 auto; padding: 3px 6px; font-size: 11px; }
+.pet-room-actions { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.pet-room-empty { font-size: 10.5px; opacity: .6; padding: 3px 2px; }
+
+/* Tab Create / Join: satu mode aktif, sisanya redup. */
+.pet-room-mode { display: flex; gap: 3px; padding: 3px; border: 1px solid var(--pet-border); border-radius: 8px; background: rgba(128, 128, 128, .1); }
+.pet-room-mode button { flex: 1 1 0; min-width: 0; padding: 5px 6px; border: 1px solid transparent; border-radius: 6px; background: transparent; color: inherit; font: 600 10.5px/1.2 var(--vscode-font-family, system-ui, sans-serif); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+.pet-room-mode button:hover { background: rgba(128, 128, 128, .18); }
+.pet-room-mode button.active { background: var(--vscode-button-background, #0e639c); border-color: var(--vscode-button-background, #0e639c); color: var(--vscode-button-foreground, #fff); }
+.pet-room-mode button:focus-visible { outline: 1px solid var(--vscode-focusBorder, #38bdf8); outline-offset: 1px; }
+
+.pet-room-devices { display: flex; flex-direction: column; gap: 4px; }
+.pet-room-device { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px; align-items: center; padding: 4px 6px; border-radius: 7px; background: rgba(128, 128, 128, .1); border: 1px solid transparent; }
+.pet-room-device.self { border-color: rgba(56, 189, 248, .45); }
+.pet-room-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.pet-room-device-main { min-width: 0; }
+.pet-room-device-name { font-size: 10.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pet-room-device-sub { font-size: 9.5px; opacity: .7; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pet-room-device-meta { font-size: 9.5px; opacity: .7; white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.pet-room-map { border: 1px solid var(--pet-border); border-radius: 8px; background: rgba(128, 128, 128, .1); padding: 4px; }
+.pet-room-map-inner { position: relative; height: 74px; border-radius: 5px; background-image: linear-gradient(rgba(128, 128, 128, .18) 1px, transparent 1px), linear-gradient(90deg, rgba(128, 128, 128, .18) 1px, transparent 1px); background-size: 18px 18px; overflow: hidden; }
+.pet-room-map-cursor { position: absolute; width: 7px; height: 7px; border-radius: 50%; background: var(--c, #38bdf8); box-shadow: 0 0 0 2px rgba(0, 0, 0, .25); transform: translate(-50%, -50%); transition: left .12s linear, top .12s linear; }
+.pet-room-map-name { position: absolute; left: 8px; top: -2px; font-size: 8.5px; font-weight: 600; color: var(--c, #38bdf8); white-space: nowrap; text-shadow: 0 1px 2px rgba(0, 0, 0, .5); }
+
+.pet-room-table { max-height: min(236px, 42vh); overflow: auto; border: 1px solid var(--pet-border); border-radius: 8px; scrollbar-width: thin; }
+.pet-room-grid { border-collapse: separate; border-spacing: 0; font-size: 10px; width: max-content; min-width: 100%; }
+.pet-room-grid th, .pet-room-grid td { padding: 0; border-right: 1px solid var(--pet-border); border-bottom: 1px solid var(--pet-border); }
+.pet-room-grid th { position: sticky; top: 0; z-index: 2; background: var(--vscode-sideBar-background, #202024); padding: 3px 5px; text-align: left; font-size: 9.5px; font-weight: 700; white-space: nowrap; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
+.pet-room-grid td.idx, .pet-room-grid th.idx { position: sticky; left: 0; z-index: 1; background: var(--vscode-sideBar-background, #202024); padding: 3px 5px; font-size: 9px; opacity: .6; text-align: right; }
+.pet-room-grid th.idx { z-index: 3; }
+.pet-room-grid input.cell { width: 96px; padding: 2px 4px; border: none; background: transparent; color: inherit; font: inherit; outline: none; }
+.pet-room-grid input.cell:focus { background: rgba(56, 189, 248, .16); outline: 1px solid var(--vscode-focusBorder, #0e639c); outline-offset: -1px; }
+.pet-room-grid input.cell.dirty {
+    /* Tanpa blok kuning: penanda = garis aksen di bawah sel + teks lebih tebal. */
+    background: transparent;
+    box-shadow: inset 0 -2px 0 0 var(--vscode-focusBorder, #38bdf8);
+    font-weight: 600;
+}
+.pet-room-grid input.cell.dirty:focus { background: rgba(56, 189, 248, .12); }
+.pet-room-grid input.cell:disabled { opacity: .65; }
+
+.pet-room-preview { display: flex; flex-direction: column; gap: 4px; padding: 6px 7px; border-radius: 8px; border: 1px solid var(--pet-border); background: rgba(128, 128, 128, .1); }
+.pet-room-preview-head { font-size: 10.5px; font-weight: 700; }
+
+/* ── Pratinjau CSV: tombol & panel melayang yang bisa digeser ─────────────── */
+.pet-room-chip {
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    z-index: 46;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: calc(100vw - 24px);
+    padding: 6px 11px;
+    border: 1px solid var(--vscode-button-background, #0e639c);
+    border-radius: 999px;
+    background: var(--vscode-button-background, #0e639c);
+    color: var(--vscode-button-foreground, #fff);
+    font: 600 10.5px/1.3 var(--vscode-font-family, system-ui, sans-serif);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .38);
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.pet-room-chip:hover { filter: brightness(1.1); }
+.pet-room-chip:focus-visible { outline: 2px solid var(--vscode-focusBorder, #38bdf8); outline-offset: 2px; }
+.pet-room-chip.pending { box-shadow: 0 0 0 2px rgba(56, 189, 248, .45), 0 6px 18px rgba(0, 0, 0, .38); }
+.pet-room-chip[hidden] { display: none; }
+.pet-room-chip.dragging { cursor: grabbing; }
+
+.pet-room-float {
+    position: fixed;
+    right: 12px;
+    bottom: 12px;
+    z-index: 62;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: min(330px, calc(100vw - 20px));
+    max-height: min(64vh, 430px);
+    padding: 8px;
+    border: 1px solid var(--pet-border);
+    border-radius: 10px;
+    background: var(--vscode-editorWidget-background, var(--vscode-sideBar-background, #202024));
+    color: inherit;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .45);
+    overflow: hidden;
+}
+.pet-room-float[hidden] { display: none; }
+.pet-room-float-head { display: flex; align-items: center; gap: 6px; padding: 2px 2px 4px; border-bottom: 1px solid var(--pet-border); cursor: grab; touch-action: none; user-select: none; }
+.pet-room-float-head:focus-visible { outline: 1px solid var(--vscode-focusBorder, #38bdf8); outline-offset: 2px; border-radius: 6px; }
+.pet-room-float.dragging .pet-room-float-head { cursor: grabbing; }
+.pet-room-float-grip { opacity: .55; letter-spacing: -2px; cursor: grab; }
+.pet-room-float-head strong { flex: 1 1 auto; min-width: 0; font-size: 10.5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pet-room-float-x { flex: 0 0 auto; width: 20px; height: 20px; padding: 0; border: 1px solid transparent; border-radius: 5px; background: transparent; color: inherit; font-size: 11px; line-height: 1; cursor: pointer; }
+.pet-room-float-x:hover { background: rgba(128, 128, 128, .24); }
+.pet-room-float .pet-room-preview { border: none; background: transparent; padding: 0; max-height: calc(64vh - 68px); overflow: auto; }
+
+/* File masuk di kartu “Kirim file”. */
+.pet-room-file-icon { font-size: 14px; line-height: 1; }
+.pet-room-device .pet-room-download { justify-self: end; padding: 3px 8px; font-size: 10px; white-space: nowrap; }
+.pet-room-device .pet-room-download:disabled { opacity: .68; cursor: default; }
+.pet-room-diff { display: flex; flex-direction: column; gap: 2px; }
+.pet-room-diff-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 4px; align-items: center; font-size: 9.5px; }
+.pet-room-diff-row .kol { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: .8; }
+.pet-room-diff-row .lama { text-decoration: line-through; opacity: .65; max-width: 74px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pet-room-diff-row .baru { color: var(--vscode-testing-iconPassed, #22c55e); font-weight: 600; max-width: 84px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pet-room-diff-row .arah { opacity: .5; }
+
+/* ── Responsif: sidebar sempit (VS Code side bar) sampai panel lebar ──────── */
+@container (max-width: 320px) {
+    .pet-room { gap: 5px; }
+    .pet-room-card { padding: 7px; }
+    /* Hanya baris tanpa tombol (nama room & user) yang ditumpuk penuh. */
+    .pet-room-row:not(:has(button)) .pet-input { flex: 1 1 100%; }
+    #room-file { flex: 1 1 100%; }
+    .pet-room-row .pet-btn.icon { flex: 0 0 auto; }
+    .pet-room-device { grid-template-columns: auto minmax(0, 1fr); row-gap: 1px; }
+    .pet-room-device-meta { grid-column: 2; justify-self: start; opacity: .62; }
+    .pet-room-map-inner { height: 58px; }
+    .pet-room-grid input.cell { width: 78px; }
+    .pet-room-grid th { max-width: 84px; }
+    .pet-room-actions .pet-btn { flex: 1 1 auto; }
+    .pet-room-mode button { font-size: 10px; padding: 5px 4px; }
+    .pet-room-chip { font-size: 10px; padding: 5px 8px; }
+    .pet-room-device .pet-room-download { grid-column: 2; justify-self: start; }
+    .pet-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+    .pet-room-title { font-size: 10.5px; }
+}
+
+@container (max-width: 250px) {
+    .pet-room-map-inner { height: 50px; }
+    .pet-room-grid input.cell { width: 68px; }
+    .pet-room-grid td.idx, .pet-room-grid th.idx { padding: 3px 3px; }
+    .pet-room-device-sub { white-space: normal; }
+    .pet-room-float { width: calc(100vw - 12px); }
+}
+
+@container (min-width: 420px) {
+    .pet-room-grid input.cell { width: 124px; }
+    .pet-room-map-inner { height: 92px; }
+    .pet-room-device-meta { font-size: 10px; }
+}

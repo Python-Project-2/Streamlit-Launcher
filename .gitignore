@@ -1,0 +1,19 @@
+# Build and Release Folders
+bin-debug/
+bin-release/
+[Oo]bj/
+[Bb]in/
+
+# Date Skunder: hasil build & berkas sementara pengujian
+.tmp-check/
+build/
+out/
+
+# Other files and folders
+.settings/
+
+# Executables
+*.swf
+*.air
+*.ipa
+*.apk

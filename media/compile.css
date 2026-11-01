@@ -1,0 +1,320 @@
+/* Gaya view “Compile MSI” — kartu token, kartu build, dan terminal di dalam sidebar.
+   Semua warna memakai variabel tema VS Code supaya cocok dengan tema terang/gelap. */
+:root {
+    --cp-border: var(--vscode-panel-border, rgba(128, 128, 128, .35));
+    --cp-acc: var(--vscode-button-background, #0e639c);
+    --cp-ok: #3fa66a;
+    --cp-bad: var(--vscode-errorForeground, #e2575a);
+    --cp-warn: #d9a53a;
+}
+
+body.cp-body {
+    margin: 0;
+    padding: 0;
+    color: var(--vscode-foreground);
+    font-family: var(--vscode-font-family, sans-serif);
+    font-size: 12px;
+}
+
+.cp-root {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+}
+
+.cp-head { display: flex; align-items: baseline; gap: 8px; }
+.cp-head strong { font-size: 12.5px; }
+.cp-state { flex: 1 1 auto; text-align: right; font-size: 10.5px; opacity: .7; }
+
+/* ── kartu ─────────────────────────────────────────────────────────────── */
+.cp-card {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 9px;
+    border-radius: 10px;
+    border: 1px solid var(--cp-border);
+    background: rgba(128, 128, 128, .06);
+}
+
+.cp-title { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 11.5px; }
+.cp-sub { font-size: 10.5px; line-height: 1.45; opacity: .74; }
+.cp-sub code {
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 10px;
+    padding: 0 3px;
+    border-radius: 4px;
+    background: var(--vscode-textCodeBlock-background, rgba(0, 0, 0, .2));
+    word-break: break-all;
+}
+.cp-tags { display: inline-flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.cp-plan-main { font-size: 10.5px; margin-bottom: 2px; }
+.cp-plan-main b { font-size: 11px; }
+.cp-plan-out {
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 9.5px;
+    opacity: .75;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.cp-plan-tags { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.cp-tag {
+    font-size: 9.5px;
+    padding: 1px 5px;
+    border-radius: 999px;
+    background: rgba(128, 128, 128, .18);
+    opacity: .9;
+}
+
+.cp-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* ── form identitas aplikasi ───────────────────────────────────────────── */
+.cp-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .02em;
+    opacity: .72;
+    margin-top: 2px;
+}
+
+.cp-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+@media (max-width: 300px) { .cp-grid2 { grid-template-columns: 1fr; } }
+
+.cp-size { display: flex; align-items: center; gap: 4px; }
+.cp-size .cp-input { min-width: 0; }
+.cp-size span { opacity: .55; font-size: 10px; }
+
+select.cp-input { padding: 4px 5px; }
+input[type='number'].cp-input { appearance: textfield; -moz-appearance: textfield; }
+
+.cp-icon-row { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+.cp-icon-main { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+
+.cp-icon-preview {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 9px;
+    object-fit: contain;
+    background: rgba(128, 128, 128, .14);
+    border: 1px solid var(--cp-border);
+    padding: 2px;
+}
+
+.cp-icon-name {
+    font-size: 10px;
+    opacity: .72;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.cp-checks { display: flex; flex-direction: column; gap: 3px; margin-top: 2px; }
+.cp-check { display: flex; align-items: center; gap: 5px; font-size: 10.5px; opacity: .85; }
+.cp-check input { margin: 0; }
+
+.cp-cooldown {
+    font-size: 10px;
+    line-height: 1.4;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 200, 97, .4);
+    background: rgba(255, 200, 97, .14);
+    font-variant-numeric: tabular-nums;
+}
+
+/* ── input & tombol ────────────────────────────────────────────────────── */
+.cp-input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 11.5px;
+    padding: 5px 7px;
+    border-radius: 6px;
+    border: 1px solid var(--cp-border);
+    background: var(--vscode-input-background, rgba(128, 128, 128, .12));
+    color: var(--vscode-input-foreground, inherit);
+}
+
+/* Kolom token tampil monospace + huruf besar supaya mudah dibaca ulang. */
+#cp-token {
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 12px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.cp-input::placeholder { opacity: .55; }
+.cp-input:focus { outline: 1px solid var(--vscode-focusBorder, #0e639c); outline-offset: -1px; }
+.cp-input.ok { border-color: rgba(63, 166, 106, .75); }
+.cp-input.bad { border-color: rgba(226, 87, 90, .75); }
+
+.cp-btn {
+    font-family: inherit;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    border: 1px solid var(--cp-border);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.cp-btn:hover { background: rgba(128, 128, 128, .16); }
+.cp-btn.primary { background: var(--cp-acc); color: var(--vscode-button-foreground, #fff); border-color: transparent; }
+.cp-btn.primary:hover { background: var(--vscode-button-hoverBackground, #1177bb); }
+.cp-btn.danger { color: var(--cp-bad); border-color: rgba(226, 87, 90, .45); }
+.cp-btn.danger:hover { background: rgba(226, 87, 90, .15); }
+.cp-btn:disabled { opacity: .5; cursor: default; background: transparent; color: inherit; border-color: var(--cp-border); }
+.cp-btn.primary:disabled { background: rgba(128, 128, 128, .22); }
+
+/* ── token: titik percobaan ────────────────────────────────────────────── */
+.cp-token-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.cp-dots { display: inline-flex; align-items: center; gap: 2px; font-size: 10px; letter-spacing: 1px; }
+.cp-dot { color: rgba(128, 128, 128, .42); }
+.cp-dot.on { color: var(--cp-ok); }
+.cp-dot-label { margin-left: 5px; font-size: 10px; opacity: .72; letter-spacing: 0; }
+.cp-token-note { flex: 1 1 auto; font-size: 10.5px; opacity: .72; }
+.cp-token-note.ok { color: var(--cp-ok); opacity: .95; }
+.cp-token-note.bad { color: var(--cp-bad); opacity: .95; }
+
+/* ── progres & langkah build ───────────────────────────────────────────── */
+.cp-progress {
+    height: 5px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: rgba(128, 128, 128, .18);
+}
+
+#cp-bar {
+    width: 0;
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--cp-acc), #35c3a1);
+    transition: width .25s ease;
+}
+
+.cp-steps { display: flex; flex-direction: column; gap: 3px; }
+
+.cp-step {
+    display: grid;
+    grid-template-columns: 14px auto minmax(0, 1fr);
+    gap: 5px;
+    align-items: baseline;
+    font-size: 10.5px;
+    padding: 2px 4px;
+    border-radius: 6px;
+}
+
+.cp-step-icon { text-align: center; opacity: .65; }
+.cp-step-label { white-space: nowrap; }
+.cp-step-detail { min-width: 0; opacity: .62; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.cp-step.start { background: rgba(128, 128, 128, .12); }
+.cp-step.start .cp-step-icon { color: var(--cp-acc); opacity: 1; animation: cp-spin 1.1s linear infinite; }
+.cp-step.ok .cp-step-icon { color: var(--cp-ok); opacity: 1; }
+.cp-step.fail .cp-step-icon { color: var(--cp-bad); opacity: 1; }
+.cp-step.fail .cp-step-label { color: var(--cp-bad); }
+.cp-step.warn .cp-step-icon { color: var(--cp-warn); opacity: 1; }
+.cp-step.skip .cp-step-label, .cp-step.skip .cp-step-detail { opacity: .45; }
+.cp-step.pending { opacity: .55; }
+
+@keyframes cp-spin { to { transform: rotate(180deg); } }
+
+/* ── terminal ──────────────────────────────────────────────────────────── */
+.cp-term-wrap {
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    border: 1px solid var(--cp-border);
+    overflow: hidden;
+    background: var(--vscode-terminal-background, rgba(0, 0, 0, .22));
+}
+
+.cp-term-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 8px;
+    background: rgba(128, 128, 128, .16);
+    border-bottom: 1px solid var(--cp-border);
+}
+
+.cp-term-title { font-size: 10.5px; font-weight: 700; letter-spacing: .02em; white-space: nowrap; flex: 0 0 auto; }
+.cp-term-state { flex: 1 1 auto; font-size: 9.5px; opacity: .62; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+
+.cp-term-btn {
+    border: none;
+    background: transparent;
+    color: inherit;
+    font-size: 10px;
+    padding: 1px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+    opacity: .65;
+}
+
+.cp-term-btn:hover { background: rgba(128, 128, 128, .25); opacity: 1; }
+
+.cp-term {
+    margin: 0;
+    padding: 7px 8px;
+    height: 190px;
+    min-height: 110px;
+    max-height: 46vh;
+    resize: vertical;
+    overflow: auto;
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 10.5px;
+    line-height: 1.45;
+    outline: none;
+}
+
+.cp-line { white-space: pre-wrap; word-break: break-word; }
+.cp-line.cmd { color: var(--vscode-terminal-ansiCyan, #34b6c9); }
+.cp-line.err { color: var(--vscode-terminal-ansiRed, #e2575a); }
+.cp-line.ok { color: var(--vscode-terminal-ansiGreen, #3fa66a); }
+.cp-line.info { opacity: .62; }
+
+body.cp-running .cp-term-wrap { box-shadow: inset 0 0 0 1px rgba(53, 195, 161, .35); }
+
+.cp-prompt {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-top: 1px solid var(--cp-border);
+    background: rgba(128, 128, 128, .08);
+}
+
+.cp-ps1 { font-family: var(--vscode-editor-font-family, monospace); font-size: 10.5px; color: var(--vscode-terminal-ansiGreen, #3fa66a); }
+
+.cp-cmd {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 10.5px;
+}
+
+.cp-cmd::placeholder { opacity: .45; }
+
+/* ── catatan ───────────────────────────────────────────────────────────── */
+.cp-note {
+    font-size: 10.5px;
+    line-height: 1.45;
+    padding: 6px 8px;
+    border-radius: 8px;
+    background: rgba(63, 166, 106, .2);
+}
+
+.cp-note.bad { background: rgba(226, 87, 90, .2); }

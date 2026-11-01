@@ -1,0 +1,462 @@
+/* Tambahan gaya untuk “komunitas ramai” (pesan lokal, indikator menulis, tombol ⚡ Ramai).
+   Dipisah dari community.css supaya berkas lama tidak perlu diubah. */
+
+.cw-live-note {
+    font-size: 10px;
+    line-height: 1.35;
+    padding: 4px 6px;
+    border-radius: 6px;
+    border: 1px dashed var(--cw-border);
+    opacity: .85;
+    background: var(--cw-soft);
+}
+
+.cw-live-note.on {
+    border-style: solid;
+    border-color: rgba(89, 161, 79, .55);
+    background: var(--cw-ok);
+    opacity: 1;
+}
+
+.cw-ib.cw-live {
+    white-space: nowrap;
+    font-size: 10px;
+    padding: 2px 6px;
+}
+
+.cw-ib.cw-live.on {
+    background: var(--cw-ok);
+    border-color: rgba(89, 161, 79, .55);
+}
+
+/* ── pemilih bahasa komunitas (🌐): boleh lebih dari satu ─────────────────── */
+.cw-ib.cw-langbtn {
+    white-space: nowrap;
+    font-size: 10px;
+    padding: 2px 6px;
+}
+
+.cw-ib.cw-langbtn.on {
+    border-color: rgba(59, 130, 246, .55);
+    background: rgba(59, 130, 246, .18);
+}
+
+.cw-lang-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 7px 8px;
+    border: 1px solid var(--cw-border);
+    border-radius: 7px;
+    background: var(--cw-soft);
+}
+
+.cw-lang-menu[hidden] { display: none; }
+
+.cw-lang-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px;
+    font-size: 11px;
+}
+
+.cw-lang-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3px 8px;
+}
+
+.cw-lang-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-width: 0;
+    font-size: 10.5px;
+    cursor: pointer;
+}
+
+.cw-lang-item input { flex: 0 0 auto; margin: 0; }
+
+.cw-lang-item span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.cw-lang-item em {
+    flex: 0 0 auto;
+    margin-left: auto;
+    font-style: normal;
+    font-size: 9px;
+    opacity: .6;
+}
+
+.cw-lang-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.cw-lang-actions .cw-btn {
+    font-size: 10px;
+    padding: 2px 6px;
+}
+
+.cw-lang-reply {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+}
+
+.cw-lang-reply select {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 2px 4px;
+    font-family: inherit;
+    font-size: 10.5px;
+    border-radius: 5px;
+    color: var(--vscode-dropdown-foreground, inherit);
+    background: var(--vscode-dropdown-background, var(--cw-soft));
+    border: 1px solid var(--vscode-dropdown-border, var(--cw-border));
+}
+
+.cw-lang-note {
+    font-size: 9.5px;
+    line-height: 1.35;
+}
+
+.cw-local {
+    font-size: 9px;
+    padding: 0 4px;
+    border-radius: 6px;
+    background: var(--cw-soft);
+    border: 1px solid var(--cw-border);
+    opacity: .9;
+    white-space: nowrap;
+}
+
+.cw-msg .cw-top {
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+/* Indikator “menulis…” dengan tiga titik yang berdenyut. */
+.cw-typing .cw-dots span {
+    animation: cw-blink 1.2s infinite;
+}
+
+.cw-typing .cw-dots span:nth-child(2) { animation-delay: .2s; }
+.cw-typing .cw-dots span:nth-child(3) { animation-delay: .4s; }
+
+@keyframes cw-blink {
+    0%, 60%, 100% { opacity: .2; }
+    30% { opacity: 1; }
+}
+
+/* Pesan dari catatan lokal (data/data.txt) tetap terbaca jelas. */
+.cw-msg.local .cw-bubble {
+    border-left: 2px solid rgba(89, 161, 79, .5);
+}
+
+/* Tanpa server, chat tetap bisa dipakai penuh: jangan nonaktifkan kotak tulis,
+   daftar pesan, atau bilah tombol — aturan lama di community.css menonaktifkannya. */
+.cw-root.offline .cw-input,
+.cw-root.offline .cw-msgs,
+.cw-root.offline .cw-extra-bar {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* ── dua ruang terpisah: Komunitas & Diskusi AI ─────────────────────────────── */
+.cw-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--cw-border);
+    padding-bottom: 4px;
+}
+
+.cw-tab {
+    flex: 1 1 0;
+    min-width: 0;
+    font-family: inherit;
+    font-size: 11px;
+    line-height: 1.2;
+    padding: 4px 6px;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid transparent;
+    border-bottom: none;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: .72;
+}
+.cw-tab:hover { background: var(--cw-soft); opacity: 1; }
+.cw-tab.on {
+    opacity: 1;
+    font-weight: 700;
+    border-color: var(--cw-border);
+    background: var(--cw-soft);
+}
+
+.cw-pane { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.cw-pane[hidden] { display: none; }
+
+.cw-ai-head {
+    border: 1px solid var(--cw-border);
+    border-radius: 8px;
+    padding: 6px 8px;
+    background: var(--cw-ai);
+    font-size: 10.5px;
+    line-height: 1.45;
+}
+.cw-ai-head b { font-size: 11px; }
+
+/* Sumber ruang Diskusi AI: Firebase `diskusi_ai` atau log lokal. */
+.cw-ai-src {
+    margin-top: 2px;
+    font-family: var(--vscode-editor-font-family, monospace);
+    font-size: 10px;
+    opacity: .85;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Ruang Diskusi AI: pesan diberi warna berbeda supaya tidak tertukar dengan komunitas. */
+.cw-ai-msgs { max-height: 48vh; }
+.cw-msg.ai-room .cw-bubble {
+    border-color: rgba(99, 102, 241, .5);
+    background: var(--cw-ai);
+    border-left-width: 2px;
+}
+.cw-msg.ai-room .cw-local { background: rgba(99, 102, 241, .16); }
+.cw-ai-tips { font-size: 10px; line-height: 1.4; }
+
+.cw-logline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    opacity: .8;
+    min-width: 0;
+}
+.cw-logline span {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.cw-logline code { font-family: var(--vscode-editor-font-family, monospace); }
+
+/* Status di kepala tetap ringkas saat ruang Diskusi AI aktif. */
+.cw-root.cw-tab-ai .cw-state { text-align: right; }
+
+/* ── penanda pesan tersimpan, ruang, dan tombol JSON ───────────────────────── */
+.cw-local.cw-saved {
+    background: rgba(89, 161, 79, .14);
+    border-color: rgba(89, 161, 79, .4);
+}
+
+.cw-room {
+    font-size: 9px;
+    padding: 0 4px;
+    border-radius: 6px;
+    border: 1px solid var(--cw-border);
+    background: var(--cw-soft);
+    opacity: .8;
+    white-space: nowrap;
+}
+
+.cw-ib.cw-json {
+    border-color: rgba(89, 161, 79, .5);
+    background: rgba(89, 161, 79, .12);
+}
+.cw-ib.cw-json:hover { background: rgba(89, 161, 79, .22); }
+
+/* ── Firebase & API JSON ───────────────────────────────────────────────────── */
+.cw-local.cw-cloud {
+    background: rgba(59, 130, 246, .14);
+    border-color: rgba(59, 130, 246, .45);
+}
+
+.cw-ib.cw-cloud {
+    border-color: rgba(59, 130, 246, .5);
+    background: rgba(59, 130, 246, .12);
+}
+.cw-ib.cw-cloud:hover { background: rgba(59, 130, 246, .22); }
+
+.cw-ib.cw-api {
+    border-color: rgba(139, 92, 246, .5);
+    background: rgba(139, 92, 246, .12);
+}
+.cw-ib.cw-api:hover { background: rgba(139, 92, 246, .22); }
+.cw-ib.cw-api:disabled { opacity: .45; cursor: default; }
+
+/* Tombol terminal server API JSON — di bawah URL & tombol Salin. */
+.cw-ib.cw-term {
+    border-color: rgba(14, 99, 156, .55);
+    background: rgba(14, 99, 156, .12);
+    white-space: nowrap;
+    font-size: 9.5px;
+}
+.cw-ib.cw-term:hover { background: rgba(14, 99, 156, .22); }
+
+.cw-api-line {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+    font-size: 9.5px;
+    opacity: .85;
+}
+.cw-api-line code {
+    flex: 1 1 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--vscode-editor-font-family, monospace);
+}
+.cw-api-line[hidden] { display: none; }
+
+/* Blok terminal server API JSON — tepat di bawah URL + tombol Salin. */
+.cw-api-term-note {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 5px;
+    min-width: 0;
+    font-size: 9.5px;
+    line-height: 1.35;
+    padding: 3px 6px;
+    border: 1px dashed var(--cw-border);
+    border-radius: 6px;
+    background: var(--cw-soft);
+}
+.cw-api-term-note[hidden] { display: none; }
+.cw-api-term-note[data-state="on"] {
+    border-style: solid;
+    border-color: rgba(89, 161, 79, .5);
+    background: var(--cw-ok);
+}
+.cw-term-dot {
+    flex: 0 0 6px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d19a2d;
+}
+.cw-api-term-note[data-state="on"] .cw-term-dot { background: #59a14f; }
+.cw-api-term-note span:nth-child(2) {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── kerapian percakapan ──────────────────────────────────────────────────── */
+.cw-day {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 9px;
+    letter-spacing: .02em;
+    text-transform: uppercase;
+    opacity: .55;
+    margin: 4px 0 1px;
+}
+.cw-day::before,
+.cw-day::after {
+    content: '';
+    flex: 1 1 auto;
+    height: 1px;
+    background: var(--cw-border);
+}
+.cw-day span { flex: 0 0 auto; }
+
+/* Pesan berturut-turut dari orang yang sama dirapatkan, tanpa avatar berulang. */
+.cw-msg.grouped { margin-top: -4px; }
+.cw-msg.grouped .cw-bubble {
+    border-top-left-radius: 4px;
+    background: color-mix(in srgb, var(--cw-soft) 70%, transparent);
+}
+.cw-msg { transition: background .12s ease; }
+.cw-mini-time {
+    display: block;
+    text-align: right;
+    font-size: 8.5px;
+    opacity: .45;
+    margin-top: 1px;
+    font-variant-numeric: tabular-nums;
+}
+
+.cw-countline {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 9px;
+    opacity: .55;
+    min-width: 0;
+}
+.cw-countline span:first-child { font-variant-numeric: tabular-nums; }
+.cw-countline span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ── avatar inisial, draft streaming, dan indikator antrean ────────────────── */
+.cw-avatar.cw-ini {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    line-height: 1;
+    color: hsl(var(--h, 210) 55% 26%);
+    background: hsl(var(--h, 210) 70% 88%);
+    border-color: hsl(var(--h, 210) 45% 72%);
+    user-select: none;
+}
+
+.cw-stream .cw-bubble {
+    border-color: rgba(59, 130, 246, .38);
+    border-left: 2px solid rgba(59, 130, 246, .65);
+}
+
+.cw-stream-text {
+    white-space: pre-wrap;
+}
+
+/* Kursor kecil selama jawaban masih mengalir. */
+.cw-caret {
+    display: inline-block;
+    margin-left: 1px;
+    opacity: .55;
+    animation: cw-caret 1s steps(2, start) infinite;
+}
+
+@keyframes cw-caret {
+    50% { opacity: 0; }
+}
+
+/* Kotak tulis tetap aktif saat jawaban disusun: pengguna boleh menyiapkan pesan berikutnya. */
+.cw-input textarea:focus {
+    outline: 1px solid var(--cw-accent, rgba(59, 130, 246, .5));
+    outline-offset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cw-caret { animation: none; }
+    .cw-typing .cw-dots span { animation: none; opacity: .6; }
+}

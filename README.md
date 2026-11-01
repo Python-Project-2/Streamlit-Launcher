@@ -47,6 +47,13 @@
 
 🛠️ Repair Bug
 
+• Update @vscode/vsce is 4.1.0
+• Fixed Bug Terminal
+• Fixed Bug Version
+• Fixed Bug Panel
+• Fixed Bug Shorcut
+• Fixed Bug etc
+
 ## [2.10.2] - Press-Release 2026-10-30
 
 🚀 Performance & Optimization

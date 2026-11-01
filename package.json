@@ -2,7 +2,7 @@
   "name": "streamlit-launcher",
   "displayName": "Streamlit Launcher For Vscode",
   "description": "Automated preview and interactive data analysis for CSV and Excel files with charts, notes, DOCX/PDF journal export, Excel report export, flowchart workflow image and EasyCast (presentation view inside the editor for a digital TV / second screen), plus a UI language switch (Bahasa Indonesia / 简体中文)",
-  "version": "2.10.2",
+  "version": "2.10.7",
   "author": "dwidevelopes",
   "publisher": "dwidevelopes",
   "preview": true,

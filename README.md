@@ -29,6 +29,24 @@
 
 </div>
 
+## [2.10.7] - 2026-11-01
+
+🚀 Performance & Optimization
+
+• Size Converter Smooth: Smoother and more responsive size conversion workflow.
+• Optimize Size: Enhanced size optimization algorithm to deliver a more lightweight application footprint.
+• RAM Health: Improved memory management to maintain RAM stability and prevent memory leaks or crashes.
+• PC & Laptop Health: Comprehensive system optimizations to boost performance, manage resources, and maintain overall hardware health.
+
+🛠️ New Features & Core Systems
+
+• Compile MSI: Added full support to directly compile your projects into .msi installer packages.
+• Room Management System:
+	• Create Room: Instantly spin up and host a new room with optimized server-side initialization.
+	• Join Room: Connect to active rooms seamlessly with reduced latency and improved connection stability.
+
+🛠️ Repair Bug
+
 ## [2.10.2] - Press-Release 2026-10-30
 
 🚀 Performance & Optimization

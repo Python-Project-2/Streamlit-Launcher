@@ -9,6 +9,24 @@ Check [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) for recommendatio
 - **Publish works even when `articles` denies the account**: a 403 on the article collection now falls back to `community_artikel`, remembers the working collection, and reports it in the status bar instead of stopping at *Database: akses ditolak*. The 403 message names both collections. Covered by `npm run check:publish` against a local database stub.
 - **No more empty pill above the analysis header**: `.sk-room-banner`, `.sk-room-toast` and `.sk-room-badge` now really hide with `[hidden]` (their `display` rules used to override it), so the room warning card only appears when a room is actually blocked.
 
+## [2.10.2] - 2026-11-01
+
+🚀 Performance & Optimization
+
+• Size Converter Smooth: Smoother and more responsive size conversion workflow.
+• Optimize Size: Enhanced size optimization algorithm to deliver a more lightweight application footprint.
+• RAM Health: Improved memory management to maintain RAM stability and prevent memory leaks or crashes.
+• PC & Laptop Health: Comprehensive system optimizations to boost performance, manage resources, and maintain overall hardware health.
+
+🛠️ New Features & Core Systems
+
+• Compile MSI: Added full support to directly compile your projects into .msi installer packages.
+• Room Management System:
+	• Create Room: Instantly spin up and host a new room with optimized server-side initialization.
+	• Join Room: Connect to active rooms seamlessly with reduced latency and improved connection stability.
+
+🛠️ Repair Bug
+
 ## [2.10.2] - 2026-10-30
 
 🚀 Performance & Optimization

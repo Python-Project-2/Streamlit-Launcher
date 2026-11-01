@@ -8,6 +8,7 @@ bin-release/
 .tmp-check/
 build/
 out/
+src/
 
 # Other files and folders
 .settings/

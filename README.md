@@ -24,6 +24,10 @@
 ## EDITING FILE CSV 
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/editing.png?raw=true">
 
+## Collab Trading View
+<img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/.tradingview/trading1.png?raw=true">
+<img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/.tradingview/trading2.png?raw=true">
+<img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/.tradingview/trading3.png?raw=true">
 
 # Journal Generator APA Style
 

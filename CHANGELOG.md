@@ -9,6 +9,19 @@ Check [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) for recommendatio
 - **Publish works even when `articles` denies the account**: a 403 on the article collection now falls back to `community_artikel`, remembers the working collection, and reports it in the status bar instead of stopping at *Database: akses ditolak*. The 403 message names both collections. Covered by `npm run check:publish` against a local database stub.
 - **No more empty pill above the analysis header**: `.sk-room-banner`, `.sk-room-toast` and `.sk-room-badge` now really hide with `[hidden]` (their `display` rules used to override it), so the room warning card only appears when a room is actually blocked.
 
+## [2.11.7] - 2026-11-10
+
+- Vitur New Chart OHLC 
+- Fix Bug 
+- Vitur New Editing Csv 
+- Vitur New Chart Anlys
+- Fix Bug Peer To Peer Connection Multi Editing Vitures
+- Fix Bug Monitoring Chart Undiviend 
+- Open Source Stremlit Launcher RelTime Group
+- Contribution Streamlit Launcher Group Analyz
+- Take Open Source Here Planing Project Capstone : https://github.com/Python-Project-2/Streamlit-Launcher
+
+
 ## [2.10.7] - 2026-11-01
 
 🚀 Performance & Optimization

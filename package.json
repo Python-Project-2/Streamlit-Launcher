@@ -1403,6 +1403,7 @@
     "watch": "node esbuild.js --watch",
     "package": "node esbuild.js --production",
     "check:easycast": "node scripts/check-easycast.cjs",
+    "check:builder": "node scripts/check-builder.cjs",
     "check:community": "node scripts/check-community.cjs",
     "check:chat-api": "node scripts/check-chat-api.cjs",
     "check:publish": "node scripts/check-publish.cjs",
@@ -1414,7 +1415,7 @@
     "check:room-activate": "node scripts/check-room-activate.cjs",
     "check:compile": "node scripts/check-compile.cjs",
     "preview:website": "node scripts/preview-website.cjs",
-    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs"
+    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs && node scripts/check-builder.cjs"
   },
   "dependencies": {
     "chart.js": "^4.4.1",

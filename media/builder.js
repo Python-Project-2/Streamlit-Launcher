@@ -8,7 +8,8 @@
         ['waterfall', '💧 Waterfall'], ['diverging', '↕️ Diverging Bar'], ['boxplot', '📦 Boxplot (Q1–Q3 + Median)'],
         ['areastack', '🌄 Stacked Area'], ['areastack100', '🌄 100% Stacked Area'],
         ['gauge', '🎛️ Gauge (share of total)'], ['timeline', '📅 Timeline (Gantt)'],
-        ['heatmap', '🔥 Heatmap (kategori × seri)'], ['lollipop', '🍭 Lollipop'], ['sunburst2', '🌞 Sunburst (2 cincin)']
+        ['heatmap', '🔥 Heatmap (kategori × seri)'], ['lollipop', '🍭 Lollipop'], ['sunburst2', '🌞 Sunburst (2 cincin)'],
+        ['candle', '🕯️ Candlestick (OHLC)'], ['ohlc', '📊 OHLC Bar']
     ];
     const AGGS = [
         ['count', 'Row count'], ['sum', 'Sum (Total)'], ['mean', 'Average (Mean)'],
@@ -380,13 +381,43 @@
         };
     }
 
-    const buildConfig = (cfg) => (cfg.type === 'timeline' ? buildTimeline(cfg) : cfg.type === 'hist' ? buildHist(cfg) : cfg.type === 'scatter' || cfg.type === 'bubble' ? buildXY(cfg) : buildCat(cfg));
+    const buildConfig = (cfg) => (cfg.type === 'timeline' ? buildTimeline(cfg) : cfg.type === 'hist' ? buildHist(cfg) : cfg.type === 'candle' || cfg.type === 'ohlc' ? buildCandle(cfg) : cfg.type === 'scatter' || cfg.type === 'bubble' ? buildXY(cfg) : buildCat(cfg));
+
+    /** Candlestick / OHLC: kolom tanggal + Open-High-Low-Close (+ volume opsional), tanpa agregasi. */
+    function buildCandle(cfg) {
+        if (!window.SkunderCandles) { return null; }
+        const xi = colI(cfg.x), oi = colI(cfg.o), hi = colI(cfg.h), li = colI(cfg.l), ci = colI(cfg.c), vi = cfg.v ? colI(cfg.v) : -1;
+        if (oi < 0 || hi < 0 || li < 0 || ci < 0) { return null; }
+        const det = { date: xi >= 0 ? cfg.x : '', open: cfg.o, high: cfg.h, low: cfg.l, close: cfg.c, volume: vi >= 0 ? cfg.v : '' };
+        const ex = SkunderCandles.extract(S.rows, S.headers, det, 800);
+        if (!ex.bars.length) { return null; }
+        const closes = ex.bars.map((b) => b.c);
+        const mas = [
+            { label: 'MA5', data: SkunderCandles.sma(closes, 5), color: '#f28e2b' },
+            { label: 'MA20', data: SkunderCandles.sma(closes, 20), color: '#af7aa1' },
+        ];
+        return SkunderCandles.config({ bars: ex.bars, style: cfg.type === 'ohlc' ? 'ohlc' : 'candle', mas, fmt: P.fmt });
+    }
 
     // ---------- builder card ----------
     function normalize(cfg) {
         const nums = S.columns.filter(num).map((c) => c.name), xy = cfg.type === 'scatter' || cfg.type === 'bubble';
         const tl = cfg.type === 'timeline';
+        const cd = cfg.type === 'candle' || cfg.type === 'ohlc';
         const dates = S.columns.filter((c) => c.type === 'date').map((c) => c.name);
+        if (cd) {
+            // Kolom saham diisi otomatis dari deteksi OHLCV; pengguna boleh mengganti lewat kontrol.
+            const det = (window.SkunderCandles && SkunderCandles.detect(S.headers, S.columns)) || { date: '', open: '', high: '', low: '', close: '', volume: '' };
+            if (!S.headers.includes(cfg.x)) { cfg.x = det.date || dates[0] || S.headers[0] || ''; }
+            const numOk = (v) => nums.includes(v);
+            if (!numOk(cfg.o)) { cfg.o = det.open || nums.find((n) => n !== cfg.h && n !== cfg.l && n !== cfg.c) || ''; }
+            if (!numOk(cfg.h) || cfg.h === cfg.o) { cfg.h = det.high || nums.find((n) => n !== cfg.o && n !== cfg.l && n !== cfg.c) || ''; }
+            if (!numOk(cfg.l) || cfg.l === cfg.o || cfg.l === cfg.h) { cfg.l = det.low || nums.find((n) => n !== cfg.o && n !== cfg.h && n !== cfg.c) || ''; }
+            if (!numOk(cfg.c) || cfg.c === cfg.o || cfg.c === cfg.h || cfg.c === cfg.l) { cfg.c = det.close || nums.find((n) => n !== cfg.o && n !== cfg.h && n !== cfg.l) || ''; }
+            if (cfg.v && !numOk(cfg.v)) { cfg.v = ''; }
+            if (!cfg.v && det.volume && numOk(det.volume)) { cfg.v = det.volume; }
+            return cfg;
+        }
         if (tl) {
             if (!dates.includes(cfg.x)) { cfg.x = dates[0] || ''; }
             if (!dates.includes(cfg.y) || cfg.y === cfg.x) { cfg.y = dates.find((d) => d !== cfg.x) || ''; }
@@ -401,17 +432,29 @@
         if (cfg.size && !nums.includes(cfg.size)) cfg.size = '';
         return cfg;
     }
-    const mk = (o) => normalize(Object.assign({ type: 'bar', x: '', y: '', agg: 'count', group: '', size: '', sort: 'auto', topn: 0, gran: 'auto', span: 'm' }, o));
+    const mk = (o) => normalize(Object.assign({ type: 'bar', x: '', y: '', o: '', h: '', l: '', c: '', v: '', agg: 'count', group: '', size: '', sort: 'auto', topn: 0, gran: 'auto', span: 'm' }, o));
 
     function controls(cfg) {
         const nums = S.columns.filter(num).map((c) => [c.name, c.name]);
         const cats = S.columns.filter((c) => c.type === 'category' || c.type === 'boolean' || (c.type === 'integer' && c.unique <= 12)).map((c) => [c.name, c.name]);
         const xy = cfg.type === 'scatter' || cfg.type === 'bubble', hist = cfg.type === 'hist', tl = cfg.type === 'timeline';
+        const cd = cfg.type === 'candle' || cfg.type === 'ohlc';
         const dates = S.columns.filter((c) => c.type === 'date').map((c) => [c.name, c.name]);
+        // Helper label+select: dideklarasikan sebelum cabang candlestick supaya tidak kena TDZ.
+        const L = (k, label, html, show) => (show === false ? '' : `<label>${label}<select data-k="${k}">${html}</select></label>`);
+        if (cd) {
+            // Candlestick / OHLC: tanggal + empat kolom harga + volume opsional.
+            const xc = dates.length ? dates : S.columns.map((c) => [c.name, c.name]);
+            return L('x', 'Date / Labels', opt(xc, cfg.x))
+                + L('o', 'Open', opt(nums, cfg.o))
+                + L('h', 'High', opt(nums, cfg.h))
+                + L('l', 'Low', opt(nums, cfg.l))
+                + L('c', 'Close', opt(nums, cfg.c))
+                + L('v', 'Volume', opt([['', '(none)'], ...nums], cfg.v));
+        }
         const xc = tl ? dates : xy || hist ? nums : S.columns.map((c) => [c.name, c.name]);
         const xCol = S.columns[colI(cfg.x)], isDate = xCol && xCol.type === 'date';
         const noGroup = CIRC.includes(cfg.type) || cfg.type === 'pareto' || cfg.type === 'gauge' || cfg.type === 'boxplot';
-        const L = (k, label, html, show) => (show === false ? '' : `<label>${label}<select data-k="${k}">${html}</select></label>`);
         return L('x', tl ? 'Start (date)' : xy || hist ? 'X-Axis Column' : 'Category / X-Axis', opt(xc, cfg.x))
             + L('y', tl ? 'End (date)' : xy ? 'Y-Axis Column' : 'Value (Y-Axis)', opt(tl ? dates : xy ? nums : [['', '(row count)'], ...nums], cfg.y), !hist)
             + L('agg', 'Aggregation', opt(AGGS, cfg.agg), !xy && !hist && !tl)
@@ -528,6 +571,11 @@
         if (cats[0] && nums[0]) out.push(mk({ type: 'boxplot', x: cats[0].name, y: nums[0].name, agg: 'mean' }));
         const dateCols = S.columns.filter((c) => c.type === 'date');
         if (dateCols.length >= 2) out.push(mk({ type: 'timeline', x: dateCols[0].name, y: dateCols[1].name }));
+        // Data saham terdeteksi → kartu candlestick siap pakai.
+        if (window.SkunderCandles) {
+            const det = SkunderCandles.detect(S.headers, S.columns);
+            if (det.full) { out.unshift(mk({ type: 'candle', x: det.date || dates[0] && dates[0].name, o: det.open, h: det.high, l: det.low, c: det.close, v: det.volume, span: 'xl' })); }
+        }
         if (!out.length) out.push(mk({ type: 'bar', x: S.headers[0] }));
         return out;
     }

@@ -31,13 +31,15 @@
         ['hist', '▥ Histogram + kumulatif'],
         ['boxplot', '📦 Boxplot (Q1–Q3 + median)'],
         ['scatter', '⚬ Scatter + trendline'],
+        ['candle', '🕯️ Candlestick (saham OHLC)'],
+        ['ohlc', '📊 Bar OHLC (saham)'],
     ];
     // Nama pendek untuk label kecil di kartu (tanpa emoji).
     const NAME = {
         auto: 'Otomatis', bar: 'Batang', barh: 'Batang horizontal', line: 'Garis (line)', area: 'Area',
         step: 'Garis bertingkat', stacked: 'Bertumpuk', stacked100: '100% bertumpuk', pareto: 'Pareto',
         lollipop: 'Lollipop', pie: 'Pie', doughnut: 'Donut', polar: 'Polar', radar: 'Radar',
-        hist: 'Histogram', boxplot: 'Boxplot', scatter: 'Scatter',
+        hist: 'Histogram', boxplot: 'Boxplot', scatter: 'Scatter', candle: 'Candlestick', ohlc: 'OHLC',
     };
     const AGGS = [
         ['count', 'Jumlah baris'],
@@ -646,6 +648,39 @@
                 if (r) { slot.card.querySelector('.pv-type').textContent = 'Scatter · r = ' + r[1]; }
             }
             slot.card.appendChild(P.el('div', 'pv-foot', 'Titik dibatasi 3.000 baris pertama yang lolos filter · garis putus-putus = tren linear.'));
+            drawInto(slot, conf);
+            return;
+        }
+        if (cfg.type === 'candle' || cfg.type === 'ohlc') {
+            // Candlestick / OHLC: butuh kolom angka Open-High-Low-Close (deteksi otomatis).
+            if (!window.SkunderCandles) {
+                host.appendChild(P.el('div', 'pv-empty muted', 'Skrip candlestick (media/candles.js) belum termuat.'));
+                return;
+            }
+            const det = SkunderCandles.detect(S.headers, S.columns);
+            if (!det.full) {
+                host.appendChild(P.el('div', 'pv-empty muted', 'Candlestick butuh kolom angka Open, High, Low, dan Close (mis. Open/High/Low/Close atau Buka/Tertinggi/Terendah/Penutupan) — tidak terdeteksi pada berkas ini.'));
+                return;
+            }
+            const rows = rowsFor();
+            const ex = SkunderCandles.extract(rows, S.headers, det, 800);
+            if (!ex.bars.length) {
+                host.appendChild(P.el('div', 'pv-empty muted', 'Tidak ada baris OHLC yang lolos filter tabel.'));
+                return;
+            }
+            const st = SkunderCandles.stats(ex.bars);
+            const ci = S.headers.indexOf(det.close);
+            const slot = addCard(det.close + ' (' + (det.date || 'urutan') + ')', S.columns[ci] ? S.columns[ci].type : 'number', NAME[cfg.type] || cfg.type);
+            const closes = ex.bars.map((b) => b.c);
+            const mas = [
+                { label: 'MA5', data: SkunderCandles.sma(closes, 5), color: '#f28e2b' },
+                { label: 'MA20', data: SkunderCandles.sma(closes, 20), color: '#af7aa1' },
+            ];
+            const conf = SkunderCandles.config({ bars: ex.bars, style: cfg.type, mas, fmt: P.fmt, lang: lang === 'zh-cn' ? 'zh-cn' : 'id' });
+            const arah = st.chgPct >= 0 ? '+' : '';
+            slot.card.appendChild(P.el('div', 'pv-foot',
+                ex.bars.length.toLocaleString('en-US') + ' bar · terakhir ' + P.fmt(st.last) + ' (' + arah + (Math.round((st.chgPct || 0) * 10) / 10) + '%)' +
+                (st.volTotal !== null ? ' · total volume ' + P.fmt(st.volTotal) : '') + ' · grafik mengikuti filter tabel bila diaktifkan'));
             drawInto(slot, conf);
             return;
         }

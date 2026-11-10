@@ -1689,3 +1689,67 @@ select {
     font-size: 10.5px;
     cursor: pointer;
 }
+/* ── ✏️ Editor CSV Langsung ─────────────────────────────────────────────── */
+
+.ed-card { position: relative; padding: 12px 14px; }
+
+.ed-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.ed-head h3 { margin: 0; font-size: 15px; }
+.ed-head .muted { font-size: 11.5px; }
+.ed-spacer { flex: 1; }
+
+.ed-toolbar { display: flex; flex-wrap: wrap; gap: 6px 12px; margin: 6px 0; align-items: center; }
+.ed-tgroup { display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.ed-tgroup > .muted { font-size: 11px; margin-right: 2px; }
+
+.ed-find { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 10px; border: 1px dashed var(--sk-border, var(--vscode-panel-border, rgba(128, 128, 128, .35))); border-radius: 6px; margin: 6px 0; background: rgba(128, 128, 128, .06); }
+.ed-find.hidden { display: none; }
+.ed-find input, .ed-find select { min-width: 130px; }
+.ed-check { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; white-space: nowrap; }
+
+.ed-bar { display: flex; gap: 8px; align-items: center; margin: 8px 0 6px; flex-wrap: wrap; }
+.ed-bar input { flex: 1; min-width: 240px; }
+.ed-status { font-size: 11.5px; white-space: nowrap; }
+.ed-more { white-space: nowrap; }
+
+.ed-wrap { max-height: 480px; overflow: auto; border: 1px solid var(--sk-border, var(--vscode-panel-border, rgba(128, 128, 128, .3))); border-radius: 6px; background: var(--sk-card, var(--vscode-editor-background)); }
+
+.ed-table { border-collapse: separate; border-spacing: 0; width: max-content; min-width: 100%; font-size: 12px; table-layout: auto; }
+.ed-table td { border-right: 1px solid rgba(128, 128, 128, .2); border-bottom: 1px solid rgba(128, 128, 128, .2); padding: 3px 8px; min-width: 56px; max-width: 340px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: cell; background: var(--sk-card, var(--vscode-editor-background)); color: var(--sk-fg, var(--vscode-editor-foreground)); }
+.ed-table td:first-child { border-left: 1px solid rgba(128, 128, 128, .2); position: sticky; left: 0; z-index: 1; }
+.ed-table .ed-idx { background: rgba(128, 128, 128, .14); cursor: pointer; min-width: 44px; text-align: right; opacity: .85; font-size: 11px; user-select: none; }
+.ed-table .ed-idx:hover { background: rgba(78, 121, 167, .3); }
+.ed-table .ed-corner { text-align: center; }
+.ed-table tr.ed-hrow td { position: sticky; top: 0; z-index: 3; font-weight: 700; background: rgba(78, 121, 167, .22); border-bottom: 2px solid rgba(78, 121, 167, .5); }
+.ed-table tr.ed-hrow td:first-child { z-index: 4; }
+.ed-table td.ed-num { text-align: right; font-variant-numeric: tabular-nums; }
+.ed-table td.ed-dirty { background: rgba(242, 142, 43, .16); box-shadow: inset 2px 0 0 #f28e2b; }
+.ed-table td.ed-range { background: rgba(78, 121, 167, .25); }
+.ed-table td.ed-sel { outline: 2px solid var(--sk-accent, #4e79a7); outline-offset: -2px; z-index: 2; }
+
+.ed-input { box-sizing: border-box; width: 100%; min-width: 120px; border: none; outline: none; background: var(--sk-input, var(--vscode-input-background)); color: var(--sk-inputFg, var(--vscode-input-foreground)); font: inherit; padding: 1px 3px; margin: 0; border-radius: 2px; }
+
+.ed-foot { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 8px; font-size: 11.5px; }
+.ed-foot > span { display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.ed-dirty-text { color: #f28e2b; }
+
+.ed-notice { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; max-width: 760px; align-items: flex-start; }
+.ed-notice .muted { font-size: 12px; line-height: 1.55; }
+.ed-warn { color: #f28e2b; font-size: 12px; }
+
+.ed-toast { position: absolute; right: 16px; bottom: 16px; background: rgba(38, 166, 154, .95); color: #04283d; padding: 7px 13px; border-radius: 6px; font-size: 12px; font-weight: 600; opacity: 0; transform: translateY(6px); transition: opacity .18s, transform .18s; pointer-events: none; z-index: 20; max-width: 70%; }
+.ed-toast.show { opacity: 1; transform: none; }
+.ed-toast.bad { background: rgba(239, 83, 80, .96); color: #ffffff; }
+
+/* ── 📈 Analisis Saham (Candlestick) ────────────────────────────────────── */
+
+.sm-tools { padding: 10px 14px; }
+.sm-controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.sm-controls label { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; }
+.sm-check { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; white-space: nowrap; cursor: pointer; }
+.sm-det { margin-top: 8px; font-size: 11.5px; line-height: 1.6; }
+.sm-det code { background: rgba(128, 128, 128, .16); padding: 1px 6px; border-radius: 4px; font-size: 11px; }
+
+.sm-toast { position: fixed; right: 26px; bottom: 26px; background: rgba(38, 166, 154, .95); color: #04283d; padding: 7px 13px; border-radius: 6px; font-size: 12px; font-weight: 600; opacity: 0; transform: translateY(6px); transition: opacity .18s, transform .18s; pointer-events: none; z-index: 90; max-width: 60%; }
+.sm-toast.show { opacity: 1; transform: none; }
+.sm-toast.bad { background: rgba(239, 83, 80, .96); color: #ffffff; }

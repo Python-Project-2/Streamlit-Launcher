@@ -16,6 +16,14 @@
 
 </div>
 
+# UPDATE NEW VITURES 2.11.7
+
+## OHLC CHART CHAIN
+<img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/thema.png?raw=true">
+
+## EDITING FILE CSV 
+<img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/thema.png?raw=true">
+
 
 # Journal Generator APA Style
 

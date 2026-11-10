@@ -488,12 +488,14 @@
             ['summary', 'Summary'],
             ['businesskpi', '📊 KPI Bisnis'],
             ['stock', '📦 Stok Barang'],
+            ['saham', '📈 Analisis Saham'],
             ['needs', '🎯 Analisis Kebutuhan'],
             ['csvhealth', '🩺 Profil & Kualitas CSV'],
             ['decisionTree', '🌳 Decision Tree C4.5'],
             ['notes', 'Notes & Observations'],
             ['insights', 'Insights'],
             ['table', 'Data Table'],
+            ['editor', '✏️ Editor CSV'],
             ['preview', '📊 Grafik Pratinjau'],
             ['builder', 'Chart Builder'],
             ['charts', 'Charts'],
@@ -540,6 +542,12 @@
         // ---- Stock & Inventory ----
         stockSection(sheet);
 
+        // ---- Analisis Saham (candlestick OHLC) ----
+        // Bagian khusus data pasar modal: candlestick + volume + MA + RSI.
+        if (window.SkunderStock) {
+            window.SkunderStock.init({ app, sheet, state, vscode, el, esc, fmt, cut, PALETTE, section, chart, figure });
+        }
+
         // ---- Needs Analysis ----
         needsSection(sheet);
 
@@ -560,6 +568,12 @@
 
         // ---- Data Table ----
         tableSection(sheet);
+
+        // ---- Editor CSV Langsung ----
+        // Sunting berkas CSV/TSV di dalam pratinjau lalu simpan kembali ke berkas.
+        if (window.SkunderEditor) {
+            window.SkunderEditor.init({ app, sheet, state, vscode, el, esc, fmt, cut, PALETTE, section });
+        }
 
         // ---- Grafik Pratinjau (pilih fitur) ----
         // Panel grafik cepat: pilih kolom (fitur) yang ingin digrafikkan, ikut filter tabel.

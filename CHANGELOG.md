@@ -5,11 +5,12 @@ All notable changes to the **Streamlit Launcher For VS Code** (Date Skunder) ext
 Check [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) for recommendations on how to structure this file.
 
 ## [Unreleased]
+- **Mode Analisis (TradingView) — chart penuh, analisis saja, pencarian seluruh emiten IDX**: perintah **Date Skunder: Mode Analisis** tampil sebagai ikon di bar judul tab (`editor/title`, `navigation@0.5`, di samping tombol EasyCast) dan sebagai menu **Mode Analisis** di navigasi halaman analisis. Lapisan penuh berisi chart lanjutan TradingView (seluruh indikator, alat gambar, alert, replay, template, bandingkan simbol, layar penuh milik widget), panel **Teknikal**, **Fundamental** (laporan keuangan + profil simbol), **Screener** (saham IDX + hotlist), **Berita** (top stories + kalender ekonomi), dan tab **Cari Saham** berisi katalog lengkap 941 emiten IDX (kode, nama, sektor, papan) plus indeks, saham AS, komoditas, dan kurs — pencarian yang sama dipakai kotak simbol di bar atas dan kotak pencarian di halaman analisis. **Trading Demo, Trading Real, tautan broker, kalkulator posisi, dan checklist entry dihapus** (khusus analisis). Widget kini dipasang sebagai `<iframe>` langsung ke host resmi TradingView (`www.tradingview-widget.com`, cadangan `s.tradingview.com`) berukuran 100% × 100% tanpa handshake pengatur-ukuran, sehingga kotak widget tidak lagi tampil abu-abu kosong: ada penanda memuat, sinyal siap dari widget, penggantian host otomatis, dan bilah bantuan Muat ulang/Buka di browser bila widget benar-benar gagal. Pita harga bawah dihapus karena menyisakan bilah kosong saat jaringan lambat. Perbaikan lanjutan: simbol kini juga dikirim lewat **query string** (widget `symbol-info`, `financials`, `symbol-profile`, dan `timeline` membaca simbol dari sana, jadi tidak lagi menampilkan AAPL saat simbol diganti), gauge teknikal memakai interval valid **`1h`** (sebelumnya `60` membuat kotaknya kosong), widget berita dipaksa `locale=en` seperti skrip resmi TradingView, dan setiap kotak yang tidak kunjung tampil otomatis diganti widget lain (gauge → kutipan saham IDX, berita → kalender ekonomi). Diuji lewat `npm run check:trading` (77 uji).
 - **Grafik pratinjau di halaman CSV — bisa memilih fitur**: bagian baru **📊 Grafik Pratinjau Data** (tepat di bawah **Data Table**, sebelum **Chart Builder**) menampilkan setiap kolom sebagai chip fitur; centang kolom yang ingin digrafikkan. Tersedia 16 jenis grafik (batang, batang horizontal, garis, area, garis bertingkat, batang bertumpuk, 100% bertumpuk, Pareto, lollipop, pie, donut, polar area, radar, histogram + kumulatif, boxplot, scatter + trendline) plus pilihan **Nilai (Y)**, **Agregasi** (jumlah baris, total, rata-rata, median, min, maks, nilai unik), **Pecah per** (seri/grup), **Jumlah nilai** (Top N) dan **Urutan**. Grafik mengikuti kotak pencarian tabel saat **Ikuti filter tabel** dicentang, menyertakan statistik ringkas per fitur, dan pilihan fitur diingat per berkas + sheet. Jenis grafik yang tidak cocok untuk suatu kolom otomatis memakai jenis bawaan dengan keterangan. Kontrol panel ditandai `data-spider-skip` supaya pet Spider tidak mengubah pilihan fitur, dan grafik pratinjau tidak ikut ke daftar `charts` sehingga isi export DOCX/PDF/PPT tetap sama.
 - **Publish works even when `articles` denies the account**: a 403 on the article collection now falls back to `community_artikel`, remembers the working collection, and reports it in the status bar instead of stopping at *Database: akses ditolak*. The 403 message names both collections. Covered by `npm run check:publish` against a local database stub.
 - **No more empty pill above the analysis header**: `.sk-room-banner`, `.sk-room-toast` and `.sk-room-badge` now really hide with `[hidden]` (their `display` rules used to override it), so the room warning card only appears when a room is actually blocked.
 
-## [2.11.7] - 2026-11-10
+## [2.11.7] - 2026-11-11
 
 - Vitur New Chart OHLC 
 - Fix Bug 
@@ -19,7 +20,25 @@ Check [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) for recommendatio
 - Fix Bug Monitoring Chart Undiviend 
 - Open Source Stremlit Launcher RelTime Group
 - Contribution Streamlit Launcher Group Analyz
-- Take Open Source Here Planing Project Capstone : https://github.com/Python-Project-2/Streamlit-Launcher
+- Take Open Source Here Planing Project Capstone 
+- Analyz Saham
+- Analyz Trading
+- Collab Trading View
+
+New Features
+• New OHLC Chart: Added Open, High, Low, Close price movement charts for deeper technical analysis.
+• New CSV Editing: Added a built-in feature to edit and manipulate CSV data directly within the application.
+• New Chart Analysis: Introduced new chart analysis tools to make reading data trends easier.
+Bug Fixes
+• Peer-to-Peer Connection & Multi-Editing: Fixed peer-to-peer connection issues that occurred when multiple users were editing simultaneously.
+• Monitoring Chart Undefined: Resolved a display error where the monitoring chart failed to load data (undefined).
+Collaboration & Open Source
+• Open Source Streamlit Launcher (Real-Time Group): Released open-source code for a Streamlit app launcher that supports real-time group collaboration.
+• Contribution to Streamlit Launcher Group Analysis: Contributed to the development of group analysis features in the Streamlit Launcher project.
+• Open Source Capstone Project Planning: Provided open-source documentation and planning for the capstone project, open for community collaboration.
+Financial Analysis & Integration
+• Stock & Trading Analysis: Dedicated modules for researching, monitoring, and analyzing stock market movements and trading activities.
+• TradingView Collaboration: Integrated and synchronized chart data to support collaborative analysis using the TradingView platform.
 
 
 ## [2.10.7] - 2026-11-01

@@ -37,6 +37,36 @@
 
 </div>
 
+## [2.11.7] - 2026-11-11
+
+- Vitur New Chart OHLC 
+- Fix Bug 
+- Vitur New Editing Csv 
+- Vitur New Chart Anlys
+- Fix Bug Peer To Peer Connection Multi Editing Vitures
+- Fix Bug Monitoring Chart Undiviend 
+- Open Source Stremlit Launcher RelTime Group
+- Contribution Streamlit Launcher Group Analyz
+- Take Open Source Here Planing Project Capstone 
+- Analyz Saham
+- Analyz Trading
+- Collab Trading View
+
+New Features
+• New OHLC Chart: Added Open, High, Low, Close price movement charts for deeper technical analysis.
+• New CSV Editing: Added a built-in feature to edit and manipulate CSV data directly within the application.
+• New Chart Analysis: Introduced new chart analysis tools to make reading data trends easier.
+Bug Fixes
+• Peer-to-Peer Connection & Multi-Editing: Fixed peer-to-peer connection issues that occurred when multiple users were editing simultaneously.
+• Monitoring Chart Undefined: Resolved a display error where the monitoring chart failed to load data (undefined).
+Collaboration & Open Source
+• Open Source Streamlit Launcher (Real-Time Group): Released open-source code for a Streamlit app launcher that supports real-time group collaboration.
+• Contribution to Streamlit Launcher Group Analysis: Contributed to the development of group analysis features in the Streamlit Launcher project.
+• Open Source Capstone Project Planning: Provided open-source documentation and planning for the capstone project, open for community collaboration.
+Financial Analysis & Integration
+• Stock & Trading Analysis: Dedicated modules for researching, monitoring, and analyzing stock market movements and trading activities.
+• TradingView Collaboration: Integrated and synchronized chart data to support collaborative analysis using the TradingView platform.
+
 ## [2.10.7] - 2026-11-01
 
 🚀 Performance & Optimization
@@ -219,6 +249,8 @@
 * **Chart Generation:** Create visual representations of your data with integrated Chart.js support.
 
 * **Feature-chart preview (pilih fitur):** a **📊 Grafik Pratinjau Data** panel sits right below the data table and turns the columns (*fitur*) you pick into charts. Tick features with chips, then choose one of 16 chart types (bar, horizontal bar, line, area, step line, stacked, 100% stacked, Pareto, lollipop, pie, doughnut, polar area, radar, histogram + cumulative, boxplot, scatter + trendline) and the value column, aggregation (row count, sum, mean, median, min, max, distinct count), split-by group, top-N limit and sort order. Charts follow the table search box while **Ikuti filter tabel** is checked, and the selection is remembered per file and sheet.
+
+* **Analysis mode (TradingView):** the **Mode Analisis** button in the tab title bar (`Ctrl+Alt+F`) and the matching menu entry open a full-screen TradingView workspace — advanced chart with every indicator, drawing, alert, replay and compare tool, a multi-timeframe technical gauge, financials, company profile, IDX screener and hotlist, symbol news and the economic calendar. Everything is analysis-only: the old *Trading Demo* / *Trading Real* buttons, the position-size calculator and the broker/account panel are gone. A **Cari Saham** tab and the symbol box search the whole catalogue — 941 IDX companies (code, name, sector, listing board) plus indices, US stocks, commodities and FX — so every listing is reachable from the search, even offline. Widgets are mounted as plain `<iframe>`s on TradingView's widget host at 100% × 100% (no postMessage sizing handshake); each box shows a loading marker and, when a widget cannot render, an explicit retry/open-in-browser bar instead of an empty grey area. Embed settings (theme, language, timezone, range, side toolbar, hotlist, calendar, quick indicators) are remembered per user, the symbol is auto-detected from a `Ticker`/`Symbol`/`Kode` column or the file name, and the page CSP only whitelists TradingView domains.
 
 * **Notes & Annotations:** Keep track of insights, observations, and notes alongside your data.
 

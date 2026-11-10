@@ -489,6 +489,7 @@
             ['businesskpi', '📊 KPI Bisnis'],
             ['stock', '📦 Stok Barang'],
             ['saham', '📈 Analisis Saham'],
+            ['trading', 'Mode Analisis'],
             ['needs', '🎯 Analisis Kebutuhan'],
             ['csvhealth', '🩺 Profil & Kualitas CSV'],
             ['decisionTree', '🌳 Decision Tree C4.5'],
@@ -546,6 +547,13 @@
         // Bagian khusus data pasar modal: candlestick + volume + MA + RSI.
         if (window.SkunderStock) {
             window.SkunderStock.init({ app, sheet, state, vscode, el, esc, fmt, cut, PALETTE, section, chart, figure });
+        }
+
+        // ---- Mode Analisis (TradingView) ----
+        // Tombol pembuka lapisan penuh TradingView: chart lengkap, teknikal, fundamental, screener,
+        // berita, dan pencarian seluruh emiten IDX (khusus analisis — tanpa demo/real).
+        if (window.SkunderTrading) {
+            window.SkunderTrading.init({ app, sheet, state, vscode, el, esc, fmt, cut, PALETTE, section, chart, figure });
         }
 
         // ---- Needs Analysis ----

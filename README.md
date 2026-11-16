@@ -41,6 +41,36 @@
 
 </div>
 
+## Platform WEB3 No Money Developer Take Real Global International
+- Apps Create by Dwi Bakti N Dev
+- Information Defender License
+- WEB3 Defender Global Trading And Saham International 
+
+## [3.2.7] - 2026-16-11
+- Vitures Update Algo Trading Ai Analyz 
+- Fix Bug Vitures 
+- Vitur New Chart Trading Vitur 
+- Vitur Add Chart OHLC Analyz
+- Vitur Add Ai Discussion Comunity 
+- Model Retrun Profit 
+- Model Ai Trading Change %
+- Model Ai Analyz Trading 
+- Analyz Trading View 
+- Full Saham Analyz Ai 
+- Data Skunder Analyz
+- Information Chart
+- Information Signal
+- Signal Retrun
+- Meta Trader Connect 
+- Meta Trader Information
+- Meta Trader Entry Loss and Margin Analyz And Execution
+- Trading View Discussion Ai Chart Information LLM AI Local 
+- Defender BloackChain
+- Money Blockchain
+- Trading WE3
+- Trading Crypto
+
+
 ## [2.11.7] - 2026-11-11
 
 - Vitur New Chart OHLC 

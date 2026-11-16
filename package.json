@@ -38,6 +38,22 @@
     "onView:dateSkunder.llamaView",
     "onView:dateSkunder.petView",
     "onView:dateSkunder.compileView",
+    "onView:dateSkunder.tradingView",
+    "onCommand:date-skunder.tradingview.open",
+    "onCommand:date-skunder.tradingview.analyze",
+    "onCommand:date-skunder.tradingview.terminal",
+    "onCommand:date-skunder.tradingview.screen",
+    "onCommand:date-skunder.tradingview.models",
+    "onCommand:date-skunder.tradingview.serverTerminal",
+    "onCommand:date-skunder.tradingview.serverRun",
+    "onView:dateSkunder.mtView",
+    "onCommand:date-skunder.mt.open",
+    "onCommand:date-skunder.mt.connect",
+    "onCommand:date-skunder.mt.analyze",
+    "onCommand:date-skunder.mt.models",
+    "onCommand:date-skunder.mt.serverTerminal",
+    "onCommand:date-skunder.mt.bridgeTerminal",
+    "onCommand:date-skunder.mt.closeAll",
     "onView:dateSkunder.communityView",
     "onView:dateSkunder.publishView",
     "onCommand:date-skunder.community.api",
@@ -84,6 +100,16 @@
         {
           "id": "dateSkunder.compileView",
           "name": "Compile MSI",
+          "type": "webview"
+        },
+        {
+          "id": "dateSkunder.tradingView",
+          "name": "TradingView",
+          "type": "webview"
+        },
+        {
+          "id": "dateSkunder.mtView",
+          "name": "MetaTrader AI",
           "type": "webview"
         },
         {
@@ -293,6 +319,76 @@
         "icon": "$(terminal)"
       },
       {
+        "command": "date-skunder.tradingview.open",
+        "title": "Date Skunder TradingView: Buka View TradingView",
+        "icon": "$(graph)"
+      },
+      {
+        "command": "date-skunder.tradingview.analyze",
+        "title": "Date Skunder TradingView: Analisa Simbol + AI",
+        "icon": "$(play)"
+      },
+      {
+        "command": "date-skunder.tradingview.terminal",
+        "title": "Date Skunder TradingView: Buka Terminal Trading AI",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "date-skunder.tradingview.screen",
+        "title": "Date Skunder TradingView: Buka Layar Penuh (Chart + AI, Tanpa CSV)",
+        "icon": "$(open-preview)"
+      },
+      {
+        "command": "date-skunder.tradingview.models",
+        "title": "Date Skunder TradingView: Pilih Model .gguf (Otak Trading)",
+        "icon": "$(symbol-method)"
+      },
+      {
+        "command": "date-skunder.tradingview.serverTerminal",
+        "title": "Date Skunder TradingView: Terminal Server LLAMA (Log Otak Trading)",
+        "icon": "$(server-process)"
+      },
+      {
+        "command": "date-skunder.tradingview.serverRun",
+        "title": "Date Skunder TradingView: Jalankan llama-server Otak Trading di Terminal",
+        "icon": "$(server)"
+      },
+      {
+        "command": "date-skunder.mt.open",
+        "title": "Date Skunder MetaTrader AI: Buka View MetaTrader AI",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "date-skunder.mt.connect",
+        "title": "Date Skunder MetaTrader AI: Hubungkan Bridge Python (MT4/5)",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "date-skunder.mt.analyze",
+        "title": "Date Skunder MetaTrader AI: Analisa Simbol + Rencana Entry",
+        "icon": "$(play)"
+      },
+      {
+        "command": "date-skunder.mt.models",
+        "title": "Date Skunder MetaTrader AI: Pilih Model .gguf (Otak MetaTrader)",
+        "icon": "$(symbol-method)"
+      },
+      {
+        "command": "date-skunder.mt.serverTerminal",
+        "title": "Date Skunder MetaTrader AI: Terminal Server LLAMA MetaTrader",
+        "icon": "$(server-process)"
+      },
+      {
+        "command": "date-skunder.mt.bridgeTerminal",
+        "title": "Date Skunder MetaTrader AI: Terminal Jembatan Python",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "date-skunder.mt.closeAll",
+        "title": "Date Skunder MetaTrader AI: Tutup Semua Posisi",
+        "icon": "$(close-all)"
+      },
+      {
         "command": "date-skunder.community.open",
         "title": "Date Skunder AI: Buka Community Chat",
         "icon": "$(comment-discussion)"
@@ -459,6 +555,62 @@
           "when": "true"
         },
         {
+          "command": "date-skunder.tradingview.open",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.tradingview.analyze",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.tradingview.terminal",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.tradingview.screen",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.tradingview.models",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.tradingview.serverTerminal",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.tradingview.serverRun",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.mt.open",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.mt.connect",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.mt.analyze",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.mt.models",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.mt.serverTerminal",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.mt.bridgeTerminal",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.mt.closeAll",
+          "when": "true"
+        },
+        {
           "command": "date-skunder.exportXlsx",
           "when": "true"
         },
@@ -613,11 +765,11 @@
       ]
     },
     "keybindings": [
-        {
-          "command": "date-skunder.trading.open",
-          "key": "ctrl+alt+f",
-          "when": "!terminalFocus"
-        },
+      {
+        "command": "date-skunder.trading.open",
+        "key": "ctrl+alt+f",
+        "when": "!terminalFocus"
+      },
       {
         "command": "date-skunder.openPreview",
         "key": "ctrl+alt+o",
@@ -913,6 +1065,279 @@
           "default": 8081,
           "description": "Port HTTP llama-server (endpoint /v1/chat/completions)."
         },
+        "dateSkunder.tradingAi.modelPath": {
+          "type": "string",
+          "default": "",
+          "description": "Berkas model .gguf untuk otak Trading AI (terpisah dari Skunder AI). Kosong = pakai model pertama dari dateSkunder.llama.modelPaths."
+        },
+        "dateSkunder.tradingAi.port": {
+          "type": "number",
+          "default": 8137,
+          "description": "Port llama-server khusus Trading AI. Harus berbeda dari port LLAMA Server (default 8081)."
+        },
+        "dateSkunder.tradingAi.contextSize": {
+          "type": "number",
+          "default": 4096,
+          "description": "Jendela konteks otak trading (-c)."
+        },
+        "dateSkunder.tradingAi.gpuLayers": {
+          "type": "number",
+          "default": 0,
+          "description": "Lapisan model yang dijalankan di GPU (-ngl) untuk otak trading."
+        },
+        "dateSkunder.tradingAi.threads": {
+          "type": "number",
+          "default": 0,
+          "description": "Jumlah thread CPU otak trading (0 = bawaan llama-server)."
+        },
+        "dateSkunder.tradingAi.temperature": {
+          "type": "number",
+          "default": 0.2,
+          "description": "Kreativitas jawaban trading (0 = paling tegas/deterministik)."
+        },
+        "dateSkunder.tradingAi.maxTokens": {
+          "type": "number",
+          "default": 700,
+          "description": "Batas panjang jawaban analisa (token)."
+        },
+        "dateSkunder.tradingAi.autoStart": {
+          "type": "boolean",
+          "default": false,
+          "description": "Tidak berjalan otomatis saat ekstensi dipasang — nyalakan sendiri dari tombol/Command Palette. Nyalakan otak trading otomatis saat pertama kali dipakai."
+        },
+        "dateSkunder.tradingAi.liveRefreshSeconds": {
+          "type": "number",
+          "default": 30,
+          "description": "Interval penyegaran data pasar untuk analisa AI otak trading (detik). 30 = harga, indikator, dan konteks jawaban diperbarui tiap 30 detik agar mengikuti pergerakan terbaru di TradingView. 0 = matikan penyegaran otomatis (data diambil saat bertanya)."
+        },
+        "dateSkunder.mtAi.modelPath": {
+          "type": "string",
+          "default": "",
+          "description": "Berkas model .gguf untuk otak MetaTrader AI (terpisah dari Trading AI & Skunder AI). Kosong = pakai model pertama dari daftar pindai / dateSkunder.llama.modelPaths."
+        },
+        "dateSkunder.mtAi.port": {
+          "type": "number",
+          "default": 8147,
+          "description": "Port llama-server khusus MetaTrader AI. Harus berbeda dari port LLAMA Server (8081) dan Trading AI (8137)."
+        },
+        "dateSkunder.mtAi.contextSize": {
+          "type": "number",
+          "default": 4096,
+          "description": "Jendela konteks otak MetaTrader (-c)."
+        },
+        "dateSkunder.mtAi.gpuLayers": {
+          "type": "number",
+          "default": 0,
+          "description": "Lapisan model yang dijalankan di GPU (-ngl) untuk otak MetaTrader."
+        },
+        "dateSkunder.mtAi.threads": {
+          "type": "number",
+          "default": 0,
+          "description": "Jumlah thread CPU otak MetaTrader (0 = bawaan llama-server)."
+        },
+        "dateSkunder.mtAi.temperature": {
+          "type": "number",
+          "default": 0.15,
+          "description": "Kreativitas jawaban MetaTrader (rendah = lebih disiplin, cocok untuk rencana entry JSON)."
+        },
+        "dateSkunder.mtAi.maxTokens": {
+          "type": "number",
+          "default": 420,
+          "description": "Batas panjang jawaban/rencana MetaTrader (token)."
+        },
+        "dateSkunder.mtAi.autoStart": {
+          "type": "boolean",
+          "default": false,
+          "description": "Tidak berjalan otomatis saat ekstensi dipasang — nyalakan sendiri dari tombol/Command Palette. Nyalakan llama-server MetaTrader otomatis saat pertama kali dipakai."
+        },
+        "dateSkunder.mt.platform": {
+          "type": "string",
+          "enum": [
+            "mt5",
+            "mt4"
+          ],
+          "default": "mt5",
+          "description": "Platform trading. MT5 memakai paket Python resmi MetaTrader5 (Windows). MT4 membutuhkan jembatan EA/HTTP yang menyediakan endpoint JSON yang sama — isi dateSkunder.mt.bridgeUrl."
+        },
+        "dateSkunder.mt.mode": {
+          "type": "string",
+          "enum": [
+            "auto",
+            "live",
+            "sim",
+            "bridge"
+          ],
+          "default": "auto",
+          "description": "Mode jembatan: auto = coba MT5 lalu simulasi, live = wajib MT5, sim = simulasi (tidak ada order nyata), bridge = pakai bridge eksternal (MT4/EA)."
+        },
+        "dateSkunder.mt.bridgePort": {
+          "type": "number",
+          "default": 8770,
+          "description": "Port HTTP jembatan Python MetaTrader (127.0.0.1)."
+        },
+        "dateSkunder.mt.bridgeUrl": {
+          "type": "string",
+          "default": "",
+          "description": "URL jembatan eksternal untuk MT4/EA, mis. http://127.0.0.1:8771. Kosong = jalankan jembatan Python lokal."
+        },
+        "dateSkunder.mt.bridgeToken": {
+          "type": "string",
+          "default": "",
+          "description": "Token header X-Bridge-Token untuk jembatan eksternal. Jembatan lokal memakai token acak per sesi."
+        },
+        "dateSkunder.mt.symbol": {
+          "type": "string",
+          "default": "EURUSD",
+          "description": "Simbol awal MetaTrader (mis. EURUSD, XAUUSD, BTCUSD)."
+        },
+        "dateSkunder.mt.timeframe": {
+          "type": "string",
+          "default": "M15",
+          "description": "Timeframe analisa MetaTrader: M1, M5, M15, M30, H1, H4, D1."
+        },
+        "dateSkunder.mt.riskPercent": {
+          "type": "number",
+          "default": 1,
+          "description": "Risiko per trade (% ekuitas). Lot dihitung dari angka ini, bukan dari model."
+        },
+        "dateSkunder.mt.minRR": {
+          "type": "number",
+          "default": 1.5,
+          "description": "Rasio reward:risk minimum agar entry diizinkan."
+        },
+        "dateSkunder.mt.maxLot": {
+          "type": "number",
+          "default": 1,
+          "description": "Batas lot maksimum untuk setiap order MetaTrader."
+        },
+        "dateSkunder.mt.minConfidence": {
+          "type": "number",
+          "default": 65,
+          "description": "Keyakinan AI minimum (%) agar entry diizinkan. Di bawah ini otomatis ditolak."
+        },
+        "dateSkunder.mt.autoTrade": {
+          "type": "boolean",
+          "default": false,
+          "description": "PENTING: bila aktif, order dikirim tanpa dialog konfirmasi (tetap harus lolos semua validasi risiko). Bawaan mati — tidak ada jaminan menang, gunakan akun demo dulu."
+        },
+        "dateSkunder.mt.deviation": {
+          "type": "number",
+          "default": 20,
+          "description": "Deviasi harga (poin) yang diizinkan saat eksekusi market."
+        },
+        "dateSkunder.mt.magic": {
+          "type": "number",
+          "default": 20261113,
+          "description": "Magic number order Date Skunder (memudahkan memisahkan posisi AI)."
+        },
+        "dateSkunder.mt.autoProfitClose": {
+          "type": "boolean",
+          "default": true,
+          "description": "Tutup otomatis posisi AI begitu profit mencapai target R (lihat profitCloseR), lalu boleh entry lagi setelah jeda. Bawaan aktif."
+        },
+        "dateSkunder.mt.profitCloseR": {
+          "type": "number",
+          "default": 0.8,
+          "minimum": 0.2,
+          "maximum": 5,
+          "description": "Target profit untuk menutup otomatis, dalam kelipatan risiko 1R (0.8 = tutup saat untung 0,8 kali jarak SL)."
+        },
+        "dateSkunder.mt.reentryCooldown": {
+          "type": "number",
+          "default": 45,
+          "minimum": 5,
+          "maximum": 3600,
+          "description": "Jeda (detik) sebelum auto-pilot boleh entry lagi setelah posisi ditutup."
+        },
+        "dateSkunder.mt.maxTradesPerDay": {
+          "type": "number",
+          "default": 30,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "Batas jumlah entry otomatis per hari agar tidak overtrading."
+        },
+        "dateSkunder.mt.maxDailyLossPct": {
+          "type": "number",
+          "default": 3,
+          "minimum": 0.5,
+          "maximum": 20,
+          "description": "Batas rugi harian (% ekuitas). Bila terlampaui (termasuk floating), posisi AI ditutup dan auto-pilot berhenti entry agar tidak MC."
+        },
+        "dateSkunder.mt.autoPilot": {
+          "type": "boolean",
+          "default": false,
+          "description": "Auto-pilot: analisa berkala dan eksekusi otomatis setiap rencana yang lolos validasi. Bawaan mati. Saat diaktifkan dari view, dateSkunder.mt.autoTrade juga dinyalakan. Tidak ada jaminan menang — gunakan akun demo dulu."
+        },
+        "dateSkunder.mt.autoScanSeconds": {
+          "type": "number",
+          "default": 30,
+          "description": "Jeda antar-analisa auto-pilot (detik, minimal 30). Satu simbol watchlist dianalisa per putaran."
+        },
+        "dateSkunder.mt.watchlist": {
+          "type": "string",
+          "default": "",
+          "description": "Daftar simbol untuk auto-pilot, dipisah koma (mis. EURUSD,XAUUSD,BTCUSD). Kosong = simbol yang sedang aktif saja."
+        },
+        "dateSkunder.mt.maxPositions": {
+          "type": "number",
+          "default": 3,
+          "description": "Batas jumlah posisi terbuka sebelum auto-pilot berhenti membuka posisi baru."
+        },
+        "dateSkunder.mt.bridgeHost": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "Alamat bind jembatan Python. 127.0.0.1 = hanya komputer ini. Isi 0.0.0.0 + dateSkunder.mt.bridgeToken yang kuat untuk diakses dari HP (VS Code code-server) lewat LAN/VPN. MT5 tetap berjalan di PC Windows."
+        },
+        "dateSkunder.mt.login": {
+          "type": "number",
+          "default": 0,
+          "description": "Nomor login akun MT5 NYATA (bukan demo/simulasi). Diisi juga dari form “Akun Nyata” di view MetaTrader AI."
+        },
+        "dateSkunder.mt.server": {
+          "type": "string",
+          "default": "",
+          "description": "Nama broker/server MT5, persis seperti di terminal (mis. MetaQuotes-Demo, ICMarkets-Live). Wajib untuk login akun nyata."
+        },
+        "dateSkunder.mt.terminalPath": {
+          "type": "string",
+          "default": "",
+          "description": "Path terminal64.exe MT5 (opsional). Kosong = pakai terminal MT5 yang sedang berjalan."
+        },
+        "dateSkunder.mt.notifySignals": {
+          "type": "boolean",
+          "default": true,
+          "description": "Tampilkan notifikasi VS Code setiap ada sinyal BUY/SELL lengkap entry, SL, TP, dan lot. Tombol “Eksekusi” langsung mengirim order (setelah validasi ulang)."
+        },
+        "dateSkunder.mt.minMarginLevel": {
+          "type": "number",
+          "default": 200,
+          "description": "Margin level minimum (%) agar entry baru diizinkan. Di bawah ini auto-trading berhenti membuka posisi agar tidak MC."
+        },
+        "dateSkunder.mt.autoConnect": {
+          "type": "boolean",
+          "default": false,
+          "description": "Tidak berjalan otomatis saat ekstensi dipasang — nyalakan sendiri dari tombol/Command Palette. Sambung otomatis realtime: view langsung menyambung ke jembatan/broker tanpa menekan tombol Hubungkan, dan menyambung ulang sendiri bila terputus. Matikan hanya bila ingin koneksi manual."
+        },
+        "dateSkunder.mt.symbolPresets": {
+          "type": "string",
+          "default": "XAUUSD,BTCUSD,ETHUSD,EURUSD,GBPUSD,USDJPY,US30,NAS100,USOIL,XAGUSD",
+          "description": "Simbol favorit untuk dropdown simbol akun (dipisah koma). Nama generik otomatis dicocokkan ke nama broker: ETHUSD → ETHUSDm, XAUUSD → XAUUSDm."
+        },
+        "dateSkunder.mt.llmEntry": {
+          "type": "boolean",
+          "default": true,
+          "description": "Izinkan LLM menyusun entry dari chat/tombol Entry (mis. \"beli ETHUSDm sekarang\"). Rencana tetap divalidasi host; order hanya terkirim setelah Eksekusi ditekan atau auto-trade aktif."
+        },
+        "dateSkunder.mt.tickMs": {
+          "type": "number",
+          "default": 2000,
+          "description": "Jeda pembaruan harga realtime (milidetik, 500–15000). Lebih kecil = chart lebih hidup, lebih besar = lebih hemat CPU."
+        },
+        "dateSkunder.mt.maxMarginUsage": {
+          "type": "number",
+          "default": 50,
+          "description": "Batas pemakaian free margin per order (%). Order ditolak bila margin yang dibutuhkan melebihi persentase ini."
+        },
         "dateSkunder.llama.contextSize": {
           "type": "number",
           "default": 4096,
@@ -960,8 +1385,8 @@
         },
         "dateSkunder.ai.autoStartServer": {
           "type": "boolean",
-          "default": true,
-          "description": "Jalankan llama-server otomatis saat pesan pertama dikirim di Chat AI."
+          "default": false,
+          "description": "Tidak berjalan otomatis saat ekstensi dipasang — nyalakan sendiri dari tombol/Command Palette. Jalankan llama-server otomatis saat pesan pertama dikirim di Chat AI."
         },
         "dateSkunder.ai.includeStats": {
           "type": "boolean",
@@ -1155,8 +1580,9 @@
         },
         "dateSkunder.room.autoStart": {
           "type": "boolean",
-          "default": true,
-          "markdownDescription": "Nyalakan **server Socket.IO** (Join Room) otomatis saat ekstensi aktif, supaya laptop lain bisa langsung bergabung. Server hanya mendengarkan di jaringan lokal (LAN); tidak ada data yang dikirim ke internet.\n\n启动扩展时自动运行 Join Room 的 Socket.IO 服务器（仅局域网）。"
+          "default": false,
+          "markdownDescription": "Nyalakan **server Socket.IO** (Join Room) otomatis saat ekstensi aktif, supaya laptop lain bisa langsung bergabung. Server hanya mendengarkan di jaringan lokal (LAN); tidak ada data yang dikirim ke internet.\n\n启动扩展时自动运行 Join Room 的 Socket.IO 服务器（仅局域网）。",
+          "description": "Tidak berjalan otomatis saat ekstensi dipasang — nyalakan sendiri dari tombol/Command Palette."
         },
         "dateSkunder.room.port": {
           "type": "number",
@@ -1413,6 +1839,18 @@
           "minimum": 5,
           "maximum": 120,
           "markdownDescription": "Batas waktu satu perintah build (menit). Perintah yang melewati batas dihentikan dan build dianggap gagal."
+        },
+        "dateSkunder.mt.demoAggressive": {
+          "type": "boolean",
+          "default": true,
+          "description": "Mode demo agresif: izinkan lot minimum 0,01 walau risikonya melebihi 2% ekuitas (maksimal demoRiskCapPct). Hanya berlaku di akun demo/trial — akun real tetap memakai batas ketat."
+        },
+        "dateSkunder.mt.demoRiskCapPct": {
+          "type": "number",
+          "default": 25,
+          "minimum": 2,
+          "maximum": 50,
+          "description": "Batas risiko per trade untuk mode demo agresif (% ekuitas). 25 = lot minimum boleh dipakai bila risikonya ≤25% ekuitas. Di atas itu tetap ditolak agar tidak MC."
         }
       }
     }
@@ -1425,6 +1863,8 @@
     "check:easycast": "node scripts/check-easycast.cjs",
     "check:builder": "node scripts/check-builder.cjs",
     "check:trading": "node scripts/check-trading.cjs",
+    "check:tradingview": "node scripts/check-tradingview.cjs",
+    "check:mt": "node scripts/check-mt.cjs",
     "check:community": "node scripts/check-community.cjs",
     "check:chat-api": "node scripts/check-chat-api.cjs",
     "check:publish": "node scripts/check-publish.cjs",
@@ -1436,7 +1876,7 @@
     "check:room-activate": "node scripts/check-room-activate.cjs",
     "check:compile": "node scripts/check-compile.cjs",
     "preview:website": "node scripts/preview-website.cjs",
-    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs && node scripts/check-builder.cjs && node scripts/check-trading.cjs"
+    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs && node scripts/check-builder.cjs && node scripts/check-trading.cjs && node scripts/check-tradingview.cjs && node scripts/check-mt.cjs"
   },
   "dependencies": {
     "chart.js": "^4.4.1",

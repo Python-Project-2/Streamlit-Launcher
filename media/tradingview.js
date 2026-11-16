@@ -7,7 +7,10 @@
  *    template, bandingkan simbol, layar penuh) + pengatur simbol/interval/gaya/rentang,
  *  • pencarian simbol lengkap: 941 emiten IDX + indeks, saham AS, komoditas, dan kurs,
  *  • panel Teknikal, Fundamental, Screener, Berita — semuanya widget resmi TradingView,
- *  • setelan embed: tema, bahasa, zona waktu, toolbar samping, hotlist, kalender, indikator.
+ *  • setelan embed: tema, bahasa, zona waktu, toolbar samping, hotlist, kalender, indikator,
+ *  • drawer “Analisa AI”: chat analisa saham dengan otak trading terpisah (pilih model .gguf,
+ *    nyalakan/hentikan llama-server, tanya jawab streaming) — data diambil dari simbol aktif,
+ *    jadi tetap bekerja tanpa berkas CSV (dipakai juga oleh panel layar penuh mandiri).
  *
  * Catatan tampilan: widget dipasang sebagai <iframe> langsung ke host resmi TradingView
  * (www.tradingview-widget.com, cadangan s.tradingview.com) berukuran 100% × 100%. Cara ini
@@ -125,6 +128,10 @@
     let sectionBody = null;       // div.grid seksi “Mode Trading” di halaman analisis
     let zenOn = false;            // apakah lapisan meminta mode layar penuh (zen) VS Code
     let hasSaved = false;         // ada setelan tersimpan (simbol pilihan pengguna dihormati)
+    let aiEl = null;              // drawer chat AI analisa (null = belum dibuat)
+    let aiStream = null;          // gelembung jawaban yang sedang di-stream
+    let aiInfo = {};              // keadaan otak trading terakhir (port/model/siap)
+    let aiBusy = false;           // permintaan AI sedang berjalan
     const frames = new Map();     // kotak widget → keadaan pemantauan (lihat mount)
 
     const L = (id, zh) => (lang === 'zh-cn' ? zh : id);
@@ -231,6 +238,7 @@
         link: '<path d="M14 4h6v6M20 4l-8 8M18 14v5H5V6h5"/>',
         check: '<path d="M4 12l5 5L20 6"/>',
         alert: '<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',
+        chat: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8.5 9h7M8.5 12h4"/>',
     };
     /** Ikon SVG monokrom; ukuran & warna diatur CSS (.tv-i). */
     function icon(name, cls) {
@@ -343,6 +351,39 @@
         '@media (max-width:1180px){#tv-ov .tv-rail{display:none}#tv-ov .tv-grid{grid-template-columns:1fr}#tv-ov .tv-item{grid-template-columns:74px minmax(0,1fr) 96px}}',
         '@media (max-width:1520px){#tv-ov .tv-lb{display:none}#tv-ov .tv-acts .tv-i{margin-right:0}#tv-ov .tv-acts button{padding:5px 9px}}',
         '@media (max-width:860px){#tv-ov .tv-set{left:12px;width:auto}#tv-ov .tv-brand .tv-bname{display:none}#tv-ov .tv-chips{display:none}#tv-ov .tv-top select{max-width:126px}#tv-ov .tv-item{grid-template-columns:74px minmax(0,1fr)}#tv-ov .tv-item .tv-sek,#tv-ov .tv-item .tv-papan{display:none}}',
+        // Drawer chat AI analisa (otak trading terpisah). Mengambang di kanan, chart tidak bergeser.
+        '#tv-ov .tv-ai{position:absolute;top:0;right:0;bottom:0;width:392px;max-width:94vw;z-index:6;display:flex;flex-direction:column;gap:8px;padding:10px 12px;background:var(--sk-bg,var(--vscode-editor-background,#1e1e1e));border-left:1px solid var(--sk-border,rgba(128,128,128,.4));box-shadow:-18px 0 44px rgba(0,0,0,.38)}',
+        '#tv-ov .tv-ai[hidden]{display:none}',
+        '#tv-ov .tv-ai-head{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600}',
+        '#tv-ov .tv-ai-head .tv-i{width:16px;height:16px;margin-right:0}',
+        '#tv-ov .tv-ai-head b{font-weight:600}',
+        '#tv-ov .tv-ai-head .tv-chip{margin-left:auto;font-size:11px;font-weight:400;border:1px solid var(--sk-border,rgba(128,128,128,.35));border-radius:10px;padding:1px 8px;opacity:.8;max-width:170px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}',
+        '#tv-ov .tv-ai-x{padding:3px 7px;border-radius:6px}',
+        '#tv-ov .tv-ai-x .tv-i{margin:0}',
+        '#tv-ov .tv-ai-model{display:flex;gap:6px;align-items:center}',
+        '#tv-ov .tv-ai-model select{flex:1;min-width:0}',
+        '#tv-ov .tv-ai-live{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px;font-size:11.5px;line-height:1.5;padding-top:6px;border-top:1px solid var(--sk-border,rgba(128,128,128,.25));opacity:.9}',
+        '#tv-ov .tv-ai-live .up{color:#26a69a}',
+        '#tv-ov .tv-ai-live .down{color:#ef5350}',
+        '#tv-ov .tv-ai-live .muted{opacity:.6}',
+        '#tv-ov .tv-ai-log{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:8px;padding-right:2px}',
+        '#tv-ov .tv-ai-msg{border:1px solid var(--sk-border,rgba(128,128,128,.28));border-radius:8px;padding:8px 10px;font-size:12.5px;line-height:1.62;white-space:pre-wrap;word-break:break-word}',
+        '#tv-ov .tv-ai-msg strong{font-weight:700}',
+        '#tv-ov .tv-ai-msg em{font-style:italic}',
+        '#tv-ov .tv-ai-msg code{font-family:var(--vscode-editor-font-family,Consolas,monospace);font-size:11px;background:rgba(128,128,128,.18);border-radius:3px;padding:0 3px}',
+        '#tv-ov .tv-ai-msg .md-p{margin:2px 0}',
+        '#tv-ov .tv-ai-msg .md-h{font-weight:700;margin:6px 0 2px;line-height:1.4}',
+        '#tv-ov .tv-ai-msg ul,#tv-ov .tv-ai-msg ol{margin:3px 0 3px 16px;padding:0}',
+        '#tv-ov .tv-ai-msg.user{background:var(--sk-input,rgba(128,128,128,.14));opacity:.92}',
+        '#tv-ov .tv-ai-msg.ai{background:transparent}',
+        '#tv-ov .tv-ai-msg.thinking{opacity:.6;font-style:italic}',
+        '#tv-ov .tv-ai-msg.err{border-color:#ef5350;color:#ef5350}',
+        '#tv-ov .tv-ai-note{font-size:11.5px;opacity:.6;line-height:1.6}',
+        '#tv-ov .tv-ai-ask{display:flex;gap:6px}',
+        '#tv-ov .tv-ai-ask input{flex:1;min-width:0}',
+        '#tv-ov .tv-ai-foot{font-size:10.5px;opacity:.5;line-height:1.55}',
+        '#tv-ov #tv-btn-ai.on{border-color:var(--sk-accent,var(--vscode-focusBorder,#007fd4));color:inherit;font-weight:600}',
+        '@media (max-width:860px){#tv-ov .tv-ai{width:100%;max-width:none}}',
     ].join('\n');
 
     function ensureCss() {
@@ -575,6 +616,238 @@
         return STUDIES.filter((s) => cfg.studies.indexOf(s.k) >= 0);
     }
 
+    // ── chat AI analisa (drawer kanan) ──────────────────────────────────────────
+    /** Gelembung pesan di drawer AI. */
+    function aiSay(kind, text) {
+        if (!aiEl) { return null; }
+        const log = aiEl.querySelector('#tv-ai-log');
+        if (!log) { return null; }
+        const box = el('div', 'tv-ai-msg' + (kind ? ' ' + kind : ''), text);
+        log.appendChild(box);
+        log.scrollTop = log.scrollHeight;
+        return box;
+    }
+
+    function aiChip(text) {
+        if (!aiEl) { return; }
+        const chip = aiEl.querySelector('#tv-ai-chip');
+        if (chip) { chip.textContent = text; }
+    }
+
+    /** Daftar model otak trading di drawer (pilihan aktif tidak dihapus saat daftar sama). */
+    function aiModels(models, selected) {
+        if (!aiEl) { return; }
+        const sel = aiEl.querySelector('#tv-ai-model');
+        if (!sel) { return; }
+        const list = Array.isArray(models) ? models : [];
+        const key = list.map((m) => m.path).join('|');
+        if (sel.getAttribute('data-key') !== key) {
+            clear(sel);
+            if (!list.length) {
+                const kosong = el('option', null, L('(belum ada berkas .gguf)', '(没有 .gguf 文件)'));
+                kosong.value = '';
+                sel.appendChild(kosong);
+            }
+            list.forEach((m) => {
+                const o = el('option', null, (m.name || '') + (m.size ? ' · ' + m.size : ''));
+                o.value = m.path;
+                o.title = m.path;
+                sel.appendChild(o);
+            });
+            sel.setAttribute('data-key', key);
+        }
+        if (selected) { sel.value = selected; }
+    }
+
+    /** Keadaan otak trading: chip siap/berhenti + tombol Nyalakan/Hentikan. */
+    function aiApplyState(ai) {
+        if (!aiEl) { return; }
+        aiInfo = ai || {};
+        const ready = !!aiInfo.ready || aiInfo.state === 'running';
+        const label = aiInfo.state === 'starting' ? L('memuat…', '加载中…') : ready ? L('siap', '就绪') : L('berhenti', '停止');
+        aiChip(label + (aiInfo.port ? ' · port ' + aiInfo.port : ''));
+        const start = aiEl.querySelector('#tv-ai-start');
+        if (start) {
+            const starting = aiInfo.state === 'starting';
+            start.textContent = starting ? L('Memuat…', '加载中…') : ready ? L('Hentikan', '停止') : L('Nyalakan', '启动');
+            start.setAttribute('data-on', ready ? '1' : '');
+            start.disabled = starting;
+        }
+        if (aiInfo.models) { aiModels(aiInfo.models, aiInfo.modelPath); }
+    }
+
+    function aiBusySet(on) {
+        aiBusy = !!on;
+        if (!aiEl) { return; }
+        const q = aiEl.querySelector('#tv-ai-q');
+        const send = aiEl.querySelector('#tv-ai-send');
+        if (q) { q.disabled = aiBusy; }
+        if (send) { send.disabled = aiBusy; }
+        aiEl.classList.toggle('busy', aiBusy);
+    }
+
+    /** Angka harga ringkas untuk baris data live di drawer. */
+    function hargaRingkas(n) {
+        if (typeof n !== 'number' || !isFinite(n)) { return '—'; }
+        const d = Math.abs(n) >= 100 ? 0 : 2;
+        return n.toLocaleString('id-ID', { minimumFractionDigits: d, maximumFractionDigits: d });
+    }
+
+    /** Baris harga terbaru (simbol, harga, perubahan, sesi, waktu data) di drawer AI. */
+    function aiLive(m) {
+        if (!aiEl) { return; }
+        const box = aiEl.querySelector('#tv-ai-live');
+        if (!box) { return; }
+        const t = m && m.teknik;
+        if (!t) { box.textContent = '—'; return; }
+        const up = Number(t.changePct) >= 0;
+        const pct = isFinite(t.changePct) ? Number(t.changePct) : 0;
+        box.textContent = '';
+        const sym = el('b', null, String(t.symbol || m.symbol || cfg.symbol));
+        const price = el('span', null, ' ' + hargaRingkas(t.last) + ' ');
+        const chg = el('span', up ? 'up' : 'down', (up ? '+' : '') + nf(pct, 2) + '%');
+        const rest = el('span', 'muted', ' · ' + (m.sesi || '') + (m.waktu ? ' · ' + m.waktu : ''));
+        box.append(sym, price, chg, rest);
+    }
+
+    function aiBegin() {
+        if (!aiEl) { return; }
+        if (aiStream && aiStream.parentElement) { aiStream.parentElement.removeChild(aiStream); }
+        aiStream = aiSay('ai thinking', L('Membaca data pasar…', '正在读取市场数据…'));
+    }
+
+    function aiChunk(text) {
+        if (!aiStream) { aiBegin(); }
+        if (!aiStream) { return; }
+        if (aiStream.classList.contains('thinking')) {
+            aiStream.classList.remove('thinking');
+            aiStream.textContent = '';
+        }
+        aiStream.textContent += String(text || '');
+        const log = aiStream.parentElement;
+        if (log) { log.scrollTop = log.scrollHeight; }
+    }
+
+    function aiAnswer(text) {
+        const body = String(text || '').trim();
+        if (!aiStream) { aiStream = aiSay('ai', ''); }
+        if (!aiStream) { return; }
+        aiStream.classList.remove('thinking');
+        if (window.SkunderMd) {
+            window.SkunderMd.block(aiStream, body || L('(tidak ada jawaban)', '(无回答)'));
+        } else {
+            aiStream.textContent = body || L('(tidak ada jawaban)', '(无回答)');
+        }
+        const log = aiStream.parentElement;
+        if (log) { log.scrollTop = log.scrollHeight; }
+        aiStream = null;
+    }
+
+    function aiError(text) {
+        if (aiStream && aiStream.parentElement) { aiStream.parentElement.removeChild(aiStream); }
+        aiStream = null;
+        aiSay('err', String(text || L('galat', '错误')));
+    }
+
+    function aiNote(text) {
+        if (!aiEl) { return; }
+        const log = aiEl.querySelector('#tv-ai-log');
+        if (!log) { return; }
+        const note = el('div', 'tv-ai-note', String(text || ''));
+        log.appendChild(note);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function aiSend() {
+        if (!aiEl || aiBusy) { return; }
+        const q = aiEl.querySelector('#tv-ai-q');
+        if (!q) { return; }
+        const text = String(q.value || '').trim();
+        if (!text) { return; }
+        q.value = '';
+        aiSay('user', text);
+        aiBegin();
+        post({ type: 'tvAiAsk', text: text, symbol: cfg.symbol });
+    }
+
+    function aiToggle() {
+        if (!aiEl) { return; }
+        if (aiEl.hidden) { aiOpen(); } else { aiClose(); }
+    }
+
+    function aiOpen() {
+        if (!aiEl) { return; }
+        aiEl.hidden = false;
+        const btn = ov && ov.querySelector('#tv-btn-ai');
+        if (btn) { btn.classList.add('on'); }
+        // Keadaan & daftar model diminta saat drawer dibuka (bukan saat halaman dimuat).
+        post({ type: 'tvAiState' });
+        post({ type: 'tvAiModels' });
+        // Data pasar simbol aktif diminta ulang agar baris live & jawaban mengikuti harga terbaru.
+        post({ type: 'tvAiWatch', symbol: cfg.symbol });
+        const q = aiEl.querySelector('#tv-ai-q');
+        if (q) { setTimeout(() => { if (q.isConnected) { q.focus(); } }, 40); }
+    }
+
+    function aiClose() {
+        if (!aiEl) { return; }
+        aiEl.hidden = true;
+        const btn = ov && ov.querySelector('#tv-btn-ai');
+        if (btn) { btn.classList.remove('on'); }
+    }
+
+    /** Drawer kanan: pilih model, nyalakan otak trading, tanya analisa. */
+    function buildAi() {
+        const box = el('aside', 'tv-ai');
+        box.id = 'tv-ai';
+        box.hidden = true;
+        box.innerHTML =
+            '<div class="tv-ai-head">' + icon('chat') +
+            '<b>' + esc(L('Analisa AI', 'AI 分析')) + '</b>' +
+            '<span id="tv-ai-chip" class="tv-chip">…</span>' +
+            '<button id="tv-ai-new" class="tv-ai-x" title="' + esc(L('Percakapan baru', '新对话')) + '">＋</button>' +
+            '<button id="tv-ai-x" class="tv-ai-x" title="' + esc(L('Tutup panel AI', '关闭 AI 面板')) + '">' + icon('close') + '</button>' +
+            '</div>' +
+            '<div class="tv-ai-model">' +
+            '<select id="tv-ai-model" title="' + esc(L('Model .gguf otak trading', '交易大脑模型')) + '"><option value="">' + esc(L('(memindai model…)', '(正在扫描模型…)')) + '</option></select>' +
+            '<button id="tv-ai-start">' + esc(L('Nyalakan', '启动')) + '</button>' +
+            '<button id="tv-ai-scan" title="' + esc(L('Pindai ulang berkas .gguf', '重新扫描 .gguf')) + '">⟳</button>' +
+            '</div>' +
+            '<div id="tv-ai-live" class="tv-ai-live">—</div>' +
+            '<div id="tv-ai-log" class="tv-ai-log"></div>' +
+            '<div class="tv-ai-ask">' +
+            '<input id="tv-ai-q" type="text" spellcheck="false" autocomplete="off" placeholder="' + esc(L('Tanya: aman buy sekarang?', '提问：现在适合买入吗？')) + '">' +
+            '<button id="tv-ai-send" class="tv-primary">' + esc(L('Kirim', '发送')) + '</button>' +
+            '</div>' +
+            '<div class="tv-ai-foot">' + esc(L('Otak trading terpisah dari Skunder AI: port, model, dan terminal sendiri. Data diambil langsung, tidak perlu berkas CSV.', '交易大脑独立于 Skunder AI：独立端口、模型与终端。数据直接获取，无需 CSV。')) + '</div>';
+        box.querySelector('#tv-ai-x').onclick = () => aiClose();
+        box.querySelector('#tv-ai-new').onclick = () => {
+            post({ type: 'tvAiNewChat' });
+            const log = box.querySelector('#tv-ai-log');
+            if (log) { clear(log); }
+            aiStream = null;
+            aiNote(L('Percakapan baru.', '新对话。'));
+        };
+        box.querySelector('#tv-ai-model').onchange = (ev) => {
+            const path = String(ev.target.value || '');
+            if (path) { post({ type: 'tvAiModel', path: path }); }
+        };
+        box.querySelector('#tv-ai-start').onclick = (ev) => {
+            const on = ev.currentTarget.getAttribute('data-on') === '1';
+            post({ type: 'tvAiServer', action: on ? 'stop' : 'start' });
+        };
+        box.querySelector('#tv-ai-scan').onclick = () => {
+            aiChip(L('memindai…', '扫描中…'));
+            post({ type: 'tvAiModels' });
+        };
+        box.querySelector('#tv-ai-send').onclick = () => aiSend();
+        box.querySelector('#tv-ai-q').onkeydown = (ev) => {
+            if (ev.key === 'Enter') { aiSend(); }
+            if (ev.key === 'Escape') { ev.stopPropagation(); aiClose(); }
+        };
+        return box;
+    }
+
     // ── overlay ─────────────────────────────────────────────────────────────────
     function status(text) {
         if (statusEl) { statusEl.textContent = text; }
@@ -626,6 +899,12 @@
         }));
 
         const acts = el('div', 'tv-acts');
+        const bAi = el('button');
+        bAi.innerHTML = icon('chat') + '<span class="tv-lb">' + esc(L('Analisa AI', 'AI 分析')) + '</span>';
+        bAi.id = 'tv-btn-ai';
+        bAi.title = L('Chat AI analisa saham — otak trading terpisah (port, model, terminal sendiri)', 'AI 股票分析对话 — 独立交易大脑（独立端口、模型、终端）');
+        bAi.setAttribute('aria-label', L('Analisa AI', 'AI 分析'));
+        bAi.onclick = () => aiToggle();
         const bSet = el('button');
         bSet.innerHTML = icon('gear') + '<span class="tv-lb">' + esc(L('Setelan', '设置')) + '</span>';
         bSet.title = L('Setelan tampilan widget & indikator cepat', '组件显示与快捷指标设置');
@@ -652,7 +931,7 @@
         bX.id = 'tv-btn-close';
         bX.title = L('Tutup mode analisis (Esc)', '关闭分析模式（Esc）');
         bX.onclick = () => close();
-        acts.append(bSet, bFull, bReload, bX);
+        acts.append(bAi, bSet, bFull, bReload, bX);
         top.appendChild(acts);
         x.appendChild(top);
 
@@ -681,6 +960,11 @@
 
         bodyEl = el('div', 'tv-body');
         x.appendChild(bodyEl);
+
+        // Drawer chat AI analisa: mengambang di kanan, tidak menggeser chart (iframe tidak perlu dimuat ulang).
+        aiStream = null;
+        aiEl = buildAi();
+        x.appendChild(aiEl);
 
         // Pita harga TradingView dihapus: saat jaringan lambat/lambat memuat, bilah 46px itu
         // hanya menyisakan kotak kosong di bawah chart. Seluruh info pasar kini ada di dalam
@@ -740,6 +1024,8 @@
         cfg.symbol = v;
         saveCfg();
         renderAll();
+        // Simbol chart berubah → otak trading & data live mengikuti simbol ini.
+        post({ type: 'tvAiWatch', symbol: cfg.symbol });
     }
 
     function hideAc() {
@@ -1230,26 +1516,39 @@
         }
         if (!cfg.symbol) { cfg.symbol = DEFAULT_CFG.symbol; }
         tab = (opts && opts.tab) || tab || 'chart';
-        if (ov) { renderAll(); return; }
+        if (ov) {
+            renderAll();
+            if (opts && opts.ai) { aiOpen(); }
+            return;
+        }
         ov = buildOverlay();
         document.body.appendChild(ov);
         document.body.style.overflow = 'hidden';
         renderMain();
+        // Mode layar penuh tanpa data & panel mandiri: drawer AI langsung terbuka.
+        if (opts && opts.ai) { aiOpen(); }
+        // Data pasar untuk simbol awal langsung diminta (baris live terisi tanpa klik).
+        post({ type: 'tvAiWatch', symbol: cfg.symbol });
         const inp = ov.querySelector('#tv-symbol');
         if (inp) { inp.focus(); }
         status(symbolLabel() + ' · ' + labelOf(INTERVALS, cfg.interval) + ' · ' + labelOf(RANGES, cfg.range));
     }
 
-    function close() {
+    function close(silent) {
         if (!ov) { return; }
         renderSeq++;
         disposeFrames();
         const x = ov;
         ov = null; bodyEl = null; statusEl = null; setEl = null;
+        aiEl = null; aiStream = null; aiBusy = false;
         clear(x);
         if (x.parentElement) { x.parentElement.removeChild(x); }
         document.body.style.overflow = '';
         if (zenOn) { zenOn = false; post({ type: 'tradingFullscreen', on: false }); }
+        // Panel mandiri menutup jendelanya lewat hook ini (halaman analisis tidak memakainya).
+        if (!silent) {
+            try { if (P && typeof P.onClose === 'function') { P.onClose(); } } catch (e) { /* tanpa panel */ }
+        }
     }
 
     // ── seksi di halaman analisis ───────────────────────────────────────────────
@@ -1313,7 +1612,7 @@
             if (next === lang) { return; }
             lang = next;
             const wasOpen = !!ov;
-            if (wasOpen) { close(); }
+            if (wasOpen) { close(true); }
             renderSection();
             if (wasOpen) { open(); }
         } else if (m.type === 'tradingOpen') {
@@ -1323,6 +1622,34 @@
         } else if (m.type === 'tradingTab' && m.tab) {
             tab = String(m.tab);
             if (ov) { renderMain(); } else { open({ tab: tab }); }
+        } else if (m.type === 'tvAiState') {
+            aiApplyState(m.ai);
+        } else if (m.type === 'tvAiModels') {
+            aiModels(m.models, m.selected);
+        } else if (m.type === 'tvAiThink') {
+            aiBegin();
+        } else if (m.type === 'tvAiChunk') {
+            aiChunk(m.text);
+        } else if (m.type === 'tvAiAnswer') {
+            aiAnswer(m.text);
+        } else if (m.type === 'tvAiError') {
+            aiError(m.text);
+        } else if (m.type === 'tvAiInfo') {
+            aiNote(m.text);
+        } else if (m.type === 'tvAiBusy') {
+            aiBusySet(!!m.on);
+        } else if (m.type === 'tvAiSymbol' && m.symbol) {
+            // Simbol yang benar-benar dipakai otak trading dikirim balik oleh ekstensi.
+            if (m.symbol !== cfg.symbol) { cfg.symbol = String(m.symbol); saveCfg(); renderAll(); }
+        } else if (m.type === 'tvAiLive') {
+            aiLive(m);
+        } else if (m.type === 'tvAiChatReset') {
+            if (aiEl) {
+                const log = aiEl.querySelector('#tv-ai-log');
+                if (log) { clear(log); }
+                aiStream = null;
+                aiNote(L('Percakapan baru.', '新对话。'));
+            }
         }
     });
 
@@ -1350,7 +1677,7 @@
         /** Pencarian simbol lengkap (dipakai uji & fitur lain). */
         cari(q, n) { return saham().cari(q, n); },
         destroy() {
-            close();
+            close(true);
             const sec = document.getElementById('trading');
             if (sec && sec.parentElement) { sec.parentElement.removeChild(sec); }
             P = null; S = null; sectionBody = null;

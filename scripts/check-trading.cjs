@@ -62,6 +62,8 @@ const posts = [];
 const ctx = {
     app, sheet, state: { fileName: 'saham.csv' },
     vscode: { postMessage: (m) => posts.push(m) },
+    /** Hook panel mandiri: dipanggil saat lapisan ditutup (Esc / tombol tutup). */
+    onClose: () => posts.push({ type: 'panelClose' }),
     el, esc, fmt: (n) => String(n), cut: (s) => String(s).slice(0, 12), section,
 };
 
@@ -95,6 +97,7 @@ check('seksi tidak menjual trading demo/real', !/paper trading|broker|trading re
 doc.getElementById('btn-trading-open').click();
 const ov = doc.getElementById('tv-ov');
 check('overlay penuh terbuka', !!ov);
+check('membuka mode analisis meminta data live simbol', posts.some((p) => p.type === 'tvAiWatch' && p.symbol === 'IDX:BBCA'), JSON.stringify(posts.slice(-4)));
 check('z-index lapisan di atas EasyCast', /2147483200/.test(doc.getElementById('sk-tv-css').textContent));
 check('berat body dikunci saat terbuka', doc.body.style.overflow === 'hidden');
 
@@ -219,6 +222,66 @@ rsi.querySelector('input').dispatchEvent(new window.Event('change'));
 check('indikator RSI ikut terkirim ke chart', ((configOf('advanced-chart') || {}).studies || []).indexOf('STD;RSI') >= 0, JSON.stringify((configOf('advanced-chart') || {}).studies));
 check('panel setelan tetap terbuka setelah ganti setelan', doc.getElementById('tv-set').hidden === false);
 
+// ── 8b. chat AI analisa di lapisan (drawer kanan, otak trading terpisah) ───────
+const aiBtn = doc.getElementById('tv-btn-ai');
+check('tombol Analisa AI ada di bar atas', !!aiBtn);
+const drawer = doc.getElementById('tv-ai');
+check('drawer AI dibuat dan tersembunyi', !!drawer && drawer.hidden === true);
+posts.length = 0;
+aiBtn.click();
+check('klik tombol membuka drawer AI', drawer.hidden === false);
+check('membuka drawer meminta keadaan + daftar model', posts.some((p) => p.type === 'tvAiState') && posts.some((p) => p.type === 'tvAiModels'), JSON.stringify(posts.slice(0, 4)));
+
+function aiSend(data) { window.dispatchEvent(new window.MessageEvent('message', { data })); }
+aiSend({
+    type: 'tvAiState',
+    ai: {
+        state: 'running', port: 8137, ready: true, modelPath: 'D:/models/qwen.gguf',
+        models: [{ path: 'D:/models/qwen.gguf', name: 'qwen.gguf', size: '4.1 GB' }],
+    },
+});
+const modelSel = doc.getElementById('tv-ai-model');
+check('daftar model otak trading terisi', modelSel.options.length === 1 && modelSel.value === 'D:/models/qwen.gguf', modelSel.innerHTML.slice(0, 80));
+check('chip status menyebut port otak trading', /8137/.test(doc.getElementById('tv-ai-chip').textContent), doc.getElementById('tv-ai-chip').textContent);
+check('tombol server menjadi Hentikan saat siap', /Hentikan/.test(doc.getElementById('tv-ai-start').textContent), doc.getElementById('tv-ai-start').textContent);
+
+posts.length = 0;
+modelSel.value = 'D:/models/qwen.gguf';
+modelSel.dispatchEvent(new window.Event('change'));
+check('ganti model mengirim pilihan ke ekstensi', posts.some((p) => p.type === 'tvAiModel' && p.path === 'D:/models/qwen.gguf'), JSON.stringify(posts));
+
+posts.length = 0;
+const aiQ = doc.getElementById('tv-ai-q');
+aiQ.value = 'aman buy sekarang?';
+doc.getElementById('tv-ai-send').click();
+check('pertanyaan AI membawa simbol aktif', posts.some((p) => p.type === 'tvAiAsk' && p.text === 'aman buy sekarang?' && p.symbol === window.SkunderTrading.cfg.symbol), JSON.stringify(posts));
+check('gelembung pertanyaan tampil', /aman buy sekarang\?/.test(doc.getElementById('tv-ai-log').textContent));
+
+aiSend({ type: 'tvAiThink' });
+aiSend({ type: 'tvAiChunk', text: 'ARAH: NAIK\nSINYAL: BUY\n' });
+check('potongan jawaban AI tampil saat streaming', /SINYAL: BUY/.test(doc.getElementById('tv-ai-log').textContent));
+aiSend({ type: 'tvAiAnswer', text: 'ARAH: NAIK\nSINYAL: BUY\nENTRY: 4.350' });
+check('jawaban AI final tampil', /ENTRY: 4.350/.test(doc.getElementById('tv-ai-log').textContent), doc.getElementById('tv-ai-log').textContent.slice(-90));
+aiSend({ type: 'tvAiError', text: 'model belum dipilih' });
+check('galat AI tampil di drawer', /model belum dipilih/.test(doc.getElementById('tv-ai-log').textContent));
+
+aiSend({ type: 'tvAiLive', symbol: 'IDX:BBCA', sesi: 'Sesi 1', waktu: '21:05:12 WIB', teknik: { symbol: 'IDX:BBCA', last: 9350, changePct: 1.24 } });
+const liveText = doc.getElementById('tv-ai-live').textContent;
+check('baris harga live tampil di drawer', /9\.350/.test(liveText) && /\+1,24%/.test(liveText) && /21:05:12 WIB/.test(liveText), liveText);
+
+posts.length = 0;
+const liveInput = doc.getElementById('tv-symbol');
+liveInput.value = 'TLKM';
+liveInput.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+check('ganti simbol chart meminta data live simbol baru', posts.some((p) => p.type === 'tvAiWatch' && p.symbol === 'IDX:TLKM'), JSON.stringify(posts.slice(0, 4)));
+
+aiSend({ type: 'tvAiInfo', text: 'Konteks data → IDX:TLKM' });
+const afterContext = doc.getElementById('tv-ai-log').textContent;
+check('catatan konteks data baru tampil', /Konteks data → IDX:TLKM/.test(afterContext) && /aman buy sekarang/.test(afterContext), afterContext.slice(-100));
+
+doc.getElementById('tv-ai-x').click();
+check('tombol tutup hanya menutup drawer', doc.getElementById('tv-ai').hidden === true && !!doc.getElementById('tv-ov'));
+
 // ── 9. tombol muat ulang + Esc ────────────────────────────────────────────────
 const beforeFrame = frames().filter((f) => (f.getAttribute('src') || '').indexOf('/advanced-chart/') > 0)[0];
 doc.getElementById('tv-btn-reload').click();
@@ -228,6 +291,41 @@ check('muat ulang menggambar ulang widget', !!afterFrame && afterFrame !== befor
 window.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape' }));
 check('Esc menutup overlay', !doc.getElementById('tv-ov'));
 check('scroll body dipulihkan', doc.body.style.overflow === '');
+check('hook tutup dipanggil (panel mandiri bisa menutup jendelanya)', posts.some((p) => p.type === 'panelClose'), JSON.stringify(posts.slice(-3)));
+
+// ── 9b. mode layar penuh tanpa berkas CSV: drawer AI langsung terbuka ─────────
+posts.length = 0;
+window.SkunderTrading.open({ symbol: 'IDX:TLKM', ai: true });
+check('lapisan bisa dibuka tanpa data CSV', !!doc.getElementById('tv-ov') && /IDX:TLKM/.test(doc.getElementById('tv-symbol').value), doc.getElementById('tv-symbol').value);
+check('drawer AI langsung terbuka pada mode tanpa CSV', doc.getElementById('tv-ai').hidden === false);
+check('membuka lapisan meminta status + model otak trading', posts.some((p) => p.type === 'tvAiState') && posts.some((p) => p.type === 'tvAiModels'), JSON.stringify(posts.slice(0, 3)));
+window.SkunderTrading.close();
+
+// ── 9c. panel mandiri (tanpa CSV): init tanpa seksi + chat + hook tutup ──────
+{
+    const dom2 = new JSDOM('<!doctype html><html><body class="tv-standalone"></body></html>', { runScripts: 'outside-only', url: 'https://skunder.test/panel' });
+    const w2 = dom2.window;
+    const posts2 = [];
+    let closed = 0;
+    w2.eval(fs.readFileSync(path.join(root, 'media/saham.js'), 'utf8'));
+    w2.eval(fs.readFileSync(path.join(root, 'media/tradingview.js'), 'utf8'));
+    w2.SkunderTrading.init({
+        vscode: { postMessage: (m) => posts2.push(m) },
+        state: { fileName: '' },
+        onClose: () => { closed++; posts2.push({ type: 'panelClose' }); },
+    });
+    check('panel mandiri: init tanpa seksi tidak membuat seksi', !w2.document.getElementById('trading'));
+    w2.SkunderTrading.open({ symbol: 'IDX:TLKM', ai: true });
+    check('panel mandiri: overlay penuh terbuka tanpa data', !!w2.document.getElementById('tv-ov'));
+    check('panel mandiri: drawer AI langsung terbuka', w2.document.getElementById('tv-ai').hidden === false);
+    posts2.length = 0;
+    w2.document.getElementById('tv-ai-q').value = 'trend naik?';
+    w2.document.getElementById('tv-ai-send').click();
+    check('panel mandiri: pertanyaan dikirim dengan simbol aktif', posts2.some((p) => p.type === 'tvAiAsk' && p.symbol === 'IDX:TLKM' && p.text === 'trend naik?'), JSON.stringify(posts2.slice(0, 3)));
+    w2.document.getElementById('tv-btn-close').click();
+    check('panel mandiri: tombol tutup memanggil hook onClose', closed === 1 && !w2.document.getElementById('tv-ov'), String(closed));
+    w2.close();
+}
 
 // ── 10. berkas ekstensi: menu + CSP + pemuatan skrip ──────────────────────────
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
@@ -251,4 +349,4 @@ if (fails.length) {
     fails.forEach((f) => console.error('  - ' + f));
     process.exit(1);
 }
-console.log('✓ Mode Analisis: ' + ok.length + ' uji lolos (katalog saham, overlay, widget, tab, pencarian, menu, CSP)');
+console.log('✓ Mode Analisis: ' + ok.length + ' uji lolos (katalog saham, overlay, widget, tab, pencarian, menu, CSP, drawer AI, panel mandiri)');

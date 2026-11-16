@@ -18,3 +18,10 @@ src/
 *.air
 *.ipa
 *.apk
+
+# Python (jembatan MetaTrader)
+__pycache__/
+*.pyc
+
+# Riwayat chat Date Skunder (database lokal)
+database/database*.txt

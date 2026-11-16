@@ -24,3 +24,9 @@ apps.gif
 ohlc.png
 journal.png
 thema.png
+# Python cache jembatan MetaTrader
+**/__pycache__/**
+**/*.pyc
+
+# Jangan ikutkan riwayat chat pengguna ke VSIX
+database/database*.txt

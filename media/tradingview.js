@@ -1551,58 +1551,6 @@
         }
     }
 
-    // ── seksi di halaman analisis ───────────────────────────────────────────────
-    function renderSection() {
-        if (!P || !P.section) { return; }
-        const old = document.getElementById('trading');
-        if (old && old.parentElement) { old.parentElement.removeChild(old); }
-        sectionBody = P.section('trading', L('Mode Analisis (TradingView)', '分析模式（TradingView）'));
-        if (!sectionBody) { return; }
-        const card = P.el('div', 'card wide tv-launch');
-        card.setAttribute('data-spider-skip', '1');
-        const auto = detectSymbol();
-        const sym = auto || cfg.symbol;
-        const total = saham().jumlah || saham().items.length;
-        card.innerHTML =
-            '<div style="padding:16px">' +
-            '<h3>' + esc(L('Analisis saham lengkap dengan TradingView', '使用 TradingView 进行完整股票分析')) + '</h3>' +
-            '<p class="muted" style="margin:0 0 12px;line-height:1.7">' +
-            esc(L('Satu klik membuka layar penuh berisi chart TradingView: semua indikator, alat gambar, alert, replay, gauge teknikal, laporan keuangan, profil perusahaan, screener bursa, berita, kalender ekonomi — plus pencarian ' + nf(total) + ' emiten IDX.',
-                '一键打开 TradingView 图表全屏界面：全部指标、绘图工具、警报、回放、技术面仪表、财务报表、公司资料、选股器、新闻、经济日历，以及 ' + nf(total) + ' 家 IDX 公司搜索。')) +
-            '</p>' +
-            '<div class="tv-lsearch"><input id="tv-lsearch" type="text" autocomplete="off" placeholder="' +
-            esc(L('Cari kode atau nama saham…', '搜索代码或公司名称…')) + '"><div class="tv-lac" id="tv-lac" hidden></div></div>' +
-            '<div class="tv-lrow">' +
-            '<button class="btn tv-lbtn" id="btn-trading-open">' + icon('chart') + esc(L('Buka Mode Analisis', '打开分析模式')) + '</button>' +
-            '</div>' +
-            '<div class="tv-lrow" id="tv-lchips"></div>' +
-            '<div class="tv-lnote">' +
-            esc(L('Simbol terdeteksi', '检测到的代码')) + ': <code>' + esc(sym) + '</code> · ' +
-            esc(L('Katalog pencarian: ' + nf(total) + ' emiten IDX + indeks, saham AS, komoditas, kurs. Butuh internet — data dari TradingView, bukan rekomendasi investasi.',
-                '搜索目录：' + nf(total) + ' 家 IDX 公司 + 指数、美股、商品、汇率。需要联网 — 数据来自 TradingView，非投资建议。')) +
-            '</div></div>';
-        sectionBody.appendChild(card);
-
-        const btn = card.querySelector('#btn-trading-open');
-        if (btn) { btn.onclick = () => open({ symbol: auto || undefined }); }
-
-        const inp = card.querySelector('#tv-lsearch');
-        const panel = card.querySelector('#tv-lac');
-        if (inp && panel) {
-            attachSuggest(inp, panel, (simbol) => { open({ symbol: simbol }); });
-        }
-
-        const chips = card.querySelector('#tv-lchips');
-        if (chips) {
-            QUICK.slice(0, 10).forEach((q) => {
-                const c = P.el('button', 'tv-lchip', q.d);
-                c.title = q.n;
-                c.onclick = () => open({ symbol: q.s });
-                chips.appendChild(c);
-            });
-        }
-    }
-
     // ── bahasa & pesan dari ekstensi ────────────────────────────────────────────
     window.addEventListener('message', (ev) => {
         const m = ev.data;

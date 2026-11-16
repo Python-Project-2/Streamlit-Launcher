@@ -1,34 +1,10 @@
-{"at":1794788475489,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794788624975,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794788745173,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794788894927,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794789015171,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794789165006,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794789285055,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794789405162,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794789555117,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794789675197,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794789795302,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794789915325,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794790065254,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794790185377,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794790335577,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794790485397,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794790605448,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794790725649,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794791444440,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794791594506,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794791744527,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794791894484,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794792044485,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794792164670,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794792314640,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794792464685,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794792614752,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794792764686,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794792914839,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794793064707,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794793184932,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794793334795,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794793454887,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
-{"at":1794793604875,"name":"Ayu","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","text":"Belum ada sinyal kuat di IDX:BBCA (skor 1%). Aku tunggu konfirmasi — jangan masuk dulu."}
+{"at":1794799108894,"name":"Nadia","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"gate","text":"Gerbang MUTLAK IDX:BBCA: TUNGGU 7/13. Belum lulus Sinyal mesin searah; Tren SMA20/SMA50 searah; Tren jangka panjang (SMA200). Tidak ada entry — modal dijaga."}
+{"at":1794799108895,"name":"Dimas","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"levels","text":"Level acuan IDX:BBCA: harga 5.475 · support 4.740 · resistance 5.650 · RSI 52.7%. Aku pantau sampai syarat lengkap."}
+{"at":1794799168646,"name":"Nadia","role":"partner","text":"RSI 52.7% · MACD hist 94.823 · volume 0.12×. TUNGGU 7/13.","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"watch"}
+{"at":1794799596534,"name":"Nadia","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"gate","text":"Gerbang MUTLAK IDX:BBCA: TUNGGU 7/13. Belum lulus Sinyal mesin searah; Tren SMA20/SMA50 searah; Tren jangka panjang (SMA200). Tidak ada entry — modal dijaga."}
+{"at":1794799596535,"name":"Dimas","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"levels","text":"Level acuan IDX:BBCA: harga 5.450 · support 4.740 · resistance 5.650 · RSI 51.9%. Aku pantau sampai syarat lengkap."}
+{"at":1794799596535,"name":"Nadia","role":"partner","text":"Resistance 20h 5.650 · support 20h 4.740. Selama belum tembus, aku tunggu.","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"watch"}
+{"at":1794799648743,"name":"Dimas","role":"partner","text":"Rencana kalau lulus: entry 5.450, stop 5.170, TP1 6.015. Sekarang tunggu 7/13.","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"watch"}
+{"at":1794799708999,"name":"Nadia","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"gate","text":"Gerbang MUTLAK IDX:BBCA: TUNGGU 7/13. Belum lulus Sinyal mesin searah; Tren SMA20/SMA50 searah; Tren jangka panjang (SMA200). Tidak ada entry — modal dijaga."}
+{"at":1794799709000,"name":"Dimas","role":"partner","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"levels","text":"Level acuan IDX:BBCA: harga 5.475 · support 4.740 · resistance 5.650 · RSI 52.7%. Aku pantau sampai syarat lengkap."}
+{"at":1794799709000,"name":"Dewi","role":"partner","text":"Pengingat: risiko maksimal 1% modal per posisi. TUNGGU 7/13.","symbol":"IDX:BBCA","signal":"HOLD","verdict":"TUNGGU","topic":"watch"}

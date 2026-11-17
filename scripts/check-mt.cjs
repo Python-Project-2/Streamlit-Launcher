@@ -439,7 +439,7 @@ function startMock() {
     const iTrading = views.indexOf('dateSkunder.tradingView');
     const iMt = views.indexOf('dateSkunder.mtView');
     check('view MetaTrader terdaftar', iMt >= 0, JSON.stringify(views));
-    eq('MetaTrader di bawah TradingView', iMt, iTrading + 1);
+    check('MetaTrader di bawah TradingView', iMt > iTrading, `trading=${iTrading}, mt=${iMt}`);
     eq('nama view MetaTrader', pkg.contributes.views.dateSkunderAi[iMt].name, 'MetaTrader AI');
     check('perintah MT terdaftar', ['open', 'connect', 'analyze', 'models', 'serverTerminal', 'bridgeTerminal', 'closeAll']
         .every((k) => pkg.contributes.commands.some((c) => c.command === 'date-skunder.mt.' + k)));

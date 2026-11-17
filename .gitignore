@@ -9,6 +9,7 @@ bin-release/
 build/
 out/
 src/
+media/
 
 # Other files and folders
 .settings/
@@ -18,6 +19,7 @@ src/
 *.air
 *.ipa
 *.apk
+*.vsix
 
 # Python (jembatan MetaTrader)
 __pycache__/

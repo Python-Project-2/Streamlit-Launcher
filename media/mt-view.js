@@ -789,6 +789,48 @@
         }
     }
 
+    /**
+     * Animasi mengetik: jawaban AI muncul bertahap dengan kursor berkedip.
+     * Bila requestAnimationFrame tidak tersedia, teks langsung ditulis penuh.
+     */
+    function typeInto(node, full) {
+        if (!node) { return; }
+        node.dataset.raw = full;
+        if (typeof window.requestAnimationFrame !== 'function') {
+            node.textContent = full;
+            node.classList.remove('streaming');
+            return;
+        }
+        if (node.classList.contains('thinking')) {
+            node.classList.remove('thinking');
+            node.textContent = '';
+        }
+        // Potongan pertama tampil utuh, potongan berikutnya dianimasikan mengetik.
+        if (!String(node.textContent || '').length) {
+            node.textContent = full;
+            node.classList.remove('streaming');
+            node._typer = false;
+            return;
+        }
+        node.classList.add('streaming');
+        if (node._typer) { return; }
+        node._typer = true;
+        const step = () => {
+            const target = String(node.dataset.raw || '');
+            const shown = String(node.textContent || '');
+            if (shown.length >= target.length) {
+                node._typer = false;
+                node.classList.remove('streaming');
+                return;
+            }
+            const add = Math.max(2, Math.ceil((target.length - shown.length) / 10));
+            node.textContent = target.slice(0, shown.length + add);
+            if (eChat) { eChat.scrollTop = eChat.scrollHeight; }
+            window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+    }
+
     function bubble(role, text) {
         const div = document.createElement('div');
         div.className = 'mt-msg ' + (role === 'user' ? 'user' : 'ai');
@@ -909,10 +951,8 @@
                 break;
             case 'chunk':
                 if (streaming) {
-                    streaming.classList.remove('thinking');
-                    streaming.textContent = (streaming.dataset.raw || '') + String(m.text || '');
-                    streaming.dataset.raw = streaming.textContent;
-                    eChat.scrollTop = eChat.scrollHeight;
+                    // Aliran teks: ditulis bertahap (animasi mengetik) + kursor berkedip.
+                    typeInto(streaming, String(streaming.dataset.raw || '') + String(m.text || ''));
                 }
                 break;
             case 'answer':
@@ -920,6 +960,9 @@
                     const node = streaming;
                     streaming = null;
                     node.classList.remove('thinking');
+                    node.classList.remove('streaming');
+                    node._typer = false;
+                    node.dataset.raw = '';
                     if (m.text) { renderAnswer(node, m.text); } else { node.textContent = '(tidak ada jawaban)'; }
                     eChat.scrollTop = eChat.scrollHeight;
                 } else if (m.text) {

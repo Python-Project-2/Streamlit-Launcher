@@ -169,6 +169,9 @@ body.mt-body {
 }
 .mt-msg.user { background: rgba(14, 99, 156, .18); border-color: rgba(14, 99, 156, .5); align-self: flex-end; max-width: 92%; }
 .mt-msg.ai { background: rgba(128, 128, 128, .08); }
+/* Kursor berkedip selama jawaban mengalir (animasi mengetik). */
+.mt-msg.streaming::after { content: "▍"; margin-left: 1px; opacity: .75; animation: mt-blink 1s steps(1) infinite; }
+@keyframes mt-blink { 50% { opacity: 0; } }
 .mt-msg.thinking { opacity: .6; font-style: italic; }
 .mt-msg .kv { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 2px 8px; }
 .mt-msg .kv span { opacity: .6; }

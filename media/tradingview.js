@@ -92,6 +92,8 @@
         { id: 'screen', icon: 'filter', idl: 'Screener', zhl: '选股器' },
         { id: 'news', icon: 'news', idl: 'Berita', zhl: '新闻' },
         { id: 'cari', icon: 'search', idl: 'Cari Saham', zhl: '搜股' },
+        { id: 'buku', icon: 'book', idl: 'Buku', zhl: '书籍' },
+        { id: 'media', icon: 'image', idl: 'Gambar & Video', zhl: '图片与视频' },
     ];
 
     const DEFAULT_CFG = {
@@ -239,6 +241,10 @@
         check: '<path d="M4 12l5 5L20 6"/>',
         alert: '<path d="M12 4l9 16H3z"/><path d="M12 10v4M12 17h.01"/>',
         chat: '<path d="M4 5h16v10H9l-5 4z"/><path d="M8.5 9h7M8.5 12h4"/>',
+        book: '<path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5H6.5A2.5 2.5 0 0 0 4 21z"/><path d="M8 7.5h8M8 11h8M8 14.5h5"/>',
+        image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="m4 17 5-5 4 4 3-3 4 4"/>',
+        play: '<path d="M8 5l11 7-11 7z"/>',
+        download: '<path d="M12 4v11"/><path d="m7 11 5 5 5-5"/><path d="M4 20h16"/>',
     };
     /** Ikon SVG monokrom; ukuran & warna diatur CSS (.tv-i). */
     function icon(name, cls) {
@@ -379,6 +385,43 @@
         '#tv-ov .tv-ai-msg.thinking{opacity:.6;font-style:italic}',
         '#tv-ov .tv-ai-msg.err{border-color:#ef5350;color:#ef5350}',
         '#tv-ov .tv-ai-note{font-size:11.5px;opacity:.6;line-height:1.6}',
+        // Kursor berkedip saat jawaban sedang mengalir (animasi mengetik).
+        '#tv-ov .tv-ai-msg.streaming::after{content:"▍";margin-left:1px;opacity:.75;animation:tv-blink 1s steps(1) infinite}',
+        '@keyframes tv-blink{50%{opacity:0}}',
+        // Tab Buku: grid sampul + info + harga + Free sample.
+        '#tv-ov .tv-bgrid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;align-content:start;padding:2px}',
+        '#tv-ov .tv-bcard{display:flex;flex-direction:column;border:1px solid var(--sk-border,rgba(128,128,128,.3));border-radius:8px;background:var(--sk-input,rgba(128,128,128,.06));overflow:hidden;min-width:0}',
+        '#tv-ov .tv-bcover{width:100%;height:190px;background:rgba(128,128,128,.14);display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden}',
+        '#tv-ov .tv-bcover img{width:100%;height:100%;object-fit:contain;display:block;background:#0f0f0f}',
+        '#tv-ov .tv-bbody{display:flex;flex-direction:column;gap:4px;padding:8px 9px 9px;min-width:0;flex:1}',
+        '#tv-ov .tv-bt{font-size:12.5px;font-weight:600;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.7em}',
+        '#tv-ov .tv-ba{font-size:11px;opacity:.66;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+        '#tv-ov .tv-bd{font-size:10.5px;opacity:.55}',
+        '#tv-ov .tv-bprice{font-size:13px;font-weight:700;color:#26a69a;font-variant-numeric:tabular-nums}',
+        '#tv-ov .tv-btags{display:flex;flex-wrap:wrap;gap:3px}',
+        '#tv-ov .tv-btag{font-size:9px;border:1px solid var(--sk-border,rgba(128,128,128,.35));border-radius:3px;padding:0 4px;opacity:.8}',
+        '#tv-ov .tv-btag.ok{border-color:#26a69a;color:#26a69a}',
+        '#tv-ov .tv-btag.warn{border-color:#d1a33a;color:#d1a33a}',
+        '#tv-ov .tv-bact{display:flex;gap:6px;margin-top:auto;padding-top:4px}',
+        '#tv-ov .tv-sample{padding:5px 9px;font-size:11.5px;flex:1;justify-content:center}',
+        '#tv-ov .tv-binfo{padding:5px 8px;font-size:11.5px}',
+        // Tab Media: toggle Gambar/Video + grid hasil Pexels.
+        '#tv-ov .tv-seg{padding:5px 10px;font-size:12px;opacity:.7}',
+        '#tv-ov .tv-seg.on{opacity:1;border-color:var(--sk-accent,var(--vscode-focusBorder,#007fd4));font-weight:600}',
+        '#tv-ov .tv-mgrid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;align-content:start;padding:2px}',
+        '#tv-ov .tv-mcard{display:flex;flex-direction:column;border:1px solid var(--sk-border,rgba(128,128,128,.3));border-radius:8px;overflow:hidden;background:var(--sk-input,rgba(128,128,128,.06));min-width:0}',
+        '#tv-ov .tv-mthumb{position:relative;height:130px;background:rgba(128,128,128,.14);overflow:hidden}',
+        '#tv-ov .tv-mthumb img{width:100%;height:100%;object-fit:cover;display:block}',
+        '#tv-ov .tv-mplay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;background:rgba(0,0,0,.28)}',
+        '#tv-ov .tv-mplay .tv-i{width:34px;height:34px;margin:0;stroke-width:1.6}',
+        '#tv-ov .tv-mdur{position:absolute;right:6px;bottom:6px;background:rgba(0,0,0,.68);color:#fff;font-size:10px;border-radius:3px;padding:1px 5px}',
+        '#tv-ov .tv-mbody{display:flex;flex-direction:column;gap:3px;padding:7px 9px 9px;min-width:0}',
+        '#tv-ov .tv-mt{font-size:12px;font-weight:600;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}',
+        '#tv-ov .tv-mm{font-size:10.5px;opacity:.6;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+        '#tv-ov .tv-mact{display:flex;gap:6px;margin-top:3px}',
+        '#tv-ov .tv-mact button{padding:4px 8px;font-size:11.5px}',
+        '#tv-ov .tv-mact .tv-primary{flex:1;justify-content:center}',
+        '#tv-ov .tv-mdl .tv-i{width:13px;height:13px;margin-right:3px}',
         '#tv-ov .tv-ai-ask{display:flex;gap:6px}',
         '#tv-ov .tv-ai-ask input{flex:1;min-width:0}',
         '#tv-ov .tv-ai-foot{font-size:10.5px;opacity:.5;line-height:1.55}',
@@ -716,16 +759,46 @@
         aiStream = aiSay('ai thinking', L('Membaca data pasar…', '正在读取市场数据…'));
     }
 
+    /** Animasi mengetik: teks muncul bertahap, kursor berkedip sampai jawaban selesai. */
+    function aiType(node, full) {
+        if (!node) { return; }
+        node.dataset.raw = full;
+        if (typeof window.requestAnimationFrame !== 'function') {
+            node.textContent = full;
+            return;
+        }
+        if (node._typer) { return; }
+        // Potongan pertama tampil utuh; potongan berikutnya dianimasikan mengetik.
+        if (!String(node.textContent || '').length) {
+            node.textContent = full;
+            node._typer = false;
+            return;
+        }
+        node._typer = true;
+        const step = () => {
+            const target = String(node.dataset.raw || '');
+            const shown = String(node.textContent || '');
+            if (shown.length >= target.length) { node._typer = false; return; }
+            const add = Math.max(2, Math.ceil((target.length - shown.length) / 10));
+            node.textContent = target.slice(0, shown.length + add);
+            const log = node.parentElement;
+            if (log) { log.scrollTop = log.scrollHeight; }
+            window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+    }
+
     function aiChunk(text) {
         if (!aiStream) { aiBegin(); }
         if (!aiStream) { return; }
         if (aiStream.classList.contains('thinking')) {
             aiStream.classList.remove('thinking');
             aiStream.textContent = '';
+            aiStream.dataset.raw = '';
         }
-        aiStream.textContent += String(text || '');
-        const log = aiStream.parentElement;
-        if (log) { log.scrollTop = log.scrollHeight; }
+        const full = String(aiStream.dataset.raw || '') + String(text || '');
+        aiStream.classList.add('streaming');
+        aiType(aiStream, full);
     }
 
     function aiAnswer(text) {
@@ -733,6 +806,9 @@
         if (!aiStream) { aiStream = aiSay('ai', ''); }
         if (!aiStream) { return; }
         aiStream.classList.remove('thinking');
+        aiStream.classList.remove('streaming');
+        aiStream._typer = false;
+        aiStream.dataset.raw = '';
         if (window.SkunderMd) {
             window.SkunderMd.block(aiStream, body || L('(tidak ada jawaban)', '(无回答)'));
         } else {
@@ -1231,6 +1307,8 @@
         else if (tab === 'fund') { renderFund(); }
         else if (tab === 'screen') { renderScreen(); }
         else if (tab === 'news') { renderNews(); }
+        else if (tab === 'buku') { renderBooks(); }
+        else if (tab === 'media') { renderMedia(); }
         else { renderCari(); }
         status(symbolLabel() + ' · ' + labelOf(INTERVALS, cfg.interval) + ' · ' + labelOf(RANGES, cfg.range));
     }
@@ -1503,6 +1581,300 @@
         setTimeout(() => { if (inp.isConnected) { inp.focus(); } }, 30);
     }
 
+    // ── tab buku (Pustaka Trading): cari buku lalu klik “Free sample” ─────────
+    let bookQuery = '';
+    let bookItems = [];
+    let bookInfo = '';
+    let bookBusy = false;
+    let bookError = '';
+    /** Repaint tab buku tanpa membangun ulang seluruh lapisan (dipanggil dari pesan ekstensi). */
+    let bookRepaint = null;
+
+    /** Payload buku untuk panel pembaca (info + harga + sampul ikut dikirim). */
+    function bookPayload(b) {
+        return {
+            type: 'tvBookRead', id: b.id, title: b.title, subtitle: b.subtitle,
+            authors: b.authors || [], viewability: b.viewability, embeddable: b.embeddable,
+            thumbnail: b.thumbnail, previewLink: b.previewLink, infoLink: b.infoLink,
+            publisher: b.publisher, publishedDate: b.publishedDate, pageCount: b.pageCount,
+            language: b.language, categories: b.categories || [], isbn: b.isbn,
+            rating: b.rating, ratingsCount: b.ratingsCount, price: b.price,
+            saleability: b.saleability, buyLink: b.buyLink, description: b.description,
+        };
+    }
+
+    /** Kartu buku di grid: sampul besar, info, harga, dan tombol Free sample. */
+    function bookCard(b) {
+        const card = el('div', 'tv-bcard');
+        const cover = el('div', 'tv-bcover');
+        if (b.thumbnail) {
+            const img = el('img');
+            img.src = String(b.thumbnail).replace('zoom=1', 'zoom=2');
+            img.alt = 'Sampul ' + (b.title || '');
+            img.loading = 'lazy';
+            img.onerror = () => { img.remove(); cover.textContent = '📕'; };
+            cover.appendChild(img);
+        } else {
+            cover.textContent = '📕';
+        }
+
+        const body = el('div', 'tv-bbody');
+        body.appendChild(el('div', 'tv-bt', b.title || 'Tanpa judul'));
+        const authors = (b.authors && b.authors.length) ? b.authors.join(', ') : L('Penulis tidak dicantumkan', '未注明作者');
+        body.appendChild(el('div', 'tv-ba', authors));
+        const bits = [];
+        if (b.publishedDate) { bits.push(String(b.publishedDate).slice(0, 4)); }
+        if (b.pageCount) { bits.push(nf(b.pageCount) + ' hlm'); }
+        if (b.rating) { bits.push('★ ' + b.rating); }
+        body.appendChild(el('div', 'tv-bd', bits.join(' · ')));
+
+        const price = b.price || (b.saleability === 'FREE' ? L('Gratis', '免费') : '—');
+        const priceRow = el('div', 'tv-bprice', price);
+        priceRow.title = b.saleability ? 'saleability: ' + b.saleability : '';
+        body.appendChild(priceRow);
+
+        const tags = el('div', 'tv-btags');
+        const tag = (text, cls) => el('span', 'tv-btag' + (cls ? ' ' + cls : ''), text);
+        if (b.viewability === 'FULL') { tags.appendChild(tag(L('buku penuh', '全书'), 'ok')); }
+        else if (b.viewability === 'NO_PAGES') { tags.appendChild(tag(L('tanpa sampel', '无样页'), 'warn')); }
+        else { tags.appendChild(tag(L('free sample', '免费样章'), 'ok')); }
+        if (b.embeddable) { tags.appendChild(tag(L('bisa dibaca', '可阅读'))); }
+        if (tags.childElementCount) { body.appendChild(tags); }
+
+        const act = el('div', 'tv-bact');
+        const sample = el('button', 'tv-primary tv-sample', L('📖 Free sample', '📖 免费样章'));
+        sample.title = L('Baca pratinjau gratis buku ini sekarang', '立即阅读免费样章');
+        sample.onclick = () => {
+            post(bookPayload(b));
+            sample.textContent = L('membuka…', '打开中…');
+            setTimeout(() => { if (sample.isConnected) { sample.textContent = L('📖 Free sample', '📖 免费样章'); } }, 2500);
+        };
+        const info = el('button', 'tv-binfo', L('Info', '详情'));
+        info.title = L('Info lengkap + harga di panel pembaca', '在阅读面板查看详情与价格');
+        info.onclick = () => post(bookPayload(b));
+        act.append(sample, info);
+        body.appendChild(act);
+
+        card.append(cover, body);
+        return card;
+    }
+
+    /** Tab Buku: pencarian Google Books + tombol Free sample per buku. */
+    function renderBooks() {
+        const wrap = el('div', 'tv-search');
+        const bar = el('div', 'tv-searchbar');
+        const inp = el('input');
+        inp.id = 'tv-book-q';
+        inp.type = 'search';
+        inp.value = bookQuery;
+        inp.autocomplete = 'off';
+        inp.placeholder = L('Cari buku trading — bandarmologi, candlestick, valuasi, psikologi…',
+            '搜索交易书籍 — 庄家、K线、估值、交易心理…');
+        const go = el('button', 'tv-primary', L('Cari buku', '搜索书籍'));
+        go.id = 'tv-book-go';
+        bar.append(inp, go);
+        wrap.appendChild(bar);
+
+        const info = el('div', 'tv-searchinfo');
+        info.id = 'tv-book-info';
+        info.textContent = bookInfo || L('Klik “Free sample” pada buku untuk membuka pratinjau baca langsung.',
+            '点击书籍的“免费样章”即可直接打开阅读预览。');
+        wrap.appendChild(info);
+
+        const list = el('div', 'tv-bgrid');
+        list.id = 'tv-book-list';
+        wrap.appendChild(list);
+        bodyEl.appendChild(wrap);
+
+        function paint() {
+            clear(list);
+            if (bookError) {
+                list.appendChild(el('div', 'tv-ac-empty', bookError));
+            } else if (!bookItems.length) {
+                list.appendChild(el('div', 'tv-ac-empty', bookBusy
+                    ? L('Mencari buku…', '正在搜索书籍…')
+                    : L('Belum ada hasil. Ketik kata kunci lalu tekan Cari buku.', '尚无结果。输入关键词后搜索。')));
+            } else {
+                bookItems.forEach((b) => list.appendChild(bookCard(b)));
+            }
+            info.textContent = bookBusy ? L('Mencari buku…', '正在搜索书籍…')
+                : (bookInfo || L('Klik “Free sample” pada buku untuk membuka pratinjau baca langsung.',
+                    '点击书籍的“免费样章”即可直接打开阅读预览。'));
+        }
+
+        function cari() {
+            const q = String(inp.value || '').trim();
+            bookQuery = q;
+            bookBusy = true;
+            bookError = '';
+            bookItems = [];
+            bookInfo = q ? L('Mencari “' + q + '”…', '正在搜索“' + q + '”…') : '';
+            paint();
+            post({ type: 'tvBookSearch', q: q, limit: 10 });
+        }
+
+        go.onclick = cari;
+        inp.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); cari(); } };
+        bookRepaint = () => { if (list.isConnected) { paint(); } };
+        paint();
+        // Buka tab = langsung ada buku (tidak perlu mengetik dulu).
+        if (!bookItems.length && !bookBusy && !bookError) {
+            bookBusy = true;
+            bookInfo = L('Memuat buku trading populer…', '正在加载热门交易书籍…');
+            paint();
+            post({ type: 'tvBookSearch', q: bookQuery, limit: 10 });
+        }
+        // Hasil baru dari ekstensi (tab lain tetap memakai keadaan terakhir).
+        setTimeout(() => { if (inp.isConnected && !bookQuery) { inp.focus(); } }, 30);
+    }
+
+    // ── tab media (Pexels): gambar & video, pratinjau + unduh ─────────────
+    let mediaKind = 'photo';
+    let mediaQuery = '';
+    let mediaItems = [];
+    let mediaTotal = 0;
+    let mediaBusy = false;
+    let mediaError = '';
+    let mediaInfo = '';
+    let mediaRepaint = null;
+
+    function fmtDur(sec) {
+        const s = Math.max(0, Math.round(Number(sec) || 0));
+        return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    }
+
+    /** Kartu media: thumbnail (foto/video), info, tombol Putar/Pratinjau + Unduh. */
+    function mediaCard(hit) {
+        const card = el('div', 'tv-mcard');
+        const thumb = el('div', 'tv-mthumb');
+        if (hit.color) { thumb.style.background = hit.color; }
+        if (hit.thumb) {
+            const img = el('img');
+            img.src = hit.thumb;
+            img.alt = hit.title || '';
+            img.loading = 'lazy';
+            img.onerror = () => { img.remove(); };
+            thumb.appendChild(img);
+        }
+        if (hit.kind === 'video') {
+            const badge = el('span', 'tv-mplay');
+            badge.innerHTML = icon('play');
+            thumb.appendChild(badge);
+            if (hit.duration) { thumb.appendChild(el('span', 'tv-mdur', fmtDur(hit.duration))); }
+        }
+
+        const body = el('div', 'tv-mbody');
+        body.appendChild(el('div', 'tv-mt', hit.title || 'Media Pexels'));
+        const meta = [(Number(hit.width) || 0) + '×' + (Number(hit.height) || 0)];
+        if (hit.kind === 'video' && hit.duration) { meta.push(fmtDur(hit.duration)); }
+        if (hit.author) { meta.push(hit.author); }
+        body.appendChild(el('div', 'tv-mm', meta.join(' · ')));
+
+        const act = el('div', 'tv-mact');
+        const prev = el('button', 'tv-primary', hit.kind === 'video' ? L('▶ Putar', '▶ 播放') : L('Pratinjau', '预览'));
+        prev.title = L('Buka pratinjau besar (bisa diputar / diunduh)', '打开大图预览（可播放/下载）');
+        prev.onclick = () => post({ type: 'tvMediaPreview', hit: hit });
+        const dl = el('button', 'tv-mdl');
+        dl.innerHTML = icon('download') + '<span>' + esc(L('Unduh', '下载')) + '</span>';
+        dl.title = L('Unduh berkas asli dari Pexels', '从 Pexels 下载原始文件');
+        dl.onclick = () => {
+            dl.disabled = true;
+            setTimeout(() => { if (dl.isConnected) { dl.disabled = false; } }, 4000);
+            post({ type: 'tvMediaDownload', hit: hit });
+        };
+        act.append(prev, dl);
+        body.appendChild(act);
+
+        card.append(thumb, body);
+        return card;
+    }
+
+    /** Tab Media: pencarian gambar/video Pexels + pratinjau + unduh. */
+    function renderMedia() {
+        const wrap = el('div', 'tv-search');
+        const bar = el('div', 'tv-searchbar');
+
+        const bPhoto = el('button', 'tv-seg' + (mediaKind === 'photo' ? ' on' : ''), L('🖼 Gambar', '🖼 图片'));
+        const bVideo = el('button', 'tv-seg' + (mediaKind === 'video' ? ' on' : ''), L('🎬 Video', '🎬 视频'));
+        bPhoto.onclick = () => {
+            if (mediaKind === 'photo') { return; }
+            mediaQuery = String(inp.value || '').trim();
+            mediaKind = 'photo';
+            mediaItems = [];
+            mediaRepaint = null;
+            renderMedia();
+        };
+        bVideo.onclick = () => {
+            if (mediaKind === 'video') { return; }
+            mediaQuery = String(inp.value || '').trim();
+            mediaKind = 'video';
+            mediaItems = [];
+            mediaRepaint = null;
+            renderMedia();
+        };
+
+        const inp = el('input');
+        inp.id = 'tv-media-q';
+        inp.type = 'search';
+        inp.value = mediaQuery;
+        inp.autocomplete = 'off';
+        inp.placeholder = mediaKind === 'video'
+            ? L('Cari video — chart, trading floor, bitcoin, ekonomi…', '搜索视频 — 图表、交易大厅、比特币、经济…')
+            : L('Cari gambar — chart saham, trading, kantor, uang…', '搜索图片 — 股票图表、交易、办公室、金钱…');
+        const go = el('button', 'tv-primary', L('Cari', '搜索'));
+        go.id = 'tv-media-go';
+        bar.append(bPhoto, bVideo, inp, go);
+        wrap.appendChild(bar);
+
+        const info = el('div', 'tv-searchinfo');
+        info.id = 'tv-media-info';
+        wrap.appendChild(info);
+
+        const grid = el('div', 'tv-mgrid');
+        grid.id = 'tv-media-list';
+        wrap.appendChild(grid);
+        bodyEl.appendChild(wrap);
+
+        function paint() {
+            clear(grid);
+            if (mediaError) {
+                grid.appendChild(el('div', 'tv-ac-empty', mediaError));
+            } else if (!mediaItems.length) {
+                grid.appendChild(el('div', 'tv-ac-empty', mediaBusy
+                    ? L('Mencari media…', '正在搜索媒体…')
+                    : L('Belum ada hasil. Ketik kata kunci lalu tekan Cari.', '尚无结果。输入关键词后搜索。')));
+            } else {
+                mediaItems.forEach((h) => grid.appendChild(mediaCard(h)));
+            }
+            info.textContent = mediaBusy ? L('Mencari media…', '正在搜索媒体…')
+                : (mediaInfo || L('Sumber: Pexels — gratis dipakai sesuai lisensi Pexels. Klik Putar/Pratinjau untuk melihat, Unduh untuk menyimpan.',
+                    '来源：Pexels — 按 Pexels 许可免费使用。点击播放/预览查看，下载保存。'));
+        }
+
+        function cari() {
+            mediaQuery = String(inp.value || '').trim();
+            mediaBusy = true;
+            mediaError = '';
+            mediaItems = [];
+            mediaInfo = mediaQuery ? L('Mencari “' + mediaQuery + '”…', '正在搜索“' + mediaQuery + '”…') : '';
+            paint();
+            post({ type: 'tvMediaSearch', kind: mediaKind, q: mediaQuery, page: 1 });
+        }
+
+        go.onclick = cari;
+        inp.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); cari(); } };
+        mediaRepaint = () => { if (grid.isConnected) { paint(); } };
+        paint();
+        // Buka tab = langsung ada hasil (tema trading bawaan).
+        if (!mediaItems.length && !mediaBusy && !mediaError) {
+            mediaBusy = true;
+            mediaInfo = L('Memuat media trading populer…', '正在加载热门交易媒体…');
+            paint();
+            post({ type: 'tvMediaSearch', kind: mediaKind, q: mediaQuery, page: 1 });
+        }
+        setTimeout(() => { if (inp.isConnected && !mediaQuery) { inp.focus(); } }, 30);
+    }
+
     // ── buka / tutup ────────────────────────────────────────────────────────────
     function open(opts) {
         ensureCss();
@@ -1548,6 +1920,77 @@
         // Panel mandiri menutup jendelanya lewat hook ini (halaman analisis tidak memakainya).
         if (!silent) {
             try { if (P && typeof P.onClose === 'function') { P.onClose(); } } catch (e) { /* tanpa panel */ }
+        }
+    }
+
+    // ── seksi di halaman analisis ───────────────────────────────────────────────
+    function renderSection() {
+        if (!P || !P.section) { return; }
+
+        const old = document.getElementById('trading');
+        if (old?.parentElement) { 
+            old.parentElement.removeChild(old); 
+        }
+
+        sectionBody = P.section('trading', L('Mode Analisis (TradingView)', '分析模式（TradingView）'));
+        if (!sectionBody) { return; }
+
+        const card = P.el('div', 'card wide tv-launch');
+        card.setAttribute('data-spider-skip', '1');
+
+        const auto = detectSymbol();
+        const sym = auto || cfg.symbol;
+        const total = saham().jumlah || saham().items.length;
+
+        card.innerHTML = `
+            <div style="padding:16px">
+                <h3>${esc(L('Analisis saham lengkap dengan TradingView', '使用 TradingView 进行完整股票分析'))}</h3>
+                <p class="muted" style="margin:0 0 12px;line-height:1.7">
+                    ${esc(L(
+                        `Satu klik membuka layar penuh berisi chart TradingView: semua indikator, alat gambar, alert, replay, gauge teknikal, laporan keuangan, profil perusahaan, screener bursa, berita, kalender ekonomi — plus pencarian ${nf(total)} emiten IDX.`,
+                        `一键打开 TradingView 图表全屏界面：全部指标、绘图工具、警报、回放、技术面仪表、财务报表、公司资料、选股器、新闻、经济日历，以及 ${nf(total)} 家 IDX 公司搜索。`
+                    ))}
+                </p>
+                <div class="tv-lsearch">
+                    <input id="tv-lsearch" type="text" autocomplete="off" placeholder="${esc(L('Cari kode atau nama saham…', '搜索代码或公司名称…'))}">
+                    <div class="tv-lac" id="tv-lac" hidden></div>
+                </div>
+                <div class="tv-lrow">
+                    <button class="btn tv-lbtn" id="btn-trading-open">${icon('chart')}${esc(L('Buka Mode Analisis', '打开分析模式'))}</button>
+                </div>
+                <div class="tv-lrow" id="tv-lchips"></div>
+                <div class="tv-lnote">
+                    ${esc(L('Simbol terdeteksi', '检测到的代码'))}: <code>${esc(sym)}</code> · 
+                    ${esc(L(
+                        `Katalog pencarian: ${nf(total)} emiten IDX + indeks, saham AS, komoditas, kurs. Butuh internet — data dari TradingView, bukan rekomendasi investasi.`,
+                        `搜索目录：${nf(total)} 家 IDX 公司 + 指数、美股、商品、汇率。需要联网 — 数据来自 TradingView，非投资建议。`
+                    ))}
+                </div>
+            </div>
+        `;
+        
+        sectionBody.appendChild(card);
+
+        // Event Listeners & Binding
+        const btn = card.querySelector('#btn-trading-open');
+        if (btn) {
+            btn.onclick = () => open({ symbol: auto || undefined });
+        }
+
+        const inp = card.querySelector('#tv-lsearch');
+        const panel = card.querySelector('#tv-lac');
+        if (inp && panel) {
+            attachSuggest(inp, panel, (simbol) => { open({ symbol: simbol }); });
+        }
+
+        const chips = card.querySelector('#tv-lchips');
+        if (chips) {
+            QUICK.slice(0, 10).forEach((q) => {
+                const c = P.el('button', 'tv-lchip', q.d);
+                c.title = q.n;
+                c.onclick = () => open({ symbol: q.s });
+                chips.appendChild(c);
+            });
         }
     }
 
@@ -1597,6 +2040,45 @@
                 if (log) { clear(log); }
                 aiStream = null;
                 aiNote(L('Percakapan baru.', '新对话。'));
+            }
+        } else if (m.type === 'tvBookBusy') {
+            bookBusy = !!m.on;
+            if (bookBusy) { bookError = ''; }
+            if (bookRepaint) { bookRepaint(); }
+        } else if (m.type === 'tvBookResults') {
+            bookBusy = false;
+            bookError = '';
+            bookItems = Array.isArray(m.items) ? m.items.slice(0, 60) : [];
+            bookInfo = String(m.info || '');
+            if (bookRepaint) { bookRepaint(); }
+        } else if (m.type === 'tvBookError') {
+            bookBusy = false;
+            bookError = String(m.text || 'Gagal mencari buku.');
+            if (bookRepaint) { bookRepaint(); }
+        } else if (m.type === 'tvMediaBusy') {
+            mediaBusy = !!m.on;
+            if (mediaBusy) { mediaError = ''; }
+            if (mediaRepaint) { mediaRepaint(); }
+        } else if (m.type === 'tvMediaResults') {
+            if (m.kind && m.kind !== mediaKind) { return; }
+            mediaBusy = false;
+            mediaError = '';
+            mediaItems = Array.isArray(m.items) ? m.items.slice(0, 60) : [];
+            mediaTotal = Number(m.total) || mediaItems.length;
+            const label = mediaKind === 'video' ? L('video', '视频') : L('gambar', '图片');
+            mediaInfo = L(
+                mediaItems.length + ' ' + label + ' dari ' + nf(mediaTotal) + ' hasil · klik Putar/Pratinjau atau Unduh',
+                mediaItems.length + ' 个' + label + '，共 ' + nf(mediaTotal) + ' 条 · 点击播放/预览或下载');
+            if (mediaRepaint) { mediaRepaint(); }
+        } else if (m.type === 'tvMediaError') {
+            mediaBusy = false;
+            mediaError = String(m.text || 'Gagal mencari media.');
+            if (mediaRepaint) { mediaRepaint(); }
+        } else if (m.type === 'tvMediaSaved') {
+            if (m.ok) {
+                status(L('Tersimpan: ' + String(m.path || ''), '已保存：' + String(m.path || '')));
+            } else {
+                status(L('Unduhan dibatalkan.', '下载已取消。'));
             }
         }
     });

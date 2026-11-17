@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Google Books">
+  <rect width="64" height="64" rx="14" fill="#fff"/>
+  <path d="M12 17h17a5 5 0 0 1 5 5v26a4 4 0 0 0-4-4H12z" fill="#4285F4"/>
+  <path d="M52 17H35a5 5 0 0 0-5 5v26a4 4 0 0 1 4-4h18z" fill="#34A853"/>
+  <path d="M30 51V22" stroke="#fff" stroke-width="2" opacity=".55"/>
+  <path d="M17 24h10M17 30h10M17 36h8" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".85"/>
+  <circle cx="45" cy="27" r="4.5" fill="#FBBC05"/>
+</svg>

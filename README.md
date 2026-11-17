@@ -29,6 +29,20 @@
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/.tradingview/trading2.png?raw=true">
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/.tradingview/trading3.png?raw=true">
 
+## 🔗 Connect Collaboration: TradingView · Google Books API · Pexels
+
+Extension ini terhubung ke tiga layanan resmi. Semua kunci bisa diganti lewat **Settings → Date Skunder**.
+
+| Ikon | Layanan | Dipakai untuk | Kunci / setelan |
+|:---:|---|---|---|
+| <img src="./icon/tradingview-brand.svg" width="46" alt="TradingView" /> | **TradingView** | Mode Analisis TradingView: chart resmi, teknikal, fundamental, screener, berita, pencarian saham IDX, dan panel chart penuh (tanpa berkas CSV). | Tidak perlu kunci API — widget resmi TradingView. |
+| <img src="./icon/googlebooks-brand.svg" width="46" alt="Google Books" /> | **Google Books API** | View **Pustaka Trading** dan tab **Buku** di Mode Analisis: cari buku trading, lihat sampul, info, **harga**, lalu klik **Free sample** untuk membaca pratinjau di panel pembaca. | `dateSkunder.books.googleApiKey` (bawaan sudah diisi; bisa diganti dengan key Google Cloud milikmu, batasi ke Books API). |
+| <img src="./icon/pexels-brand.svg" width="46" alt="Pexels" /> | **Pexels API** | Tab **Gambar & Video** di Mode Analisis: cari foto/video bertema trading, **pratinjau gambar**, **putar video**, lalu **unduh** berkas aslinya. | `dateSkunder.media.pexelsApiKey` (bawaan sudah diisi; ganti dengan key dari [pexels.com/api](https://www.pexels.com/api/) bila repo dibagikan). |
+
+- **Google Books**: pratinjau gratis mengikuti izin penerbit; buku tanpa halaman sampel tetap menampilkan sampul, metadata, dan harga.
+- **Pexels**: gambar & video gratis dipakai sesuai [lisensi Pexels](https://www.pexels.com/license/). Unduhan disimpan lewat dialog “Simpan” VS Code.
+- Kedua kunci juga bisa diberikan lewat environment variable: `GOOGLE_BOOKS_API_KEY` dan `PEXELS_API_KEY`.
+
 # Journal Generator APA Style
 
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/journal.png?raw=true"/>

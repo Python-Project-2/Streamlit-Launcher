@@ -39,6 +39,9 @@
     "onView:dateSkunder.petView",
     "onView:dateSkunder.compileView",
     "onView:dateSkunder.tradingView",
+    "onView:dateSkunder.booksView",
+    "onCommand:date-skunder.books.open",
+    "onCommand:date-skunder.books.search",
     "onCommand:date-skunder.tradingview.open",
     "onCommand:date-skunder.tradingview.analyze",
     "onCommand:date-skunder.tradingview.terminal",
@@ -105,6 +108,11 @@
         {
           "id": "dateSkunder.tradingView",
           "name": "TradingView",
+          "type": "webview"
+        },
+        {
+          "id": "dateSkunder.booksView",
+          "name": "Pustaka Trading",
           "type": "webview"
         },
         {
@@ -322,6 +330,16 @@
         "command": "date-skunder.tradingview.open",
         "title": "Date Skunder TradingView: Buka View TradingView",
         "icon": "$(graph)"
+      },
+      {
+        "command": "date-skunder.books.open",
+        "title": "Date Skunder Pustaka Trading: Buka Pencarian Buku Trading & Saham",
+        "icon": "$(book)"
+      },
+      {
+        "command": "date-skunder.books.search",
+        "title": "Date Skunder Pustaka Trading: Cari Buku (Google Books)",
+        "icon": "$(search)"
       },
       {
         "command": "date-skunder.tradingview.analyze",
@@ -1840,6 +1858,30 @@
           "maximum": 120,
           "markdownDescription": "Batas waktu satu perintah build (menit). Perintah yang melewati batas dihentikan dan build dianggap gagal."
         },
+        "dateSkunder.books.googleApiKey": {
+          "type": "string",
+          "default": "AIzaSyBY9UXwDmZGb3x0DBsFGqSHWHyaaD_d3FY",
+          "markdownDescription": "API key Google Books untuk view **Pustaka Trading**. Kosongkan untuk memakai `GOOGLE_BOOKS_API_KEY` atau key bawaan. Batasi key di Google Cloud Console (hanya Books API) bila repo dibagikan."
+        },
+        "dateSkunder.books.pageSize": {
+          "type": "number",
+          "default": 20,
+          "minimum": 10,
+          "maximum": 40,
+          "description": "Jumlah buku per halaman pada infinite scroll Pustaka Trading."
+        },
+        "dateSkunder.media.pexelsApiKey": {
+          "type": "string",
+          "default": "LH59shPdj1xO0lolnHPsClH23qsnHE4NjkCFBhKEXvR0CbqwkrXbqBnw",
+          "markdownDescription": "API key **Pexels** untuk pencarian gambar & video di Mode Analisis TradingView. Kosongkan untuk memakai `PEXELS_API_KEY` atau key bawaan. Ganti dengan key milikmu di [pexels.com/api](https://www.pexels.com/api/) bila repo dibagikan."
+        },
+        "dateSkunder.media.perPage": {
+          "type": "number",
+          "default": 18,
+          "minimum": 6,
+          "maximum": 40,
+          "description": "Jumlah gambar/video per pencarian Pexels."
+        },
         "dateSkunder.mt.demoAggressive": {
           "type": "boolean",
           "default": true,
@@ -1864,6 +1906,8 @@
     "check:builder": "node scripts/check-builder.cjs",
     "check:trading": "node scripts/check-trading.cjs",
     "check:tradingview": "node scripts/check-tradingview.cjs",
+    "check:mutlak": "node scripts/check-mutlak.cjs",
+    "check:books": "node scripts/check-books.cjs",
     "check:mt": "node scripts/check-mt.cjs",
     "check:community": "node scripts/check-community.cjs",
     "check:chat-api": "node scripts/check-chat-api.cjs",
@@ -1876,7 +1920,7 @@
     "check:room-activate": "node scripts/check-room-activate.cjs",
     "check:compile": "node scripts/check-compile.cjs",
     "preview:website": "node scripts/preview-website.cjs",
-    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs && node scripts/check-builder.cjs && node scripts/check-trading.cjs && node scripts/check-tradingview.cjs && node scripts/check-mt.cjs"
+    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs && node scripts/check-builder.cjs && node scripts/check-trading.cjs && node scripts/check-tradingview.cjs && node scripts/check-mutlak.cjs && node scripts/check-books.cjs && node scripts/check-mt.cjs"
   },
   "dependencies": {
     "chart.js": "^4.4.1",

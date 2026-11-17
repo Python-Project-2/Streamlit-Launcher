@@ -45,9 +45,18 @@
     const eCommRefresh = $('tv-comm-refresh');
     const eCommPartners = $('tv-comm-partners');
     const eCommState = $('tv-comm-state');
+    const eCommGate = $('tv-comm-gate');
+    const eCommLlm = $('tv-comm-llm');
+    const eMutlak = $('tv-mutlak');
+    const eMutlakVerdict = $('tv-mutlak-verdict');
+    const eMutlakSum = $('tv-mutlak-sum');
+    const eMutlakList = $('tv-mutlak-list');
+    const eMutlakToggle = $('tv-mutlak-toggle');
+    let mutlakOpen = false;
 
     let symbol = 'IDX:BBCA';
     let lastTeknik = null;
+    let lastConviction = null;
     let aiState = { state: 'stopped', port: 0, model: '', ready: false };
     let busy = false;
     let streaming = null;
@@ -148,7 +157,88 @@
         eQuote.append(b, chg, info);
     }
 
+    // ── gerbang syarat MUTLAK ──────────────────────────────────────────────
+    function verdictClass(v) {
+        return v === 'MUTLAK_BUY' ? 'up' : v === 'MUTLAK_SELL' ? 'down' : 'hold';
+    }
+
+    function renderConviction(c) {
+        if (!eMutlak) { return; }
+        if (!c || !Array.isArray(c.checks)) { eMutlak.hidden = true; lastConviction = null; return; }
+        lastConviction = c;
+        eMutlak.hidden = false;
+        eMutlakVerdict.textContent = c.headline + ' ' + c.passed + '/' + c.total;
+        eMutlakVerdict.className = 'tv-badge ' + verdictClass(c.verdict);
+        eMutlakSum.textContent = c.summary || '';
+        eMutlakList.textContent = '';
+        const rows = mutlakOpen ? c.checks : c.checks.slice(0, 5);
+        rows.forEach((x) => {
+            const row = document.createElement('div');
+            row.className = 'tv-mutlak-row ' + (x.pass ? 'ok' : 'bad');
+            const mark = document.createElement('span');
+            mark.className = 'tv-mutlak-mark';
+            mark.textContent = x.pass ? '✓' : '✕';
+            const body = document.createElement('span');
+            body.className = 'tv-mutlak-body';
+            const label = document.createElement('b');
+            label.textContent = x.label;
+            const detail = document.createElement('span');
+            detail.className = 'muted';
+            detail.textContent = ' — ' + x.detail;
+            body.append(label, detail);
+            row.append(mark, body);
+            eMutlakList.appendChild(row);
+        });
+        if (eMutlakToggle) {
+            eMutlakToggle.textContent = mutlakOpen
+                ? 'Sembunyikan syarat lain'
+                : 'Lihat semua ' + c.total + ' syarat';
+        }
+    }
+
     // ── chat ────────────────────────────────────────────────────────────────
+    /**
+     * Animasi mengetik: teks jawaban muncul bertahap dengan kursor berkedip.
+     * Tanpa requestAnimationFrame (mis. lingkungan uji) teks langsung ditulis penuh.
+     */
+    function typeInto(node, full) {
+        if (!node) { return; }
+        node.dataset.raw = full;
+        if (typeof window.requestAnimationFrame !== 'function') {
+            node.textContent = full;
+            node.classList.remove('streaming');
+            return;
+        }
+        if (node.classList.contains('thinking')) {
+            node.classList.remove('thinking');
+            node.textContent = '';
+        }
+        // Potongan pertama tampil utuh (jawaban langsung terbaca), potongan berikutnya dianimasikan.
+        if (!String(node.textContent || '').length) {
+            node.textContent = full;
+            node.classList.remove('streaming');
+            node._typer = false;
+            return;
+        }
+        node.classList.add('streaming');
+        if (node._typer) { return; }
+        node._typer = true;
+        const step = () => {
+            const target = String(node.dataset.raw || '');
+            const shown = String(node.textContent || '');
+            if (shown.length >= target.length) {
+                node._typer = false;
+                node.classList.remove('streaming');
+                return;
+            }
+            const add = Math.max(2, Math.ceil((target.length - shown.length) / 10));
+            node.textContent = target.slice(0, shown.length + add);
+            if (eChat) { eChat.scrollTop = eChat.scrollHeight; }
+            window.requestAnimationFrame(step);
+        };
+        window.requestAnimationFrame(step);
+    }
+
     function bubble(role, text) {
         const div = document.createElement('div');
         div.className = 'msg ' + (role === 'user' ? 'user' : 'ai');
@@ -163,23 +253,7 @@
         if (!eHistory) { return; }
         eHistory.textContent = '';
         const rows = Array.isArray(list) ? list : [];
-        if (eCommSend) {
-        const sendComm = () => {
-            const text = String(eCommAsk && eCommAsk.value || '').trim();
-            if (!text) { return; }
-            post({ type: 'communityAsk', text });
-            if (eCommAsk) { eCommAsk.value = ''; }
-        };
-        eCommSend.addEventListener('click', sendComm);
-        if (eCommAsk) {
-            eCommAsk.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') { e.preventDefault(); sendComm(); }
-            });
-        }
-        if (eCommRefresh) { eCommRefresh.addEventListener('click', () => post({ type: 'community' })); }
-    }
-
-    if (eHistoryBtn) {
+        if (eHistoryBtn) {
             eHistoryBtn.textContent = rows.length ? `🕘 Riwayat (${rows.length})` : '🕘 Riwayat';
         }
         if (!rows.length) {
@@ -216,7 +290,7 @@
     function appendCommunity(msg) {
         if (!eCommFeed || !msg || !msg.text) { return; }
         const row = document.createElement('div');
-        row.className = 'tv-comm-msg ' + (msg.role === 'user' ? 'user' : 'partner')
+        row.className = 'tv-comm-msg ' + (msg.role === 'user' ? 'user' : msg.role === 'system' ? 'system' : 'partner')
             + (msg.signal ? ' ' + String(msg.signal).toLowerCase() : '');
         const head = document.createElement('div');
         head.className = 'tv-comm-head';
@@ -231,6 +305,12 @@
             sig.className = 'tv-comm-sig ' + String(msg.signal).toLowerCase();
             sig.textContent = msg.signal;
             head.appendChild(sig);
+        }
+        if (msg.verdict) {
+            const gate = document.createElement('span');
+            gate.className = 'tv-comm-sig ' + verdictClass(msg.verdict);
+            gate.textContent = msg.verdict === 'TUNGGU' ? 'TUNGGU' : msg.verdict.replace('MUTLAK_', 'MUTLAK ');
+            head.appendChild(gate);
         }
         const text = document.createElement('div');
         text.className = 'tv-comm-text';
@@ -248,11 +328,32 @@
         if (!rows.length) {
             const empty = document.createElement('div');
             empty.className = 'tv-comm-empty';
-            empty.textContent = 'Belum ada chat. Partner akan mengumumkan sinyal otomatis saat analisa berjalan.';
+            empty.textContent = 'Belum ada chat. Partner aktif otomatis — mengumumkan gerbang MUTLAK walau otak LLM belum dinyalakan.';
             eCommFeed.appendChild(empty);
             return;
         }
         rows.forEach(appendCommunity);
+    }
+
+    /** Chip status room: gerbang MUTLAK + otak LLM (nyala = partner pakai LLM, mati = otak lokal). */
+    function setCommGate(gate) {
+        if (!eCommGate) { return; }
+        if (!gate) { eCommGate.textContent = 'gerbang —'; eCommGate.className = 'tv-chip muted'; return; }
+        eCommGate.textContent = 'gerbang ' + gate.headline + ' ' + gate.passed + '/' + gate.total;
+        eCommGate.className = 'tv-chip ' + (gate.headline === 'TUNGGU' ? '' : 'ok');
+        eCommGate.title = (gate.blockers || []).join('; ') || 'Semua syarat mutlak lulus.';
+    }
+
+    function setCommLlm(ready, state) {
+        if (!eCommLlm) { return; }
+        eCommLlm.textContent = ready ? 'LLM nyala · notif sinyal' : 'LLM mati · notif sinyal off';
+        eCommLlm.className = 'tv-chip ' + (ready ? 'ok' : '');
+        eCommLlm.title = ready
+            ? 'Partner menjawab lewat otak LLM TradingView. Notifikasi sinyal + penjelasan + saran dikirim hanya saat LLM menyala.'
+            : 'llama-server belum menyala. Room tetap bisa ditanya (otak lokal), tetapi notifikasi sinyal otomatis dimatikan agar tidak spam.';
+        if (!ready && state && eCommState) {
+            eCommState.textContent = 'room aktif tanpa LLM (database/comunity.txt)';
+        }
     }
 
     /** Pisahkan jawaban LLM (ARAH/SINYAL/ENTRY/…/ALASAN/RISIKO) menjadi blok terstruktur. */
@@ -478,6 +579,28 @@
     eSend.addEventListener('click', sendAsk);
     eAsk.addEventListener('keydown', (e) => { if (e.key === 'Enter') { sendAsk(); } });
 
+    // ── room Community: kirim pesan & muat ulang (selalu aktif, LLM boleh mati) ──
+    function sendComm() {
+        const text = String(eCommAsk && eCommAsk.value || '').trim();
+        if (!text) { return; }
+        post({ type: 'communityAsk', text });
+        if (eCommAsk) { eCommAsk.value = ''; }
+        if (eCommState) { eCommState.textContent = 'partner sedang membaca pesan…'; }
+    }
+    if (eCommSend) { eCommSend.addEventListener('click', sendComm); }
+    if (eCommAsk) {
+        eCommAsk.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); sendComm(); }
+        });
+    }
+    if (eCommRefresh) { eCommRefresh.addEventListener('click', () => post({ type: 'community' })); }
+    if (eMutlakToggle) {
+        eMutlakToggle.addEventListener('click', () => {
+            mutlakOpen = !mutlakOpen;
+            if (lastConviction) { renderConviction(lastConviction); }
+        });
+    }
+
     function sendAsk() {
         const text = String(eAsk.value || '').trim();
         if (!text) { return; }
@@ -566,6 +689,8 @@
             case 'quote':
                 renderQuote(m.teknik, m);
                 renderSignal(m.teknik);
+                renderConviction(m.conviction);
+                if (m.conviction) { setCommGate(m.conviction); }
                 if (m.sesi) { eSesi.textContent = m.sesi; }
                 if (m.teknik && m.teknik.symbol) { symbol = m.teknik.symbol; }
                 break;
@@ -575,16 +700,18 @@
                 break;
             case 'chunk':
                 if (streaming) {
-                    streaming.classList.remove('thinking');
-                    streaming.textContent = (streaming.dataset.raw || '') + m.text;
-                    streaming.dataset.raw = streaming.textContent;
-                    eChat.scrollTop = eChat.scrollHeight;
+                    // Aliran teks: ditulis bertahap (animasi mengetik) + kursor berkedip.
+                    typeInto(streaming, String(streaming.dataset.raw || '') + String(m.text || ''));
                 }
                 break;
             case 'answer':
                 if (streaming) {
                     const node = streaming;
                     streaming = null;
+                    node.classList.remove('thinking');
+                    node.classList.remove('streaming');
+                    node._typer = false;
+                    node.dataset.raw = '';
                     if (m.text) { renderAi(node, m.text); }
                     else { node.textContent = 'Tidak ada jawaban.'; }
                     eChat.scrollTop = eChat.scrollHeight;
@@ -597,6 +724,7 @@
                 break;
             case 'ai':
                 setAi(m.ai);
+                if (m.ai) { setCommLlm(!!m.ai.ready, m.ai.state); }
                 break;
             case 'models':
                 renderModels(m.models, m.selected);
@@ -609,6 +737,11 @@
                 renderCommunity(m.messages);
                 if (eCommPartners && m.partners) { eCommPartners.textContent = 'partner: ' + m.partners.join(', '); }
                 if (eCommState && m.file) { eCommState.textContent = 'database/' + String(m.file).split(/[\\/]/).pop(); }
+                setCommGate(m.gate);
+                setCommLlm(!!m.llmReady);
+                break;
+            case 'communityStatus':
+                setCommLlm(!!m.llmReady, m.state);
                 break;
             case 'communityAdd':
                 appendCommunity(m.message);

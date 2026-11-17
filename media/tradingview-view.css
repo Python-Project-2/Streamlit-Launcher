@@ -206,6 +206,9 @@ body.tv-body {
 
 .msg.user { background: rgba(14, 99, 156, .18); border-color: rgba(14, 99, 156, .5); align-self: flex-end; max-width: 92%; }
 .msg.ai { background: rgba(128, 128, 128, .08); }
+/* Kursor berkedip selama jawaban mengalir (animasi mengetik). */
+.msg.streaming::after { content: "▍"; margin-left: 1px; opacity: .75; animation: tv-blink 1s steps(1) infinite; }
+@keyframes tv-blink { 50% { opacity: 0; } }
 
 .msg .kv { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 2px 8px; }
 .msg .kv span { opacity: .6; }
@@ -382,8 +385,21 @@ body.tv-body {
 .tv-comm-head b { font-size: 10px; font-weight: 600; }
 .tv-comm-time { opacity: .5; }
 .tv-comm-sig { margin-left: auto; font-size: 8.5px; padding: 0 4px; border-radius: 3px; border: 1px solid var(--tv-border); }
-.tv-comm-sig.buy { color: var(--tv-up); border-color: var(--tv-up); }
-.tv-comm-sig.sell { color: var(--tv-down); border-color: var(--tv-down); }
+.tv-comm-sig.buy, .tv-comm-sig.up { color: var(--tv-up); border-color: var(--tv-up); }
+.tv-comm-sig.sell, .tv-comm-sig.down { color: var(--tv-down); border-color: var(--tv-down); }
 .tv-comm-sig.hold { color: var(--tv-hold); border-color: var(--tv-hold); }
+.tv-comm-sig + .tv-comm-sig { margin-left: 2px; }
+.tv-comm-msg.system { border-left-color: var(--tv-border); opacity: .75; font-style: italic; }
 .tv-comm-text { line-height: 1.4; }
 .tv-comm-empty { opacity: .5; font-size: 10px; }
+
+/* ── gerbang syarat MUTLAK ──────────────────────────────────────────────── */
+.tv-card.mutlak { border-color: var(--tv-hold); }
+.tv-mutlak-sum { font-size: 10.5px; line-height: 1.45; }
+.tv-mutlak-list { display: flex; flex-direction: column; gap: 3px; }
+.tv-mutlak-row { display: flex; gap: 5px; align-items: flex-start; font-size: 10px; line-height: 1.35; }
+.tv-mutlak-mark { font-weight: 700; width: 11px; flex: none; text-align: center; }
+.tv-mutlak-row.ok .tv-mutlak-mark { color: var(--tv-up); }
+.tv-mutlak-row.bad .tv-mutlak-mark { color: var(--tv-down); }
+.tv-mutlak-body { flex: 1; min-width: 0; }
+.tv-mutlak-body b { font-weight: 600; }

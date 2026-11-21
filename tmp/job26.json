@@ -1,0 +1,11 @@
+[
+  {
+    "file": "src/Journal.ts",
+    "edits": [
+      {
+        "old": "Penulis memegang hak cipta artikel dan memberikan hak publikasi noneksklusif kepada jurnal yang menerbitkannya, dengan ketentuan lisensi mengikuti kebijakan jurnal tujuan.`);",
+        "new": "Penulis memegang hak cipta artikel dan memberikan hak publikasi noneksklusif kepada jurnal yang menerbitkannya, dengan ketentuan lisensi mengikuti kebijakan jurnal tujuan. Penelitian ini tidak menerima pendanaan khusus, dan penulis menyatakan tidak ada konflik kepentingan dalam penulisan artikel ini.`);"
+      }
+    ]
+  }
+]

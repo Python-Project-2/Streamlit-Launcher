@@ -29,19 +29,19 @@
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/.tradingview/trading2.png?raw=true">
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/.tradingview/trading3.png?raw=true">
 
-## 🔗 Connect Collaboration: TradingView · Google Books API · Pexels
+## 🔗 Connect Collaboration: TradingView · Google Books · Pexels
 
-Extension ini terhubung ke tiga layanan resmi. Semua kunci bisa diganti lewat **Settings → Date Skunder**.
+This extension connects to three services. Everything is preconfigured — no setup needed.
 
-| Ikon | Layanan | Dipakai untuk | Kunci / setelan |
+| Ikon | Service | Used for | Notes |
 |:---:|---|---|---|
-| <img src="https://raw.githubusercontent.com/Python-Project-2/Streamlit-Launcher/6c07797c2144d322ca393235a32bea6a60f1d13e/icon/tradingview-brand.svg" width="46" alt="TradingView" /> | **TradingView** | Mode Analisis TradingView: chart resmi, teknikal, fundamental, screener, berita, pencarian saham IDX, dan panel chart penuh (tanpa berkas CSV). | Tidak perlu kunci API — widget resmi TradingView. |
-| <img src="https://github.com/Python-Project-2/Streamlit-Launcher/raw/main/icon/googlebooks-brand.svg" width="46" alt="Google Books" /> | **Google Books API** | View **Pustaka Trading** dan tab **Buku** di Mode Analisis: cari buku trading, lihat sampul, info, **harga**, lalu klik **Free sample** untuk membaca pratinjau di panel pembaca. | `dateSkunder.books.googleApiKey` (bawaan sudah diisi; bisa diganti dengan key Google Cloud milikmu, batasi ke Books API). |
-| <img src="https://github.com/Python-Project-2/Streamlit-Launcher/raw/main/icon/pexels-brand.svg" width="46" alt="Pexels" /> | **Pexels API** | Tab **Gambar & Video** di Mode Analisis: cari foto/video bertema trading, **pratinjau gambar**, **putar video**, lalu **unduh** berkas aslinya. | `dateSkunder.media.pexelsApiKey` (bawaan sudah diisi; ganti dengan key dari [pexels.com/api](https://www.pexels.com/api/) bila repo dibagikan). |
+| <img src="https://crystalpng.com/wp-content/uploads/2025/03/tradingview-logo.png" width="46" alt="TradingView" /> | **TradingView** | TradingView Analysis Mode: official charts, technicals, fundamentals, screener, news, IDX stock search, and the full-screen chart panel (no CSV required). | Official TradingView widgets. |
+| <img src="https://thumb.wikimedia.org/wikipedia/commons/thumb/1/11/Google_Play_Books_icon_%282023%29.svg/960px-Google_Play_Books_icon_%282023%29.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail&_=20230613203004" width="46" alt="Google Books" /> | **Google Books** | **Trading Library** view and the **Books** tab in Analysis Mode: search trading books, see the cover, details and **price**, then click **Free sample** to read the preview in the reader panel. | Official Google Books preview, subject to publisher permissions. |
+| <img src="https://static.vecteezy.com/system/resources/thumbnails/060/657/124/small/pixel-art-retro-computer-isolated-vintage-technology-icon-for-gaming-web-design-nostalgia-branding-digital-art-tech-blog-graphics-png.png" width="46" alt="Pexels" /> | **Pexels** | **Photos** and **Video** tabs in Analysis Mode: search trading-themed photos/videos, preview images, play videos, and download the originals. | Free to use under the [Pexels license](https://www.pexels.com/license/). |
 
-- **Google Books**: pratinjau gratis mengikuti izin penerbit; buku tanpa halaman sampel tetap menampilkan sampul, metadata, dan harga.
-- **Pexels**: gambar & video gratis dipakai sesuai [lisensi Pexels](https://www.pexels.com/license/). Unduhan disimpan lewat dialog “Simpan” VS Code.
-- Kedua kunci juga bisa diberikan lewat environment variable: `GOOGLE_BOOKS_API_KEY` dan `PEXELS_API_KEY`.
+- Photos and videos are separate tabs, each with infinite scrolling like the Trading Library.
+- Downloads are saved through the VS Code “Save” dialog.
+- Books without sample pages still show the cover, metadata and price.
 
 # Journal Generator APA Style
 

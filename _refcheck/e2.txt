@@ -1,0 +1,4 @@
+TITLE:"descriptive statistics"
+TITLE:"correlation" AND TITLE:"coefficient"
+TITLE:"linear regression"
+TITLE:"effect size" AND (TITLE:"p-value" OR TITLE:"p value" OR TITLE:"significance")

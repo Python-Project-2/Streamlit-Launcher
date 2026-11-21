@@ -89,6 +89,7 @@ eq('“apa itu trading” → mode umum', AI.chatModeFor('apa itu trading'), 'ge
 eq('“aman buy sekarang?” → mode keputusan', AI.chatModeFor('aman buy sekarang?'), 'decision');
 eq('“kenapa RSI overbought?” → mode umum', AI.chatModeFor('kenapa RSI overbought?'), 'general');
 eq('“analisa TLKM” → mode analisa', AI.chatModeFor('analisa TLKM'), 'analysis');
+eq('“apa pentingnya main trading” → mode umum (bukan sinyal)', AI.chatModeFor('apa pentingnya main trading'), 'general');
 check('prompt umum melarang memaksa analisa simbol', /JANGAN memaksakan analisa simbol/.test(AI.TRADING_GENERAL_PROMPT));
 check('prompt utama melarang label FORMAT', /Jangan menulis label "FORMAT"/.test(AI.TRADING_SYSTEM_PROMPT));
 

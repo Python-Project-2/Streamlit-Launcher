@@ -1,0 +1,23 @@
+[
+  {
+    "file": "src/docxGenerator.ts",
+    "edits": [
+      {
+        "old": "// Garis tabel: sisi kanan & bawah dibuat lebih tebal/gelap agar tampak berbayangan (shadow).\nconst line = { style: BorderStyle.SINGLE, size: 4, color: '808080' };\nconst shade = { style: BorderStyle.SINGLE, size: 16, color: '6E6E6E' };\nconst borders = { top: line, bottom: shade, left: line, right: shade, insideHorizontal: line, insideVertical: line };",
+        "new": "// Tabel polos: garis tipis seragam, tanpa bayangan, seperti jurnal internasional.\nconst line = { style: BorderStyle.SINGLE, size: 4, color: '808080' };\nconst borders = { top: line, bottom: line, left: line, right: line, insideHorizontal: line, insideVertical: line };"
+      },
+      {
+        "old": "\tconst fill = header ? 'D9E2F3' : zebra ? 'F3F6FC' : undefined;",
+        "new": "\tconst fill = header ? 'E7E6E6' : zebra ? 'F7F7F7' : undefined;"
+      },
+      {
+        "old": "/** Kotak sorotan (Temuan Utama) tetap berbayangan. */\nconst boxBorder = {\n\ttop: { style: BorderStyle.SINGLE, size: 4, color: 'B4C6E7', space: 4 },\n\tleft: { style: BorderStyle.SINGLE, size: 24, color: BLUE, space: 6 },\n\tbottom: { style: BorderStyle.SINGLE, size: 16, color: '6E6E6E', space: 4 },\n\tright: { style: BorderStyle.SINGLE, size: 16, color: '6E6E6E', space: 6 },\n};\n\nfunction boxParas(title: string, text: string, size: number): Paragraph[] {\n\tconst shading = { type: ShadingType.CLEAR, fill: 'EAF1FB', color: 'auto' } as const;\n\treturn [\n\t\tnew Paragraph({\n\t\t\tshading, border: boxBorder, alignment: AlignmentType.LEFT,\n\t\t\tspacing: { before: 100, after: 0, line: 252 }, indent: { left: 120, right: 120 },\n\t\t\tchildren: [new TextRun({ text: title, bold: true, size, color: BLUE })],\n\t\t}),\n\t\tnew Paragraph({\n\t\t\tshading, border: boxBorder, alignment: AlignmentType.JUSTIFIED,\n\t\t\tspacing: { before: 0, after: 160, line: 252 }, indent: { left: 120, right: 120 },\n\t\t\tchildren: [new TextRun({ text, size })],\n\t\t}),\n\t];\n}",
+        "new": "/** Sorotan polos: judul tebal lalu uraian, tanpa bingkai atau warna latar. */\nfunction boxParas(title: string, text: string, size: number, links?: Map<string, string>): Paragraph[] {\n\treturn [\n\t\tnew Paragraph({\n\t\t\talignment: AlignmentType.LEFT,\n\t\t\tspacing: { before: 100, after: 40, line: 252 },\n\t\t\tchildren: [new TextRun({ text: title, bold: true, size })],\n\t\t}),\n\t\tnew Paragraph({\n\t\t\talignment: AlignmentType.JUSTIFIED,\n\t\t\tspacing: { before: 0, after: 140, line: 252 },\n\t\t\tchildren: textRuns(text, links),\n\t\t}),\n\t];\n}"
+      },
+      {
+        "old": "\t\t\tcase 'callout':\n\t\t\t\tout.push(...boxParas(b.title, b.text, 19));\n\t\t\t\tbreak;",
+        "new": "\t\t\tcase 'callout':\n\t\t\t\tout.push(...boxParas(b.title, b.text, 19, links));\n\t\t\t\tbreak;"
+      }
+    ]
+  }
+]

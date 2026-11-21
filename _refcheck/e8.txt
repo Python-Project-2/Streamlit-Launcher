@@ -1,0 +1,2 @@
+TITLE:"multiple linear regression" AND (TITLE:"guide" OR TITLE:"practical" OR TITLE:"application" OR TITLE:"interpretation")
+TITLE:"linear regression" AND (TITLE:"application" OR TITLE:"interpretation")

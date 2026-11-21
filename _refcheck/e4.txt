@@ -1,0 +1,5 @@
+TITLE:"anomaly detection" AND (TITLE:"review" OR TITLE:"survey") AND (TITLE:"tabular" OR TITLE:"data")
+TITLE:"descriptive statistics" AND (TITLE:"guide" OR TITLE:"foundation" OR TITLE:"step" OR TITLE:"essential")
+TITLE:"effect sizes" AND (TITLE:"interpret" OR TITLE:"report" OR TITLE:"guide")
+TITLE:"figures" AND TITLE:"rules"
+TITLE:"data visualization" AND (TITLE:"guide" OR TITLE:"principles" OR TITLE:"rules")

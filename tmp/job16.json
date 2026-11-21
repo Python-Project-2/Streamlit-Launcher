@@ -1,0 +1,11 @@
+[
+  {
+    "file": "src/excelGenerator.ts",
+    "edits": [
+      {
+        "old": "    polishWorkbook(wb);\n    wb.views = [{ x: 0, y: 0, width: 24000, height: 12000, firstSheet: 0, activeTab: 0, visibility: 'visible' }];",
+        "new": "    polishWorkbook(wb);\n    // Halaman login dicetak satu halaman penuh (menggantikan pengaturan lanskap umum).\n    wsL.pageSetup = {\n        ...wsL.pageSetup, orientation: 'portrait', fitToPage: true, fitToWidth: 1, fitToHeight: 1,\n        printArea: 'B2:F24', horizontalCentered: true,\n        margins: { left: 0.5, right: 0.5, top: 0.6, bottom: 0.6, header: 0.3, footer: 0.3 },\n    };\n    wb.views = [{ x: 0, y: 0, width: 24000, height: 12000, firstSheet: 0, activeTab: 0, visibility: 'visible' }];"
+      }
+    ]
+  }
+]

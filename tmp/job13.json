@@ -1,0 +1,11 @@
+[
+  {
+    "file": "src/Journal.ts",
+    "edits": [
+      {
+        "old": "\t\ttool: {\n\t\t\tfirst: `${meta.author}, ${year}`, next: `${meta.author}, ${year}`,\n\t\t\truns: [t(`${meta.author}. (${year}). `), it('Date Skunder: Ekstensi analisis data dan penyusun artikel jurnal otomatis untuk Visual Studio Code'), t(' [Perangkat lunak].')],\n\t\t},",
+        "new": "\t\ttool: {\n\t\t\tfirst: `${meta.author}, ${year}`, next: `${meta.author}, ${year}`,\n\t\t\tlink: 'https://github.com/dwidevelopes/streamlit-launcher',\n\t\t\truns: [t(`${meta.author}. (${year}). `), it('Date Skunder: Ekstensi analisis data dan penyusun artikel jurnal otomatis untuk Visual Studio Code'), t(' [Perangkat lunak].')],\n\t\t},"
+      }
+    ]
+  }
+]

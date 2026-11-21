@@ -1,0 +1,11 @@
+[
+  {
+    "file": "src/pdfgenerator.ts",
+    "edits": [
+      {
+        "old": "const clean = (s: string): string => s\n\t.replace(/Σ/g, 'Sum').replace(/√/g, 'sqrt')",
+        "new": "const clean = (s: string): string => s\n\t.replace(/Σ/g, 'Sum').replace(/√/g, 'sqrt')\n\t// Transliterasi huruf non-WinAnsi (Turki, Slavia) agar nama penulis tetap utuh.\n\t.replace(/İ/g, 'I').replace(/ı/g, 'i').replace(/Ž/g, 'Z').replace(/ž/g, 'z')\n\t.replace(/Đ/g, 'D').replace(/đ/g, 'd').replace(/ğ/g, 'g').replace(/Ğ/g, 'G')\n\t.replace(/ş/g, 's').replace(/Ş/g, 'S').replace(/[ćč]/g, 'c').replace(/[ĆČ]/g, 'C')\n\t.replace(/[šŠ]/g, (m) => (m === 'š' ? 's' : 'S'))"
+      }
+    ]
+  }
+]

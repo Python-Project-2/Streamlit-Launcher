@@ -1,0 +1,11 @@
+[
+  {
+    "file": "src/pdfgenerator.ts",
+    "edits": [
+      {
+        "old": "\tj.references.forEach((r, i) => {\n\t\tconst url = j.refLinks?.[i];\n\t\tpara(r, { hang: 28, size: 9.5, after: url ? 1 : 5 });",
+        "new": "\tj.references.forEach((r, i) => {\n\t\tconst url = j.refLinks?.[i];\n\t\tneed(58);                       // jaga entri dan tautannya tetap pada halaman yang sama\n\t\tpara(r, { hang: 28, size: 9.5, after: url ? 1 : 5 });"
+      }
+    ]
+  }
+]

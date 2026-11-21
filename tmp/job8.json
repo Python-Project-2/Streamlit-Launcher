@@ -1,0 +1,11 @@
+[
+  {
+    "file": "src/pptgenerator.ts",
+    "edits": [
+      {
+        "old": "        callout(s, `Kesimpulan singkat: dataset berkualitas ${rating}. ${hl.missingCells + hl.duplicateRows + hl.outlierColsCount > 0 ? 'Bersihkan sel kosong, duplikat, dan tinjau outlier sebelum pemodelan lanjutan.' : 'Data siap dianalisis lanjut tanpa pembersihan berarti.'}`, ratingColor);",
+        "new": "        const fix: string[] = [];\n        if (hl.missingCells > 0) { fix.push('isi sel kosong'); }\n        if (hl.duplicateRows > 0) { fix.push('hapus baris duplikat'); }\n        if (hl.outlierColsCount > 0) { fix.push(`tinjau ${hl.outlierColsCount} kolom beroutlier`); }\n        callout(s, `Kesimpulan singkat: dataset berkualitas ${rating}. ${fix.length ? `Langkah perbaikan: ${fix.join(', ')} sebelum pemodelan lanjutan.` : 'Data siap dianalisis lanjut tanpa pembersihan berarti.'}`, ratingColor);"
+      }
+    ]
+  }
+]

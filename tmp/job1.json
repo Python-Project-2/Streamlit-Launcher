@@ -1,0 +1,15 @@
+[
+  {
+    "file": "src/Journal.ts",
+    "edits": [
+      {
+        "old": "export interface RefRun { text: string; i?: boolean }",
+        "new": "export interface RefRun { text: string; i?: boolean; url?: string }"
+      },
+      {
+        "old": "\trefRuns: RefRun[][];\n\treferences: string[];\n\tappendix: Block[];\n}\n\n// ───────── Referensi (APA 6, gaya Mendeley) ─────────\ninterface Ref { first: string; next: string; runs: RefRun[] }",
+        "new": "\trefRuns: RefRun[][];\n\t/** Tautan DOI/URL untuk setiap entri daftar pustaka (sejajar dengan refRuns). */\n\trefLinks: (string | undefined)[];\n\treferences: string[];\n\t/** Poin utama artikel, dipakai kotak \"Poin Utama\" pada DOCX/PDF dan slide ringkasan PPTX. */\n\thighlights: string[];\n\tappendix: Block[];\n}\n\n/** Rentang tahun seluruh daftar pustaka, dipakai pada judul bagian referensi. */\nexport const REF_RANGE = '2022–2026';\n\n// ───────── Referensi (APA 7, seluruh terbitan 2022–2026) ─────────\ninterface Ref { first: string; next: string; runs: RefRun[]; link?: string }"
+      }
+    ]
+  }
+]

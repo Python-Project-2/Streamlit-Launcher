@@ -12,6 +12,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const esbuild = require('esbuild');
 const { JSDOM } = require('jsdom');
 
 const root = path.resolve(__dirname, '..');
@@ -136,9 +137,12 @@ check('tombol Trading Real hilang', !ov.querySelector('button.tv-real, #tv-btn-r
 check('tidak ada kata “paper trading”/“broker”/“eksekusi”', !/paper trading|broker|eksekusi/i.test(ov.textContent), ov.textContent.slice(0, 120));
 check('tab Trading dihapus', ![...ov.querySelectorAll('.tv-tab')].some((b) => b.dataset.tvTab === 'trade'));
 check('tab Akun dihapus', ![...ov.querySelectorAll('.tv-tab')].some((b) => b.dataset.tvTab === 'account'));
-eq('jumlah tab = 8 (chart, teknikal, fundamental, screener, berita, cari, buku, media)', ov.querySelectorAll('.tv-tab').length, 8);
+eq('jumlah tab = 9 (chart, teknikal, fundamental, screener, berita, cari, buku, gambar, video)', ov.querySelectorAll('.tv-tab').length, 9);
 check('tab Buku tersedia di Mode Analisis', [...ov.querySelectorAll('.tv-tab')].some((b) => b.dataset.tvTab === 'buku'));
-check('tab Gambar & Video tersedia di Mode Analisis', [...ov.querySelectorAll('.tv-tab')].some((b) => b.dataset.tvTab === 'media'));
+check('tab Photos & Video tersedia di Mode Analisis', ['gambar', 'video'].every((k) => [...ov.querySelectorAll('.tv-tab')].some((b) => b.dataset.tvTab === k)));
+// bahasa: basis Inggris (label tab & tooltip)
+check('label tab berbahasa Inggris', /Technical/.test(ov.textContent) && /Books/.test(ov.textContent) && /Photos/.test(ov.textContent), ov.querySelector('.tv-tabs').textContent.slice(0, 120));
+check('tooltip berbahasa Inggris', /Close analysis mode/.test(doc.getElementById('tv-btn-close').title), doc.getElementById('tv-btn-close').title);
 
 // tab Buku: cari → hasil → Free sample membuka panel pembaca (tanpa keluar aplikasi)
 {
@@ -149,27 +153,35 @@ check('tab Gambar & Video tersedia di Mode Analisis', [...ov.querySelectorAll('.
     bookQ.value = 'bandarmologi';
     doc.getElementById('tv-book-go').click();
     check('cari buku mengirim tvBookSearch', posts.some((p) => p.type === 'tvBookSearch' && p.q === 'bandarmologi'), JSON.stringify(posts.slice(-2)));
-    aiSend({ type: 'tvBookResults', items: [{ id: 'abc123', title: 'Bandarmologi', authors: ['Rina'], viewability: 'PARTIAL' }], info: '1 buku' });
+    aiSend({ type: 'tvBookResults', startIndex: 0, total: 20, nextIndex: 1, items: [{ id: 'abc123', title: 'Bandarmologi', subtitle: 'Edisi 2', authors: ['Rina'], viewability: 'PARTIAL', price: '100.000 IDR', pageCount: 240, rating: 4.6 }], info: '1 / 20 books' });
     const sample = doc.querySelector('#tv-book-list .tv-sample');
     check('hasil buku tampil dengan tombol Free sample', !!sample, doc.getElementById('tv-book-list').textContent.slice(0, 90));
+    check('kartu buku menampilkan harga', /100\.000/.test(doc.getElementById('tv-book-list').textContent), doc.getElementById('tv-book-list').textContent.slice(0, 120));
+    posts.length = 0;
+    const bookList = doc.getElementById('tv-book-list');
+    Object.defineProperty(bookList, 'scrollHeight', { value: 1200, configurable: true });
+    Object.defineProperty(bookList, 'clientHeight', { value: 400, configurable: true });
+    bookList.scrollTop = 900;
+    bookList.dispatchEvent(new window.Event('scroll'));
+    check('infinite scroll buku meminta halaman berikutnya', posts.some((p) => p.type === 'tvBookSearch' && p.startIndex === 1), JSON.stringify(posts));
     posts.length = 0;
     sample.click();
     check('Free sample meminta panel pembaca', posts.some((p) => p.type === 'tvBookRead' && p.id === 'abc123'), JSON.stringify(posts));
     [...ov.querySelectorAll('.tv-tab')].find((b) => b.dataset.tvTab === 'chart').click();
 }
 
-// tab Media (Pexels): cari → grid gambar → pratinjau → unduh → video
+// tab Photos & Video (Pexels) — DIPISAH: cari → daftar → pratinjau → unduh
 {
     posts.length = 0;
-    [...ov.querySelectorAll('.tv-tab')].find((b) => b.dataset.tvTab === 'media').click();
-    const mediaQ = doc.getElementById('tv-media-q');
-    check('tab Media punya pencarian + toggle gambar/video', !!mediaQ && !!doc.getElementById('tv-media-go') && doc.querySelectorAll('.tv-seg').length === 2);
+    [...ov.querySelectorAll('.tv-tab')].find((b) => b.dataset.tvTab === 'gambar').click();
+    const photoQ = doc.getElementById('tv-photo-q');
+    check('tab Photos punya pencarian sendiri', !!photoQ && !!doc.getElementById('tv-photo-go'));
     posts.length = 0;
-    mediaQ.value = 'chart';
-    doc.getElementById('tv-media-go').click();
-    check('cari media mengirim tvMediaSearch', posts.some((p) => p.type === 'tvMediaSearch' && p.kind === 'photo' && p.q === 'chart'), JSON.stringify(posts.slice(-2)));
+    photoQ.value = 'chart';
+    doc.getElementById('tv-photo-go').click();
+    check('cari foto mengirim tvMediaSearch', posts.some((p) => p.type === 'tvMediaSearch' && p.kind === 'photo' && p.q === 'chart'), JSON.stringify(posts.slice(-2)));
     aiSend({
-        type: 'tvMediaResults', kind: 'photo', total: 50, page: 1, q: 'chart',
+        type: 'tvMediaResults', kind: 'photo', total: 50, page: 1, nextPage: 2, q: 'chart',
         items: [{
             kind: 'photo', id: 1, title: 'Chart saham', thumb: 'https://images.pexels.com/a.jpg',
             preview: 'https://images.pexels.com/a2.jpg', download: 'https://images.pexels.com/a3.jpg',
@@ -177,16 +189,30 @@ check('tab Gambar & Video tersedia di Mode Analisis', [...ov.querySelectorAll('.
             authorUrl: 'https://www.pexels.com/@rina',
         }],
     });
-    check('hasil gambar tampil di grid', doc.querySelectorAll('#tv-media-list .tv-mcard').length === 1, String(doc.querySelectorAll('#tv-media-list .tv-mcard').length));
+    check('hasil foto tampil sebagai grid card', doc.querySelectorAll('#tv-photo-list .tv-mcard').length === 1, String(doc.querySelectorAll('#tv-photo-list .tv-mcard').length));
     posts.length = 0;
-    doc.querySelector('#tv-media-list .tv-primary').click();
+    doc.querySelector('#tv-photo-list .tv-primary').click();
     check('pratinjau media dikirim ke ekstensi', posts.some((p) => p.type === 'tvMediaPreview' && p.hit && p.hit.id === 1), JSON.stringify(posts));
     posts.length = 0;
-    doc.querySelector('#tv-media-list .tv-mdl').click();
+    doc.querySelector('#tv-photo-list .tv-mdl').click();
     check('unduh media dikirim ke ekstensi', posts.some((p) => p.type === 'tvMediaDownload' && p.hit && p.hit.id === 1), JSON.stringify(posts));
+    // Infinite scroll: gulir daftar ke dasar → halaman 2 diminta.
     posts.length = 0;
-    [...doc.querySelectorAll('.tv-seg')][1].click();
-    check('toggle Video meminta hasil video', posts.some((p) => p.type === 'tvMediaSearch' && p.kind === 'video'), JSON.stringify(posts.slice(-2)));
+    const photoList = doc.getElementById('tv-photo-list');
+    Object.defineProperty(photoList, 'scrollHeight', { value: 1000, configurable: true });
+    Object.defineProperty(photoList, 'clientHeight', { value: 400, configurable: true });
+    photoList.scrollTop = 700;
+    photoList.dispatchEvent(new window.Event('scroll'));
+    check('infinite scroll foto meminta halaman 2', posts.some((p) => p.type === 'tvMediaSearch' && p.kind === 'photo' && p.page === 2), JSON.stringify(posts));
+    posts.length = 0;
+    [...ov.querySelectorAll('.tv-tab')].find((b) => b.dataset.tvTab === 'video').click();
+    posts.length = 0;
+    const videoQ = doc.getElementById('tv-video-q');
+    videoQ.value = 'trading';
+    doc.getElementById('tv-video-go').click();
+    check('tab Video memakai pencarian terpisah', posts.some((p) => p.type === 'tvMediaSearch' && p.kind === 'video' && p.q === 'trading'), JSON.stringify(posts.slice(-2)));
+    aiSend({ type: 'tvMediaResults', kind: 'video', total: 10, page: 1, nextPage: null, items: [{ kind: 'video', id: 2, title: 'Video', thumb: 'https://images.pexels.com/v.jpg', preview: 'https://videos.pexels.com/v.mp4', download: 'https://videos.pexels.com/v.mp4', page: 'https://www.pexels.com/video/2/', width: 1280, height: 720, duration: 12, author: 'Tima', authorUrl: 'https://www.pexels.com/@tima' }] });
+    check('hasil video tampil di tab Video saja', doc.querySelectorAll('#tv-video-list .tv-mcard').length === 1 && !doc.getElementById('tv-photo-list'), String(doc.querySelectorAll('#tv-video-list .tv-mcard').length));
     [...ov.querySelectorAll('.tv-tab')].find((b) => b.dataset.tvTab === 'chart').click();
 }
 
@@ -295,7 +321,7 @@ aiSend({
 const modelSel = doc.getElementById('tv-ai-model');
 check('daftar model otak trading terisi', modelSel.options.length === 1 && modelSel.value === 'D:/models/qwen.gguf', modelSel.innerHTML.slice(0, 80));
 check('chip status menyebut port otak trading', /8137/.test(doc.getElementById('tv-ai-chip').textContent), doc.getElementById('tv-ai-chip').textContent);
-check('tombol server menjadi Hentikan saat siap', /Hentikan/.test(doc.getElementById('tv-ai-start').textContent), doc.getElementById('tv-ai-start').textContent);
+check('tombol server menjadi Stop saat siap', /Stop/.test(doc.getElementById('tv-ai-start').textContent), doc.getElementById('tv-ai-start').textContent);
 
 posts.length = 0;
 modelSel.value = 'D:/models/qwen.gguf';
@@ -379,6 +405,37 @@ window.SkunderTrading.close();
     w2.close();
 }
 
+// ── 9d. tutup → buka lagi: tab Buku tetap bisa dipakai ───────────────────────
+{
+    window.SkunderTrading.open({ symbol: 'IDX:TLKM' });
+    check('mode analisis bisa dibuka lagi setelah ditutup', !!doc.getElementById('tv-ov'));
+    [...doc.querySelectorAll('.tv-tab')].find((b) => b.dataset.tvTab === 'buku').click();
+    check('tab Buku terbuka setelah reopen', !!doc.getElementById('tv-book-q') && !!doc.getElementById('tv-book-list'), doc.getElementById('tv-ov').textContent.slice(0, 80));
+    posts.length = 0;
+    window.SkunderTrading.close();
+    window.SkunderTrading.open({ symbol: 'IDX:TLKM' });
+    check('tutup-buka kedua kali tetap membuat lapisan', !!doc.getElementById('tv-ov'));
+}
+
+// ── 9e. anti-spam statistik karangan di Chat AI Skunder ──────────────────────
+{
+    const built = esbuild.buildSync({
+        entryPoints: [path.join(root, 'src/analysisStore.ts')],
+        bundle: true, platform: 'node', format: 'cjs', write: false, logLevel: 'silent',
+    });
+    const mod = { exports: {} };
+    new Function('module', 'exports', 'require', built.outputFiles[0].text)(mod, mod.exports, require);
+    const spam = [
+        '1. 1.234,56% peningkatan produktivitas perusahaan yang menggunakan bahasa pemrograman modern.',
+        '2. 1.234,56% peningkatan akurasi analisis data dengan teknik statistik modern.',
+        '3. 1.234,56% peningkatan kecepatan pemrosesan data dengan algoritma optimisasi.',
+        '4. 1.234,56% peningkatan efisiensi operasional perusahaan dengan implementasi AI.',
+        '5. 1.234,56% peningkatan kualitas keputusan bisnis dengan analisis prediktif.',
+    ].join('\n');
+    const cleanSpam = mod.exports.tidyModelReply(spam, 'apa pentingnya AI?');
+    check('statistik template 1.234,56% tidak diulang-ulang', (cleanSpam.match(/1\.234,56%/g) || []).length === 1, cleanSpam);
+}
+
 // ── 10. berkas ekstensi: menu + CSP + pemuatan skrip ──────────────────────────
 const pkg = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
 const titleMenus = (pkg.contributes.menus['editor/title'] || []).filter((m) => m.command === 'date-skunder.trading.open');
@@ -401,7 +458,7 @@ check('API key Pexels tersimpan di konfigurasi', pexelsKey && /^LH59/.test(pexel
 check('ukuran hasil media bisa diatur', Boolean(props['dateSkunder.media.perPage']));
 const tvJs = fs.readFileSync(path.join(root, 'media/tradingview.js'), 'utf8');
 check('tab Buku memakai grid + harga', /tv-bgrid/.test(tvJs) && /tv-bprice/.test(tvJs));
-check('tab Media punya grid gambar/video', /tv-mgrid/.test(tvJs) && /tv-seg/.test(tvJs));
+check('tab Photos & Video dipisah', /id: 'gambar'/.test(tvJs) && /id: 'video'/.test(tvJs) && /tv-mgrid/.test(tvJs));
 check('media bisa dipratinjau & diunduh', /tvMediaPreview/.test(tvJs) && /tvMediaDownload/.test(tvJs));
 
 // ── hasil ──────────────────────────────────────────────────────────────────────

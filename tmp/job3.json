@@ -1,0 +1,27 @@
+[
+  {
+    "file": "src/pdfgenerator.ts",
+    "edits": [
+      {
+        "old": "import { PDFDocument, PDFFont, PDFImage, PDFPage, StandardFonts, rgb } from 'pdf-lib';\nimport type { Align, Block, Journal } from './Journal';",
+        "new": "import { PDFArray, PDFDocument, PDFFont, PDFImage, PDFName, PDFPage, StandardFonts, rgb } from 'pdf-lib';\nimport { REF_RANGE } from './Journal';\nimport type { Align, Block, Journal } from './Journal';"
+      },
+      {
+        "old": "\t/** Awalan tebal pada baris pertama, mis. \"Abstrak -\" atau \"Kata Kunci:\". */\n\tlead?: string; leadFont?: PDFFont; color?: ReturnType<typeof rgb>;\n}",
+        "new": "\t/** Awalan tebal pada baris pertama, mis. \"Abstrak -\" atau \"Kata Kunci:\". */\n\tlead?: string; leadFont?: PDFFont; color?: ReturnType<typeof rgb>;\n\t/** Potongan teks pada paragraf ini yang diberi tautan (mis. DOI pada daftar pustaka). */\n\tanchor?: { text: string; url: string };\n}"
+      },
+      {
+        "old": "\tconst boldItal = await doc.embedFont(StandardFonts.TimesRomanBoldItalic);\n",
+        "new": "\tconst boldItal = await doc.embedFont(StandardFonts.TimesRomanBoldItalic);\n\n\t/** Anotasi tautan agar DOI/URL pada daftar pustaka dapat diklik di penampil PDF. */\n\tconst linkRect = (pg: PDFPage, url: string, x: number, y: number, w: number, h: number) => {\n\t\tconst ctx = doc.context;\n\t\tconst annot = ctx.obj({\n\t\t\tType: 'Annot', Subtype: 'Link',\n\t\t\tRect: [x, y, x + w, y + h],\n\t\t\tBorder: [0, 0, 0],\n\t\t\tA: { Type: 'Action', S: 'URI', URI: url },\n\t\t});\n\t\tconst key = PDFName.of('Annots');\n\t\tconst existing = pg.node.lookupMaybe(key, PDFArray);\n\t\tconst arr = existing ?? (ctx.obj([]) as PDFArray);\n\t\tif (!existing) { pg.node.set(key, arr); }\n\t\tarr.push(annot as never);\n\t};\n"
+      },
+      {
+        "old": "\t\t\t} else {\n\t\t\t\tvoid w;\n\t\t\t\tpage.drawText(body, { x, y, size, font, color: o.color });\n\t\t\t}",
+        "new": "\t\t\t} else {\n\t\t\t\tvoid w;\n\t\t\t\tpage.drawText(body, { x, y, size, font, color: o.color });\n\t\t\t}\n\t\t\tif (o.anchor) {\n\t\t\t\tconst idx = body.indexOf(o.anchor.text);\n\t\t\t\tif (idx >= 0) {\n\t\t\t\t\tconst xa = x + font.widthOfTextAtSize(body.slice(0, idx), size);\n\t\t\t\t\tlinkRect(page, o.anchor.url, xa, y - 1.5, font.widthOfTextAtSize(o.anchor.text, size), size + 2.5);\n\t\t\t\t}\n\t\t\t}"
+      },
+      {
+        "old": "\tpara(j.abstractEn, { ...abs, font: ital, leadFont: boldItal, lead: 'Abstract -', after: 3 });\n\tpara(j.keywordsEn, { ...abs, font: ital, leadFont: boldItal, lead: 'Keywords:', after: 8 });\n\n\trender(j.blocks);\n\theading('h1', 'Daftar Pustaka');\n\tj.references.forEach((r) => para(r, { hang: 28, size: 10.5, after: 5 }));\n\trender(j.appendix);",
+        "new": "\tpara(j.abstractEn, { ...abs, font: ital, leadFont: boldItal, lead: 'Abstract -', after: 3 });\n\tpara(j.keywordsEn, { ...abs, font: ital, leadFont: boldItal, lead: 'Keywords:', after: 8 });\n\n\t// Ringkasan inti artikel langsung di halaman pertama.\n\tif (j.highlights?.length) {\n\t\tbox(j.highlights.map((h, i) => `${i + 1}. ${h}`).join('\\n'), { title: 'Poin Utama Penelitian', size: 9.5 });\n\t}\n\n\trender(j.blocks);\n\theading('h1', 'Daftar Pustaka');\n\tpara(`Seluruh referensi terbit pada ${REF_RANGE} dan dilengkapi tautan DOI/URL aktif yang dapat diklik.`, { font: ital, size: 8.5, after: 6, color: rgb(0.35, 0.35, 0.35) });\n\tj.references.forEach((r, i) => {\n\t\tconst url = j.refLinks?.[i];\n\t\tpara(url ? `${r} ${url}` : r, { hang: 28, size: 9.5, after: 5, ...(url ? { anchor: { text: url, url } } : {}) });\n\t});\n\trender(j.appendix);"
+      }
+    ]
+  }
+]

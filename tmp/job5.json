@@ -1,0 +1,20 @@
+[
+  {
+    "file": "src/exporter.ts",
+    "edits": [
+      {
+        "old": "\t\t\t\t} else if (format === 'pptx') {\n\t\t\t\t\tfiles.push({ suffix: '-presentasi', ext: 'pptx', data: await renderPptx(sheet, fileName, { author, affiliation }) });",
+        "new": "\t\t\t\t} else if (format === 'pptx') {\n\t\t\t\t\t// Poin utama diambil dari jurnal yang sama agar isi presentasi konsisten dengan artikel.\n\t\t\t\t\tconst journal = buildJournal(sheet, fileName, { author, affiliation, email: cfg.get<string>('email') || '' });\n\t\t\t\t\tfiles.push({ suffix: '-presentasi', ext: 'pptx', data: await renderPptx(sheet, fileName, { author, affiliation, highlights: journal.highlights }) });"
+      }
+    ]
+  },
+  {
+    "file": "src/excelsafe.ts",
+    "edits": [
+      {
+        "old": "    wb.eachSheet((w) => {\n        if (w.id === ws.id) { return; }",
+        "new": "    wb.eachSheet((w) => {\n        if (w.id === ws.id || w.state === 'veryHidden') { return; }"
+      }
+    ]
+  }
+]

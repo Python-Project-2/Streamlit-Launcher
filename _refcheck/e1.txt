@@ -1,0 +1,4 @@
+TITLE:"descriptive statistics" AND (TITLE:"guide" OR TITLE:"practical" OR TITLE:"review")
+TITLE:"correlation coefficient" AND (TITLE:"guide" OR TITLE:"interpretation" OR TITLE:"practical")
+TITLE:"linear regression" AND (TITLE:"guide" OR TITLE:"practical" OR TITLE:"tutorial")
+TITLE:"effect size" AND (TITLE:"guide" OR TITLE:"review" OR TITLE:"practical" OR TITLE:"beyond")

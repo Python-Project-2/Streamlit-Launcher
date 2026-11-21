@@ -1,0 +1,36 @@
+[
+  {
+    "file": "src/Journal.ts",
+    "edits": [
+      {
+        "old": "\tadvice.push('Penelitian selanjutnya disarankan membandingkan hasil dengan algoritma lain, menggunakan data dari periode yang berbeda, dan menambahkan uji inferensial seperti analisis varians untuk perbandingan kelompok.');\n\tp(advice.join(' '));",
+        "new": "\tadvice.push('Penelitian selanjutnya disarankan membandingkan hasil dengan algoritma lain, menggunakan data dari periode yang berbeda, dan menambahkan uji inferensial seperti analisis varians untuk perbandingan kelompok.');\n\tp(advice.join(' '));\n\n\tsub('Pernyataan Orisinalitas dan Hak Cipta');\n\tp(`Artikel ini merupakan karya asli penulis, belum pernah diterbitkan, dan tidak sedang diajukan kepada media publikasi lain. Seluruh uraian disusun berdasarkan hasil analisis data, sedangkan semua tabel dan gambar dihasilkan langsung dari dataset \"${fileName}\" sehingga tidak memuat materi berhak cipta pihak ketiga. Kutipan dan gagasan pihak lain telah dicantumkan sumbernya pada daftar pustaka sesuai kaidah APA. Penulis memegang hak cipta artikel dan memberikan hak publikasi noneksklusif kepada jurnal yang menerbitkannya, dengan ketentuan lisensi mengikuti kebijakan jurnal tujuan.`);"
+      }
+    ]
+  },
+  {
+    "file": "src/docxGenerator.ts",
+    "edits": [
+      {
+        "old": "\t\t...(j.highlights?.length ? [keyPointBox(j.highlights), new Paragraph({ spacing: { after: 160 }, children: [] })] : []),\n\t];\n\n\tconst body = toChildren(j.blocks);",
+        "new": "\t];\n\n\t// Label sitasi dalam teks dijadikan hyperlink menuju DOI/URL sumbernya.\n\tconst links = new Map(j.citeLinks.map((l) => [l.label, l.url]));\n\tconst body = toChildren(j.blocks, links);"
+      },
+      {
+        "old": "\tconst appendix = toChildren(j.appendix);",
+        "new": "\tconst appendix = toChildren(j.appendix, links);"
+      },
+      {
+        "old": "function toChildren(blocks: Block[]): (Paragraph | Table)[] {",
+        "new": "/** Memecah teks menjadi potongan biasa dan hyperlink pada setiap label sitasi yang dikenal. */\nfunction textRuns(text: string, links?: Map<string, string>): (TextRun | ExternalHyperlink)[] {\n\tif (!links || links.size === 0) { return [new TextRun({ text })]; }\n\tconst labels = [...links.keys()].sort((a, b) => b.length - a.length);\n\tconst out: (TextRun | ExternalHyperlink)[] = [];\n\tlet buffer = '';\n\tlet i = 0;\n\twhile (i < text.length) {\n\t\tconst hit = labels.find((l) => text.startsWith(l, i));\n\t\tif (hit) {\n\t\t\tif (buffer) { out.push(new TextRun({ text: buffer })); buffer = ''; }\n\t\t\tout.push(new ExternalHyperlink({\n\t\t\t\tlink: links.get(hit) as string,\n\t\t\t\tchildren: [new TextRun({ text: hit, color: LINK, underline: {} })],\n\t\t\t}));\n\t\t\ti += hit.length;\n\t\t} else {\n\t\t\tbuffer += text[i];\n\t\t\ti += 1;\n\t\t}\n\t}\n\tif (buffer) { out.push(new TextRun({ text: buffer })); }\n\treturn out;\n}\n\nfunction toChildren(blocks: Block[], links?: Map<string, string>): (Paragraph | Table)[] {"
+      },
+      {
+        "old": "\t\t\t\t\tindent: { firstLine: 360 },\n\t\t\t\t\tchildren: [new TextRun({ text: b.text })],\n\t\t\t\t}));",
+        "new": "\t\t\t\t\tindent: { firstLine: 360 },\n\t\t\t\t\tchildren: textRuns(b.text, links),\n\t\t\t\t}));"
+      },
+      {
+        "old": "\t\t\t\t\t\tspacing: { after: 40 },\n\t\t\t\t\t\tchildren: [new TextRun({ text: it })],\n\t\t\t\t\t}));",
+        "new": "\t\t\t\t\t\tspacing: { after: 40 },\n\t\t\t\t\t\tchildren: textRuns(it, links),\n\t\t\t\t\t}));"
+      }
+    ]
+  }
+]

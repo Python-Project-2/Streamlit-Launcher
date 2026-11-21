@@ -169670,83 +169670,6 @@ async function renderXlsx(sheet2, fileName) {
   wb2.creator = "Date Skunder";
   wb2.created = /* @__PURE__ */ new Date();
   wb2.calcProperties = { fullCalcOnLoad: true };
-  const wsL = wb2.addWorksheet("Login", { properties: { tabColor: { argb: "FF1F3864" } } });
-  widths(wsL, [2, 26, 34, 20, 18, 14]);
-  wsL.getColumn(8).hidden = true;
-  const NAVY = "FF1F3864", SKY = "FFEAF1FB", FIELD = "FFFFF2CC";
-  const band = (range, text, o) => {
-    wsL.mergeCells(range);
-    const c = wsL.getCell(range.split(":")[0]);
-    c.value = text;
-    c.font = { bold: o.bold ?? false, size: o.size, color: { argb: o.color ?? "FF1F1F1F" } };
-    if (o.fill) {
-      c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: o.fill } };
-    }
-    c.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
-    if (o.height) {
-      wsL.getRow(Number(range.slice(1).split(":")[0].replace(/\D/g, ""))).height = o.height;
-    }
-  };
-  band("B2:F2", "DATE SKUNDER", { size: 26, bold: true, fill: NAVY, color: "FFFFFFFF", height: 48 });
-  band("B3:F3", "Aplikasi Analisis Data dan Penyusun Laporan Otomatis", { size: 12, fill: SKY, color: "FF1F3864", height: 26 });
-  band("B5:F5", "SILAKAN MASUK", { size: 15, bold: true, color: "FF2F5597", height: 30 });
-  const label = (row2, text) => {
-    const c = wsL.getCell(row2, 2);
-    c.value = text;
-    c.font = { bold: true, size: 12 };
-    c.alignment = { horizontal: "right", vertical: "middle" };
-  };
-  label(7, "Username");
-  label(8, "Password");
-  label(11, "Status");
-  label(12, "Waktu masuk");
-  wsL.getRow(9).height = 10;
-  const inputCell = (addr) => {
-    const c = wsL.getCell(addr);
-    c.fill = { type: "pattern", pattern: "solid", fgColor: { argb: FIELD } };
-    c.border = { top: THIN, bottom: THIN, left: THIN, right: THIN };
-    c.font = { size: 12 };
-    c.alignment = { horizontal: "left", vertical: "middle", indent: 1 };
-    c.protection = { locked: false };
-    c.numFmt = "@";
-    wsL.getRow(Number(addr.replace(/\D/g, ""))).height = 30;
-  };
-  inputCell("C7");
-  inputCell("C8");
-  band("B10:F10", "Akun demo   \u2014   username: admin   |   password: admin123", { size: 10, fill: SKY, color: "FF595959", height: 24 });
-  wsL.getCell("H1").value = F('IF(AND(TRIM($C$7)<>"",$C$8<>""),IF(AND(LOWER(TRIM($C$7))=LOWER(AKUN!$B$2),$C$8=AKUN!$C$2),"OK","GAGAL"),"KOSONG")', "KOSONG");
-  wsL.mergeCells("C11:F11");
-  wsL.mergeCells("C12:F12");
-  const st = wsL.getCell("C11");
-  st.value = F('IF($H$1="OK","LOGIN BERHASIL \u2014 selamat datang, "&PROPER(TRIM($C$7))&". Silakan pilih menu di bawah.",IF($H$1="GAGAL","LOGIN GAGAL \u2014 username atau password tidak sesuai.","Masukkan username dan password, lalu tekan Enter."))', "Masukkan username dan password, lalu tekan Enter.");
-  st.font = { bold: true, size: 12 };
-  st.alignment = { horizontal: "left", vertical: "middle", wrapText: true, indent: 1 };
-  wsL.getRow(11).height = 30;
-  const tm = wsL.getCell("C12");
-  tm.value = F('IF($H$1="OK",TEXT(NOW(),"dd mmm yyyy hh:mm"),"-")', "-");
-  tm.alignment = { horizontal: "left", vertical: "middle", indent: 1 };
-  wsL.mergeCells("B14:F14");
-  const btn = wsL.getCell("B14");
-  btn.value = { text: "MASUK KE DASHBOARD   \u2192", hyperlink: "#'Daftar Isi'!A1" };
-  btn.font = { bold: true, size: 13, color: { argb: "FFFFFFFF" } };
-  btn.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF2F5597" } };
-  btn.alignment = { horizontal: "center", vertical: "middle" };
-  wsL.getRow(14).height = 34;
-  band("B16:F16", "MENU APLIKASI", { size: 12, bold: true, fill: SKY, color: "FF1F3864", height: 24 });
-  wsL.addConditionalFormatting({
-    ref: "C11:F11",
-    rules: [
-      { type: "expression", formulae: ['$H$1="OK"'], priority: 1, style: { fill: { type: "pattern", pattern: "solid", bgColor: { argb: "FFE2EFDA" } }, font: { color: { argb: "FF1E6B34" }, bold: true } } },
-      { type: "expression", formulae: ['$H$1="GAGAL"'], priority: 2, style: { fill: { type: "pattern", pattern: "solid", bgColor: { argb: "FFFCE4E4" } }, font: { color: { argb: "FFC00000" }, bold: true } } }
-    ]
-  });
-  wsL.protect("admin123", { selectLockedCells: true, selectUnlockedCells: true });
-  const wsA = wb2.addWorksheet("AKUN", { properties: { tabColor: { argb: "FF7F7F7F" } } });
-  widths(wsA, [18, 20, 16, 26]);
-  hdr(wsA.addRow(["Peran", "Username", "Password", "Nama tampilan"]));
-  wsA.addRow(["Administrator", "admin", "admin123", "Administrator"]);
-  wsA.addRow(["Petunjuk", "Ubah username/password pada baris di atas bila diperlukan.", "", ""]);
-  wsA.state = "veryHidden";
   const wsToc = wb2.addWorksheet("Daftar Isi", { properties: { tabColor: { argb: "FF1F3864" } } });
   const H = sheet2.headers, P = H.length, N = sheet2.rows.length;
   const last = Math.max(2, N + 1);
@@ -169782,8 +169705,8 @@ async function renderXlsx(sheet2, fileName) {
   const ws0 = wb2.addWorksheet("Ringkasan", { properties: { tabColor: { argb: BLUE2 } } });
   widths(ws0, [44, 22, 70]);
   title(ws0, `Ringkasan Analisis: ${fileName}`);
-  const kv = (label2, v, fmt2) => {
-    const r = ws0.addRow([label2, v]);
+  const kv = (label, v, fmt2) => {
+    const r = ws0.addRow([label, v]);
     r.getCell(1).font = { bold: true };
     r.getCell(1).border = BORDER;
     r.getCell(2).border = BORDER;
@@ -169881,7 +169804,7 @@ async function renderXlsx(sheet2, fileName) {
     const cur = { row: 2 };
     const tc = /* @__PURE__ */ new Map();
     sheet2.columns.forEach((c) => tc.set(TYPE_ID2[c.type] ?? c.type, (tc.get(TYPE_ID2[c.type] ?? c.type) ?? 0) + 1));
-    side(wsP, cur, 12, "Komposisi tipe kolom dataset", hbarChart([...tc.entries()].sort((a, b) => b[1] - a[1]).map(([label2, value]) => ({ label: label2, value })), { fmt: (v) => String(Math.round(v)) }));
+    side(wsP, cur, 12, "Komposisi tipe kolom dataset", hbarChart([...tc.entries()].sort((a, b) => b[1] - a[1]).map(([label, value]) => ({ label, value })), { fmt: (v) => String(Math.round(v)) }));
     const miss = sheet2.columns.filter((c) => c.missing > 0).map((c) => ({ label: c.name, value: c.missing / Math.max(1, c.missing + c.count) * 100 })).sort((a, b) => b.value - a.value).slice(0, 8);
     if (miss.length) {
       side(wsP, cur, 12, "Persentase data hilang per kolom", hbarChart(miss, { fmt: (v) => (Math.round(v * 10) / 10).toString(), max: 100, labelLen: 14 }));
@@ -170143,8 +170066,8 @@ async function renderXlsx(sheet2, fileName) {
       for (let r = f0 + 1; r <= e; r++) {
         wsT.getCell(r, 4).numFmt = PCT;
       }
-      const stat = (label2, f, fmt2 = NUM) => {
-        const r = wsT.addRow([label2, f]);
+      const stat = (label, f, fmt2 = NUM) => {
+        const r = wsT.addRow([label, f]);
         r.getCell(1).font = { bold: true };
         r.getCell(2).numFmt = fmt2;
       };
@@ -170174,8 +170097,8 @@ async function renderXlsx(sheet2, fileName) {
         wsT.getCell(r, 3).numFmt = INT;
         wsT.getCell(r, 4).numFmt = PCT;
       }
-      const stat = (label2, f, fmt2 = NUM) => {
-        const r = wsT.addRow([label2, f]);
+      const stat = (label, f, fmt2 = NUM) => {
+        const r = wsT.addRow([label, f]);
         r.getCell(1).font = { bold: true };
         r.getCell(2).numFmt = fmt2;
       };
@@ -170197,8 +170120,8 @@ async function renderXlsx(sheet2, fileName) {
     title(wsR, "Analisis Persediaan: Parameter, Status Stok, ABC, dan Konsentrasi (rumus hidup)");
     note(wsR, `Dihitung dari sheet Persediaan (${items.length} item${stock.items.length > items.length ? `, dari ${stock.items.length} SKU` : ""}). Kolom item: "${stock.itemCol}", kuantitas: "${stock.qtyCol}"${stock.priceCol ? `, harga: "${stock.priceCol}"` : ""}.`);
     hdr(wsR.addRow(["Parameter", "Nilai", "Keterangan"]));
-    const prm = (label2, f, fmt2, ket = "") => {
-      const r = wsR.addRow([label2, f, ket]);
+    const prm = (label, f, fmt2, ket = "") => {
+      const r = wsR.addRow([label, f, ket]);
       r.getCell(1).font = { bold: true };
       r.getCell(1).border = BORDER;
       r.getCell(2).border = BORDER;
@@ -170281,11 +170204,11 @@ async function renderXlsx(sheet2, fileName) {
       fmtCols(wsR, k0, wsR.rowCount, [5], PCT);
       wsR.addRow([]);
       if (cats.length >= 2) {
-        side(wsR, cur, SC, "Nilai persediaan menurut kategori", hbarChart(cats.slice(0, 8).map(([label2, value]) => ({ label: label2, value })), { labelLen: 14 }));
+        side(wsR, cur, SC, "Nilai persediaan menurut kategori", hbarChart(cats.slice(0, 8).map(([label, value]) => ({ label, value })), { labelLen: 14 }));
       }
     }
-    const nameRow = (label2, list) => {
-      title(wsR, label2);
+    const nameRow = (label, list) => {
+      title(wsR, label);
       hdr(wsR.addRow(["Item", "Stok", "Nilai", "Status"]));
       const t0 = wsR.rowCount + 1;
       list.slice(0, 8).forEach((x, i) => {
@@ -170516,28 +170439,28 @@ async function renderXlsx(sheet2, fileName) {
     kv3("F1 tertimbang", F(`SUMPRODUCT(G${p0}:G${p1},H${p0}:H${p1})/${T}`));
     kv3("Kappa Cohen = (po - pe) / (1 - pe)", F(`(B${pc}-SUM(I${p0}:I${p1})/${T}^2)/(1-SUM(I${p0}:I${p1})/${T}^2)`), R3);
     kv3("Galat (error rate) = 1 - akurasi", F(`1-B${pc}`));
-    const wsA2 = wb2.addWorksheet("DT Aturan");
-    widths(wsA2, [6, 150]);
-    title(wsA2, `Aturan keputusan C4.5 (target: ${dt.targetAttribute})`);
-    hdr(wsA2.addRow(["No", "Aturan"]));
-    const a0 = wsA2.rowCount + 1;
-    dt.rules.slice(0, 1e3).forEach((r, i) => wsA2.addRow([i + 1, r]));
-    body(wsA2, a0, wsA2.rowCount, 2);
-    wsA2.views = [{ state: "frozen", ySplit: 2 }];
-    const wsL2 = wb2.addWorksheet("DT Langkah");
-    widths(wsL2, [6, 46, 40, 70, 40]);
-    title(wsL2, "Langkah perhitungan rinci Decision Tree (entropi, gain, gain ratio)");
-    hdr(wsL2.addRow(["No", "Uraian", "Rumus", "Perhitungan", "Hasil"]));
-    const l0 = wsL2.rowCount + 1;
-    dt.detailedCalculations.slice(0, 1e3).forEach((x) => wsL2.addRow([x.step, noEmoji3(x.description), x.formula, x.calculation, String(x.result)]));
-    for (let r = l0; r <= wsL2.rowCount; r++) {
+    const wsA = wb2.addWorksheet("DT Aturan");
+    widths(wsA, [6, 150]);
+    title(wsA, `Aturan keputusan C4.5 (target: ${dt.targetAttribute})`);
+    hdr(wsA.addRow(["No", "Aturan"]));
+    const a0 = wsA.rowCount + 1;
+    dt.rules.slice(0, 1e3).forEach((r, i) => wsA.addRow([i + 1, r]));
+    body(wsA, a0, wsA.rowCount, 2);
+    wsA.views = [{ state: "frozen", ySplit: 2 }];
+    const wsL = wb2.addWorksheet("DT Langkah");
+    widths(wsL, [6, 46, 40, 70, 40]);
+    title(wsL, "Langkah perhitungan rinci Decision Tree (entropi, gain, gain ratio)");
+    hdr(wsL.addRow(["No", "Uraian", "Rumus", "Perhitungan", "Hasil"]));
+    const l0 = wsL.rowCount + 1;
+    dt.detailedCalculations.slice(0, 1e3).forEach((x) => wsL.addRow([x.step, noEmoji3(x.description), x.formula, x.calculation, String(x.result)]));
+    for (let r = l0; r <= wsL.rowCount; r++) {
       for (let c = 1; c <= 5; c++) {
-        const cell2 = wsL2.getCell(r, c);
+        const cell2 = wsL.getCell(r, c);
         cell2.alignment = { wrapText: true, vertical: "top" };
         cell2.border = BORDER;
       }
     }
-    wsL2.views = [{ state: "frozen", ySplit: 2 }];
+    wsL.views = [{ state: "frozen", ySplit: 2 }];
   }
   const fc = layoutFlow(sheet2, "slide", `Dataset ${fileName}, lembar ${sheet2.name}`);
   const wsW = wb2.addWorksheet("Workflow", { properties: { tabColor: { argb: "FFC00000" } } });
@@ -170588,22 +170511,7 @@ async function renderXlsx(sheet2, fileName) {
     const r = wsM.addRow([s]);
     r.alignment = { wrapText: true, vertical: "top" };
   });
-  const menuOrder = ["Ringkasan", "Data", "Statistik", "Korelasi", "Regresi", "Persediaan", "Decision Tree", "Workflow", "Grafik", "Metodologi"];
-  const avail = wb2.worksheets.map((w) => w.name).filter((n) => !["Login", "AKUN", "Daftar Isi"].includes(n));
-  [...menuOrder.filter((n) => avail.includes(n)), ...avail.filter((n) => !menuOrder.includes(n))].slice(0, 9).forEach((name, i) => {
-    const r = 17 + i;
-    const c1 = wsL.getCell(r, 2);
-    c1.value = name;
-    c1.font = { bold: true, color: { argb: "FF1F3864" } };
-    c1.alignment = { horizontal: "left", vertical: "middle", indent: 1 };
-    const c2 = wsL.getCell(r, 3);
-    c2.value = { text: "Buka  >", hyperlink: `#'${name.replace(/'/g, "''")}'!A1` };
-    c2.font = { color: { argb: "FF0563C1" }, underline: true };
-    c2.alignment = { horizontal: "left", vertical: "middle", indent: 1 };
-    wsL.getRow(r).height = 20;
-  });
   fillToc(wb2, wsToc, fileName, {
-    "Login": "Halaman masuk aplikasi (username: admin, password: admin123)",
     "Ringkasan": "Skor kualitas data (rumus hidup), hasil pemeriksaan, catatan otomatis, rekomendasi",
     "Profil Kolom": "Tipe, jumlah terisi/hilang, nilai unik, min/rata-rata/maks per kolom",
     "Data": "Data sumber (dipakai semua rumus)",
@@ -170631,16 +170539,6 @@ async function renderXlsx(sheet2, fileName) {
     console.warn("[Date Skunder] sel dibersihkan:", rep);
   }
   polishWorkbook(wb2);
-  wsL.pageSetup = {
-    ...wsL.pageSetup,
-    orientation: "portrait",
-    fitToPage: true,
-    fitToWidth: 1,
-    fitToHeight: 1,
-    printArea: "B2:F25",
-    horizontalCentered: true,
-    margins: { left: 0.5, right: 0.5, top: 0.6, bottom: 0.6, header: 0.3, footer: 0.3 }
-  };
   wb2.views = [{ x: 0, y: 0, width: 24e3, height: 12e3, firstSheet: 0, activeTab: 0, visibility: "visible" }];
   return new Uint8Array(await wb2.xlsx.writeBuffer());
 }

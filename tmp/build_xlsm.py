@@ -61,6 +61,14 @@ for name in ('Login',):
 
 src = wb.Worksheets('Data')
 
+if 'AKUN' not in [ws.Name for ws in wb.Worksheets]:
+    akun = wb.Worksheets.Add(After=wb.Worksheets(wb.Worksheets.Count))
+    akun.Name = 'AKUN'
+    akun.Range('A1:D1').Value = [['Peran', 'Username', 'Password', 'Nama tampilan']]
+    akun.Range('A2:D2').Value = [['Administrator', 'admin', 'admin123', 'Administrator']]
+    akun.Range('A1:D1').Font.Bold = True
+    akun.Visible = 2
+
 # ── halaman LOGIN di depan ──
 login = wb.Worksheets.Add(wb.Worksheets(1))
 login.Name = 'LOGIN'
@@ -69,29 +77,23 @@ login.Cells.Interior.Color = BG
 login.Cells.Font.Color = TEXT
 login.Cells.Font.Name = 'Segoe UI'
 for i in range(1, 15):
-    login.Columns(i).ColumnWidth = 5.6
-for r in range(1, 34):
-    login.Rows(r).RowHeight = 19
-login.Activate()
-xl.ActiveWindow.DisplayGridlines = False
-login.Range('B4:N30').Interior.Color = BG
-
-for i in range(1, 15):
     login.Columns(i).ColumnWidth = 8.5
 for r in range(1, 34):
     login.Rows(r).RowHeight = 20
 
-card = login.Range('D6:K27')
+card = login.Range('D6:K28')
 card.Interior.Color = PANEL
-card.Borders.LineStyle = 1
-card.Borders.Color = LINE
-card.Borders.Weight = 1
-dash_top = login.Shapes.AddShape(1, card.Left, card.Top, card.Width, 3)
-dash_top.Fill.Solid()
-dash_top.Fill.ForeColor.RGB = ACCENT
-dash_top.Line.Visible = 0
+for idx in (7, 8, 9, 10):
+    card.Borders(idx).LineStyle = 1
+    card.Borders(idx).Color = LINE
+    card.Borders(idx).Weight = 1
 
-logo = login.Shapes.AddPicture(LOGO, 0, -1, card.Left + (card.Width - 48) / 2, card.Top + 12, 48, 48)
+top_bar = login.Shapes.AddShape(1, card.Left, card.Top, card.Width, 3)
+top_bar.Fill.Solid()
+top_bar.Fill.ForeColor.RGB = ACCENT
+top_bar.Line.Visible = 0
+
+logo = login.Shapes.AddPicture(LOGO, 0, -1, card.Left + (card.Width - 44) / 2, card.Top + 12, 44, 44)
 logo.Name = 'logoLogin'
 
 login.Range('D9:K9').Merge()
@@ -111,15 +113,52 @@ t.Font.Color = MUTED
 t.HorizontalAlignment = -4108
 t.VerticalAlignment = -4108
 
-login.Range('D12:K12').Merge()
-t = login.Range('D12')
-t.Value = 'Masuk untuk membuka dashboard'
-t.Font.Size = 11
-t.Font.Color = TEXT
-t.HorizontalAlignment = -4108
-t.VerticalAlignment = -4108
 
-btn = login.Shapes.AddShape(5, login.Range('D14').Left + 24, login.Range('D14').Top, card.Width - 48, 46)
+def login_label(rng, text):
+    login.Range(rng).Merge()
+    c = login.Range(rng.split(':')[0])
+    c.Value = text
+    c.Font.Size = 8
+    c.Font.Bold = True
+    c.Font.Color = MUTED
+    c.HorizontalAlignment = -4152
+    c.VerticalAlignment = -4108
+
+
+def login_input(rng):
+    login.Range(rng).Merge()
+    c = login.Range(rng.split(':')[0])
+    c.Interior.Color = rgb(9, 12, 18)
+    for idx in (7, 8, 9, 10):
+        c.Borders(idx).LineStyle = 1
+        c.Borders(idx).Color = LINE
+        c.Borders(idx).Weight = 1
+    c.Font.Size = 11
+    c.Font.Color = TEXT
+    c.HorizontalAlignment = -4131
+    c.VerticalAlignment = -4108
+    c.IndentLevel = 1
+    return c
+
+
+login_label('D12:F12', 'USERNAME')
+login_input('G12:K12')
+
+login_label('D14:F14', 'PASSWORD')
+pwd = login_input('G14:H14')
+pwd.NumberFormat = ';;;'          # isi password tidak ditampilkan
+pwd.Font.Size = 12
+
+login.Range('I14:K14').Merge()
+bul = login.Range('I14')
+bul.Formula = '=IF($G$14="","",REPT("•",LEN($G$14)))'
+bul.Font.Size = 11
+bul.Font.Color = MUTED
+bul.HorizontalAlignment = -4131
+bul.VerticalAlignment = -4108
+bul.IndentLevel = 0
+
+btn = login.Shapes.AddShape(5, card.Left + 24, login.Range('D16').Top, card.Width - 48, 44)
 btn.Name = 'btnMasuk'
 btn.Fill.Solid()
 btn.Fill.ForeColor.RGB = ACCENT
@@ -132,16 +171,15 @@ btn.TextFrame2.TextRange.Font.Bold = True
 btn.TextFrame2.TextRange.Font.Name = 'Segoe UI'
 btn.TextFrame2.VerticalAnchor = 3
 btn.TextFrame2.HorizontalAnchor = 2
-btn.OnAction = 'OpenLogin'
+btn.OnAction = 'DoLoginSheet'
 
-login.Range('D17:K18').Merge()
-t = login.Range('D17')
-t.Value = 'Seluruh lembar kerja disembunyikan sampai Anda masuk.'
+login.Range('D19:K19').Merge()
+t = login.Range('D19')
+t.Value = 'Masukkan username dan password, lalu klik MASUK.'
 t.Font.Size = 8.5
 t.Font.Color = MUTED
 t.HorizontalAlignment = -4108
 t.VerticalAlignment = -4108
-t.WrapText = True
 
 login.Range('D21:K21').Merge()
 t = login.Range('D21')
@@ -150,8 +188,15 @@ t.Font.Size = 8.5
 t.Font.Color = MUTED
 t.HorizontalAlignment = -4108
 
-login.Range('D25:K25').Merge()
-t = login.Range('D25')
+login.Range('D23:K23').Merge()
+t = login.Range('D23')
+t.Value = 'Password tidak ditampilkan saat diketik.'
+t.Font.Size = 7.5
+t.Font.Color = MUTED
+t.HorizontalAlignment = -4108
+
+login.Range('D27:K27').Merge()
+t = login.Range('D27')
 t.Value = '© 2026 Date Skunder  ·  Data: SuperMarket Analysis'
 t.Font.Size = 8
 t.Font.Color = MUTED
@@ -225,9 +270,10 @@ cards = [
 for rng, label, formula, fmt, note in cards:
     r = dash.Range(rng)
     r.Interior.Color = PANEL
-    r.Borders.LineStyle = 1
-    r.Borders.Color = LINE
-    r.Borders.Weight = 1
+    for idx in (7, 8, 9, 10):
+        r.Borders(idx).LineStyle = 1
+        r.Borders(idx).Color = LINE
+        r.Borders(idx).Weight = 1
     c1, c2 = rng.split(':')
     col1 = dash.Range(c1).Column
     row1 = dash.Range(c1).Row
@@ -401,6 +447,8 @@ if dl is not None:
     dl.Font.Name = 'Segoe UI'
     dl.NumberFormatLocal = '#.##0'
 ch1.Axes(1).ReversePlotOrder = True
+ch1.Axes(2).TickLabelPosition = -4142
+ch1.Axes(2).HasMajorGridlines = False
 
 ch2 = add_chart('H13:L30', 4, 'TREN PENJUALAN BULANAN', dd.Range(f'A15:B{15 + len(months)}'))
 sc = ch2.SeriesCollection(1)
@@ -430,9 +478,9 @@ if dl is not None:
 
 # navigasi
 navs = [
-    ('Data', 'Data sumber'), ('Statistik', 'Statistik'), ('Korelasi', 'Korelasi'),
-    ('Persediaan', 'Persediaan'), ('Decision Tree', 'C4.5'), ('Workflow', 'Alur'),
-    ('Grafik', 'Grafik'), ('Metodologi', 'Rumus'),
+    ('Data', 'Data'), ('Statistik', 'Statistik'), ('Korelasi', 'Korelasi'),
+    ('Persediaan', 'Persediaan'), ('Decision Tree', 'Decision Tree'), ('Workflow', 'Workflow'),
+    ('Grafik', 'Grafik'), ('Metodologi', 'Metodologi'),
 ]
 x = dash.Range('C32').Left
 top = dash.Range('C32').Top
@@ -592,7 +640,7 @@ login.PageSetup.Orientation = 1
 login.PageSetup.Zoom = False
 login.PageSetup.FitToPagesWide = 1
 login.PageSetup.FitToPagesTall = 1
-login.PageSetup.PrintArea = 'A1:N30'
+login.PageSetup.PrintArea = 'A1:N31'
 
 # Simpan dalam keadaan terkunci: tanpa makro pun hanya halaman login yang terlihat.
 login.Activate()

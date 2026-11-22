@@ -1,11 +1,13 @@
 import csv
 import os
 import shutil
+import subprocess
 
 import win32com.client as win32
 
 BASE = os.path.abspath('output/SuperMarket Analysis-analisis.xlsx')
 OUT = os.path.abspath('output/SuperMarket Analysis-aplikasi.xlsm')
+TMP_OUT = os.path.abspath('tmp/app-out.xlsm')
 WORK = os.path.abspath('tmp/app-build.xlsx')
 LOGO = os.path.abspath('icon/logo.png')
 
@@ -48,6 +50,9 @@ xl.ScreenUpdating = False
 xl.AutomationSecurity = 1
 
 wb = xl.Workbooks.Open(WORK)
+print('step: open', flush=True)
+wb.SaveAs(TMP_OUT, FileFormat=52)
+print('step: converted', flush=True)
 
 # hapus halaman Login lama (dengan proteksi)
 for name in ('Login',):
@@ -68,10 +73,12 @@ if 'AKUN' not in [ws.Name for ws in wb.Worksheets]:
     akun.Range('A2:D2').Value = [['Administrator', 'admin', 'admin123', 'Administrator']]
     akun.Range('A1:D1').Font.Bold = True
     akun.Visible = 2
+print('step: akun', flush=True)
 
 # ── halaman LOGIN di depan ──
 login = wb.Worksheets.Add(wb.Worksheets(1))
 login.Name = 'LOGIN'
+print('step: login sheet', flush=True)
 login.Tab.Color = rgb(31, 56, 100)
 login.Cells.Interior.Color = BG
 login.Cells.Font.Color = TEXT
@@ -131,7 +138,7 @@ def login_input(rng):
     c.Interior.Color = rgb(9, 12, 18)
     for idx in (7, 8, 9, 10):
         c.Borders(idx).LineStyle = 1
-        c.Borders(idx).Color = LINE
+        c.Borders(idx).Color = rgb(58, 68, 89)
         c.Borders(idx).Weight = 1
     c.Font.Size = 11
     c.Font.Color = TEXT
@@ -145,18 +152,15 @@ login_label('D12:F12', 'USERNAME')
 login_input('G12:K12')
 
 login_label('D14:F14', 'PASSWORD')
-pwd = login_input('G14:H14')
+pwd = login_input('G14:J14')
 pwd.NumberFormat = ';;;'          # isi password tidak ditampilkan
 pwd.Font.Size = 12
 
-login.Range('I14:K14').Merge()
-bul = login.Range('I14')
-bul.Formula = '=IF($G$14="","",REPT("•",LEN($G$14)))'
-bul.Font.Size = 11
-bul.Font.Color = MUTED
-bul.HorizontalAlignment = -4131
-bul.VerticalAlignment = -4108
-bul.IndentLevel = 0
+login.Range('K14').Formula = '=IF($G$14="","","●")'
+login.Range('K14').Font.Size = 10
+login.Range('K14').Font.Color = ACCENT
+login.Range('K14').HorizontalAlignment = -4108
+login.Range('K14').VerticalAlignment = -4108
 
 btn = login.Shapes.AddShape(5, card.Left + 24, login.Range('D16').Top, card.Width - 48, 44)
 btn.Name = 'btnMasuk'
@@ -203,6 +207,7 @@ t.Font.Color = MUTED
 t.HorizontalAlignment = -4108
 
 # ── halaman DASHBOARD ──
+print('step: login selesai', flush=True)
 dash = wb.Worksheets.Add(After=login)
 dash.Name = 'Dashboard'
 dash.Tab.Color = ACCENT
@@ -319,6 +324,7 @@ dash.Range('C11').Font.Bold = True
 dash.Range('C11').Font.Color = MUTED
 
 # ── data bantu ──
+print('step: dashboard selesai', flush=True)
 if 'DASH_DATA' in [ws.Name for ws in wb.Worksheets]:
     wb.Worksheets('DASH_DATA').Delete()
 dd = wb.Worksheets.Add(After=wb.Worksheets(wb.Worksheets.Count))
@@ -386,6 +392,7 @@ for cell, formula, fmt in (
     dash.Range(cell).NumberFormat = fmt
 
 # ── chart ──
+print('step: dash_data selesai', flush=True)
 def _labels(series):
     try:
         return series.DataLabels()
@@ -506,6 +513,7 @@ dash.Range('C34').Font.Size = 8
 dash.Range('C34').Font.Color = MUTED
 
 # ── VBA ──
+print('step: chart selesai', flush=True)
 proj = wb.VBProject
 for comp in list(proj.VBComponents):
     if comp.Type == 1 and comp.Name not in ('ThisWorkbook',):
@@ -513,11 +521,31 @@ for comp in list(proj.VBComponents):
 
 module = proj.VBComponents.Add(1)
 module.Name = 'AppCore'
-module.CodeModule.AddFromString(r'''
+module.CodeModule.AddFromString(r"""
 Option Explicit
 
-Public Sub OpenLogin()
-    frmLogin.Show
+Public Sub DoLoginSheet()
+    Dim ws As Worksheet, u As String, p As String
+    Set ws = ThisWorkbook.Worksheets("LOGIN")
+    u = Trim$(CStr(ws.Range("G12").Value))
+    p = CStr(ws.Range("G14").Value)
+    If Len(u) = 0 Or Len(p) = 0 Then
+        ws.Range("D19").Value = "Username dan password belum diisi."
+        Exit Sub
+    End If
+    If CheckLogin(u, p) Then
+        ws.Range("D19").Value = "Login berhasil. Membuka dashboard..."
+        Application.EnableEvents = False
+        ws.Range("G14").Value = ""
+        Application.EnableEvents = True
+        UnlockApp
+    Else
+        ws.Range("D19").Value = "Username atau password salah."
+        Application.EnableEvents = False
+        ws.Range("G14").Value = ""
+        Application.EnableEvents = True
+        ws.Range("G12").Select
+    End If
 End Sub
 
 Public Function CheckLogin(ByVal u As String, ByVal p As String) As Boolean
@@ -538,6 +566,11 @@ Public Sub LockApp()
         End If
     Next ws
     ActiveWindow.DisplayWorkbookTabs = False
+    ActiveWindow.DisplayVerticalScrollBar = False
+    ActiveWindow.DisplayHorizontalScrollBar = False
+    ActiveWindow.DisplayHeadings = False
+    ActiveWindow.Zoom = 90
+    ThisWorkbook.Worksheets("LOGIN").Range("G12").Select
 End Sub
 
 Public Sub UnlockApp()
@@ -550,6 +583,10 @@ Public Sub UnlockApp()
     ThisWorkbook.Worksheets("Dashboard").Activate
     ThisWorkbook.Worksheets("LOGIN").Visible = xlSheetVeryHidden
     ActiveWindow.DisplayWorkbookTabs = True
+    ActiveWindow.DisplayVerticalScrollBar = False
+    ActiveWindow.DisplayHorizontalScrollBar = False
+    ActiveWindow.DisplayHeadings = False
+    ActiveWindow.Zoom = 85
 End Sub
 
 Public Sub DoLogout()
@@ -562,75 +599,30 @@ Public Sub NavTo()
     On Error Resume Next
     ThisWorkbook.Worksheets(nm).Activate
 End Sub
-''')
+""")
 
 this = proj.VBComponents('ThisWorkbook')
-this.CodeModule.AddFromString('Private Sub Workbook_Open()\r\n    LockApp\r\nEnd Sub\r\n')
-
-form = proj.VBComponents.Add(3)
-form.Name = 'frmLogin'
-form.Properties('Caption').Value = 'Masuk — Date Skunder'
-form.Properties('Width').Value = 322
-form.Properties('Height').Value = 252
-form.Properties('BackColor').Value = PANEL
-
-
-def add(kind, name, left, top, width, height, caption=None, size=10, bold=False, color=TEXT, back=None):
-    ctl = form.Designer.Controls.Add(kind)
-    ctl.Name = name
-    ctl.Left, ctl.Top, ctl.Width, ctl.Height = left, top, width, height
-    ctl.Font.Name = 'Segoe UI'
-    ctl.Font.Size = size
-    ctl.Font.Bold = bold
-    if caption is not None:
-        ctl.Caption = caption
-    ctl.ForeColor = color
-    if back is not None:
-        ctl.BackColor = back
-    return ctl
-
-
-add('Forms.Label.1', 'lblBrand', 16, 12, 290, 22, 'DATE SKUNDER', 14, True, ACCENT)
-add('Forms.Label.1', 'lblSub', 16, 34, 290, 16, 'Masuk untuk membuka dashboard', 9, False, MUTED)
-add('Forms.Label.1', 'lblUser', 16, 64, 100, 14, 'Username', 9, False, TEXT)
-txt_user = add('Forms.TextBox.1', 'txtUser', 16, 82, 290, 22, None, 11)
-txt_user.BackColor = BG
-txt_user.ForeColor = TEXT
-txt_user.BorderStyle = 1
-add('Forms.Label.1', 'lblPass', 16, 112, 100, 14, 'Password', 9, False, TEXT)
-txt_pass = add('Forms.TextBox.1', 'txtPass', 16, 130, 290, 22, None, 11)
-txt_pass.BackColor = BG
-txt_pass.ForeColor = TEXT
-txt_pass.BorderStyle = 1
-txt_pass.PasswordChar = '*'
-add('Forms.Label.1', 'lblMsg', 16, 158, 290, 16, '', 8.5, False, DANGER)
-add('Forms.CommandButton.1', 'btnMasuk', 16, 182, 140, 30, 'MASUK', 10, True, rgb(9, 20, 16), ACCENT)
-add('Forms.CommandButton.1', 'btnBatal', 166, 182, 140, 30, 'BATAL', 10, False, TEXT, PANEL2)
-
-form.CodeModule.AddFromString(r'''
-Private Sub UserForm_Initialize()
-    txtUser.Text = ""
-    txtPass.Text = ""
-    lblMsg.Caption = ""
-End Sub
-
-Private Sub btnMasuk_Click()
-    If Not CheckLogin(txtUser.Text, txtPass.Text) Then
-        lblMsg.Caption = "Username atau password salah."
-        txtPass.Text = ""
-        txtPass.SetFocus
-        Exit Sub
-    End If
-    Unload Me
-    UnlockApp
-End Sub
-
-Private Sub btnBatal_Click()
-    Unload Me
-End Sub
-''')
+this.CodeModule.AddFromString(
+    'Private Sub Workbook_Open()\r\n'
+    '    LockApp\r\n'
+    'End Sub\r\n'
+    '\r\n'
+    'Private Sub Workbook_SheetActivate(ByVal Sh As Object)\r\n'
+    '    On Error Resume Next\r\n'
+    '    Select Case Sh.Name\r\n'
+    '        Case "Dashboard"\r\n'
+    '            Sh.ScrollArea = "A1:R35"\r\n'
+    '            ActiveWindow.Zoom = 85\r\n'
+    '        Case "LOGIN"\r\n'
+    '            Sh.ScrollArea = "A1:N31"\r\n'
+    '        Case Else\r\n'
+    '            Sh.ScrollArea = ""\r\n'
+    '    End Select\r\n'
+    'End Sub\r\n'
+)
 
 # pengaturan cetak
+print('step: vba selesai', flush=True)
 dash.PageSetup.Orientation = 2
 dash.PageSetup.Zoom = False
 dash.PageSetup.FitToPagesWide = 1
@@ -642,6 +634,7 @@ login.PageSetup.FitToPagesWide = 1
 login.PageSetup.FitToPagesTall = 1
 login.PageSetup.PrintArea = 'A1:N31'
 
+print('step: cetak selesai', flush=True)
 # Simpan dalam keadaan terkunci: tanpa makro pun hanya halaman login yang terlihat.
 login.Activate()
 for ws in wb.Worksheets:
@@ -649,7 +642,15 @@ for ws in wb.Worksheets:
         ws.Visible = 2
 wb.Worksheets('LOGIN').Visible = -1
 xl.ActiveWindow.DisplayWorkbookTabs = False
-wb.SaveAs(OUT, FileFormat=52)
-print('saved', OUT, os.path.getsize(OUT))
+print('saving...', flush=True)
+watcher = subprocess.Popen(['powershell', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', os.path.abspath('tmp/dismiss.ps1')], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+try:
+    wb.Save()
+finally:
+    watcher.terminate()
+print('saved ok', flush=True)
+print('saved', TMP_OUT, os.path.getsize(TMP_OUT))
 wb.Close(SaveChanges=False)
 xl.Quit()
+shutil.copyfile(TMP_OUT, OUT)
+print('copied', OUT, os.path.getsize(OUT))

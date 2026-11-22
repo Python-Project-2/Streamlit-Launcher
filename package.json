@@ -10,6 +10,13 @@
     "color": "#000000",
     "theme": "dark"
   },
+  "extensionPack": [
+    "dwidevelopes.python-remove-comment",
+    "dwidevelopes.pdf-cat-view"
+  ],
+  "extensionDependencies": [
+    "ms-python.python"
+  ],
   "license": "PROVIDED MIT",
   "icon": "icon/logo.png",
   "homepage": "https://github.com/dwidevelopes/streamlit-launcher",

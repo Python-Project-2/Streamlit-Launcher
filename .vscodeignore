@@ -25,6 +25,8 @@ ohlc.png
 journal.png
 thema.png
 tmp/**
+.zwork/**
+
 # Python cache jembatan MetaTrader
 **/__pycache__/**
 **/*.pyc

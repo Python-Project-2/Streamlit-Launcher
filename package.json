@@ -169,6 +169,22 @@
         "title": "Date Skunder: Open Preview & Analysis"
       },
       {
+        "command": "date-skunder.preview.prev",
+        "title": "Date Skunder: Pratinjau Sebelumnya"
+      },
+      {
+        "command": "date-skunder.preview.next",
+        "title": "Date Skunder: Pratinjau Berikutnya"
+      },
+      {
+        "command": "date-skunder.preview.recent",
+        "title": "Date Skunder: Daftar Pratinjau Terakhir (SQLite)"
+      },
+      {
+        "command": "date-skunder.preview.openFile",
+        "title": "Date Skunder: Buka Berkas CSV/Excel untuk Pratinjau"
+      },
+      {
         "command": "date-skunder.exportDocx",
         "title": "Date Skunder: Export Jurnal (DOCX)",
         "icon": "icon/docx.svg"
@@ -1022,6 +1038,16 @@
       {
         "command": "dateSkunder.publishView.focus",
         "key": "ctrl+alt+5"
+      },
+      {
+        "command": "date-skunder.preview.prev",
+        "key": "ctrl+alt+left",
+        "when": "activeCustomEditorId == dateSkunder.viewer"
+      },
+      {
+        "command": "date-skunder.preview.next",
+        "key": "ctrl+alt+right",
+        "when": "activeCustomEditorId == dateSkunder.viewer"
       }
     ],
     "configuration": {
@@ -1071,6 +1097,11 @@
           "type": "boolean",
           "default": true,
           "description": "Tampilkan file hasil export di file manager (Explorer/Finder) secara otomatis."
+        },
+        "dateSkunder.preview.plain": {
+          "type": "boolean",
+          "default": true,
+          "markdownDescription": "Halaman pratinjau CSV/Excel tampil polosan: seluruh ikon emoji di judul bagian, tombol, dan label dihapus (termasuk ikon bawaan Windows yang tampil sebagai emoji). Isi data, nama kolom, dan kode VBA tidak diubah. Matikan untuk menampilkan ikon lagi."
         },
         "dateSkunder.easycast.slideSeconds": {
           "type": "number",
@@ -1927,19 +1958,24 @@
     "check:room-activate": "node scripts/check-room-activate.cjs",
     "check:compile": "node scripts/check-compile.cjs",
     "preview:website": "node scripts/preview-website.cjs",
-    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs && node scripts/check-builder.cjs && node scripts/check-trading.cjs && node scripts/check-tradingview.cjs && node scripts/check-mutlak.cjs && node scripts/check-books.cjs && node scripts/check-mt.cjs"
+    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs && node scripts/check-builder.cjs && node scripts/check-trading.cjs && node scripts/check-tradingview.cjs && node scripts/check-mutlak.cjs && node scripts/check-books.cjs && node scripts/check-mt.cjs && node scripts/check-excel-vba.cjs && node scripts/check-preview-ui.cjs",
+    "check:excel-vba": "node scripts/check-excel-vba.cjs",
+    "check:preview-ui": "node scripts/check-preview-ui.cjs"
   },
   "dependencies": {
+    "cfb": "^1.2.2",
     "chart.js": "^4.4.1",
     "docx": "^9.9.0",
     "exceljs": "^4.4.0",
     "fast-csv": "^5.0.8",
     "i": "^0.3.7",
     "jsdom": "^30.1.3",
+    "jszip": "^3.10.2",
     "pdf-lib": "^1.17.1",
     "pptxgenjs": "^4.0.1",
     "socket.io": "^4.8.4",
     "socket.io-client": "^4.8.4",
+    "sql.js": "^1.17.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {

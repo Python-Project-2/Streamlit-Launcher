@@ -12,6 +12,16 @@ if (fs.existsSync(srcChart) && !fs.existsSync(destChart)) {
 	}
 }
 
+// SQLite (sql.js) memuat WebAssembly dari berkas terpisah: ikutkan ke dist saat build.
+const srcWasm = path.join(__dirname, 'node_modules', 'sql.js', 'dist', 'sql-wasm.wasm');
+const destDir = path.join(__dirname, 'dist');
+const destWasm = path.join(destDir, 'sql-wasm.wasm');
+try {
+	fs.mkdirSync(destDir, { recursive: true });
+	fs.copyFileSync(srcWasm, destWasm);
+} catch (err) {
+	console.warn('Gagal menyalin sql-wasm.wasm ke dist:', err);
+}
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
 

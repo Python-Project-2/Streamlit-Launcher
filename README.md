@@ -24,6 +24,14 @@
 ## EDITING FILE CSV 
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/editing.png?raw=true">
 
+## EDITOR EXCEL, PANEL VBA & MODE POLOS (SQLITE)
+
+- **Pratinjau polosan**: seluruh ikon emoji di halaman pratinjau CSV/Excel dihapus (judul bagian, tombol, label, chip) tanpa mengubah isi data. Bisa dinyalakan/dimatikan lewat pengaturan `dateSkunder.preview.plain` (bawaan: aktif).
+- **Edit berkas Excel langsung**: tombol *Aktifkan Mode Edit* kini bekerja untuk `.xlsx`, `.xlsm`, dan `.xls` — bukan hanya `.csv`/`.tsv`/`.txt`. Hanya sel yang berubah yang ditulis ulang; sheet lain, rumus, dan proyek VBA `.xlsm` tetap utuh. Berkas asli dicadangkan lebih dulu ke `<globalStorage>/backups` (12 salinan terakhir).
+- **Panel Excel VBA**: membaca modul VBA dari berkas, menyunting, mengunggah `.bas/.cls/.frm`, membuat/menghapus modul. Sumber modul disimpan otomatis ke sheet tersembunyi `_SK_VBA` **di dalam berkas asli** (dan ke SQLite), jadi tidak hilang saat pratinjau dibuka kembali — kecuali modul itu dihapus. Kode di sheet tersebut bisa disalin ke editor VBA Excel (Alt+F11) untuk dijalankan sebagai makro — Date Skunder tidak mengompilasi VBA.
+- **Pindah pratinjau**: bilah baru berisi tab sheet + tombol *Sebelumnya / Berikutnya / Daftar pratinjau / Buka berkas* (`Ctrl+Alt+←` / `Ctrl+Alt+→` di halaman pratinjau). Urutan pratinjau disimpan di SQLite.
+- **SQLite**: riwayat pratinjau, draf auto-save editor, modul VBA, dan pengaturan kecil disimpan di satu berkas `skunder.sqlite` (`<globalStorage>/skunder.sqlite`) — mesin SQLite asli lewat sql.js/WASM, tanpa modul native.
+
 ## Collab Trading View
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/.tradingview/trading1.png?raw=true">
 <img src = "https://github.com/Python-Project-2/Streamlit-Launcher/blob/main/.tradingview/trading2.png?raw=true">

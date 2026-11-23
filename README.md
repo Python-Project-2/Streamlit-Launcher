@@ -27,9 +27,13 @@
 ## EXCEL EDITOR, VBA PANEL & PLAIN MODE (SQLITE)
 
 - **Plain Preview**: All emoji icons in the CSV/Excel preview interface (section headers, buttons, labels, chips) are removed, without altering the actual data content. This can be toggled via the `dateSkunder.preview.plain` setting (default: enabled).
+
 - **Direct Excel File Editing**: The *Enable Edit Mode* button now supports `.xlsx`, `.xlsm`, and `.xls` files—not just `.csv`, `.tsv`, or `.txt`. Only modified cells are rewritten; other sheets, formulas, and VBA projects (in `.xlsm` files) remain intact. The original file is automatically backed up to `<globalStorage>/backups` (retaining the last 12 copies).
+
 - **Excel VBA Panel**: Allows for reading VBA modules from a file, editing them, uploading `.bas`/`.cls`/`.frm` files, and creating or deleting modules. Module source code is automatically saved to a hidden sheet named `_SK_VBA` **within the original file** (as well as in the SQLite database), ensuring it persists when the preview is reopened—unless the module is explicitly deleted. Code from this sheet can be copied into the Excel VBA editor (Alt+F11) to be executed as a macro; Date Skunder does not compile VBA code itself.
+
 - **Preview Navigation**: A new bar features sheet tabs along with *Previous / Next / Preview List / Open File* buttons (accessible via `Ctrl+Alt+←` / `Ctrl+Alt+→` while in the preview view). The preview sequence is stored in the SQLite database.
+
 - **SQLite**: Preview history, editor auto-save drafts, VBA modules, and various minor settings are stored in a single file, `skunder.sqlite` (located at `<globalStorage>/skunder.sqlite`). This utilizes a native SQLite engine running via `sql.js`/WASM, without requiring any native modules.
 
 ## Vitures New

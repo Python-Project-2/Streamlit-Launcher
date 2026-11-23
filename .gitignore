@@ -27,3 +27,9 @@ __pycache__/
 
 # Riwayat chat Date Skunder (database lokal)
 database/database*.txt
+
+# LocalData: isi berkas pengguna di SQLite (bisa besar, jangan ikut repo)
+sql/*.sqlite
+sql/*.sqlite-*
+sql/*.sqlite.tmp
+sql/*.rusak-*

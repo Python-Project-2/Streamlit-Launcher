@@ -69,6 +69,7 @@
     "onCommand:date-skunder.community.api",
     "onCommand:date-skunder.easycast.toggle",
     "onCommand:date-skunder.trading.open",
+    "onCommand:date-skunder.localData.open",
     "onCommand:date-skunder.easycast.start",
     "onCommand:date-skunder.easycast.stop",
     "onCommand:date-skunder.easycast.newWindow",
@@ -183,6 +184,11 @@
       {
         "command": "date-skunder.preview.openFile",
         "title": "Date Skunder: Buka Berkas CSV/Excel untuk Pratinjau"
+      },
+      {
+        "command": "date-skunder.localData.open",
+        "title": "Date Skunder: LocalData (Berkas di SQLite)",
+        "icon": "icon/media.svg"
       },
       {
         "command": "date-skunder.exportDocx",
@@ -535,6 +541,11 @@
           "group": "navigation@0.5"
         },
         {
+          "command": "date-skunder.localData.open",
+          "when": "activeCustomEditorId == 'dateSkunder.viewer'",
+          "group": "navigation@0.6"
+        },
+        {
           "command": "date-skunder.easycast.toggle",
           "when": "activeCustomEditorId == 'dateSkunder.viewer'",
           "group": "navigation@0"
@@ -593,6 +604,10 @@
       "commandPalette": [
         {
           "command": "date-skunder.trading.open",
+          "when": "true"
+        },
+        {
+          "command": "date-skunder.localData.open",
           "when": "true"
         },
         {
@@ -1102,6 +1117,25 @@
           "type": "boolean",
           "default": true,
           "markdownDescription": "Halaman pratinjau CSV/Excel tampil polosan: seluruh ikon emoji di judul bagian, tombol, dan label dihapus (termasuk ikon bawaan Windows yang tampil sebagai emoji). Isi data, nama kolom, dan kode VBA tidak diubah. Matikan untuk menampilkan ikon lagi."
+        },
+        "dateSkunder.localData.folder": {
+          "type": "string",
+          "default": "sql",
+          "markdownDescription": "Folder (relatif terhadap folder kerja pertama) tempat `localdata.sqlite` disimpan. Bawaan `sql`, sehingga basis data LocalData terlihat di Explorer."
+        },
+        "dateSkunder.localData.maxFileMB": {
+          "type": "number",
+          "default": 32,
+          "minimum": 1,
+          "maximum": 1024,
+          "markdownDescription": "Batas ukuran satu berkas yang boleh diunggah ke LocalData (MB). SQLite sendiri sanggup ~1 GB per BLOB (sekitar 976.562 KB); batas ini menjaga dashboard tetap ringan karena seluruh isi dibaca ke memori."
+        },
+        "dateSkunder.localData.maxTotalMB": {
+          "type": "number",
+          "default": 256,
+          "minimum": 1,
+          "maximum": 8192,
+          "markdownDescription": "Batas total isi LocalData (MB). Saat penuh, unggahan baru ditolak sampai ada berkas yang dihapus."
         },
         "dateSkunder.easycast.slideSeconds": {
           "type": "number",
@@ -1958,9 +1992,10 @@
     "check:room-activate": "node scripts/check-room-activate.cjs",
     "check:compile": "node scripts/check-compile.cjs",
     "preview:website": "node scripts/preview-website.cjs",
-    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs && node scripts/check-builder.cjs && node scripts/check-trading.cjs && node scripts/check-tradingview.cjs && node scripts/check-mutlak.cjs && node scripts/check-books.cjs && node scripts/check-mt.cjs && node scripts/check-excel-vba.cjs && node scripts/check-preview-ui.cjs",
+    "check": "node scripts/check-community.cjs && node scripts/check-chat-api.cjs && node scripts/check-publish.cjs && node scripts/check-spider.cjs && node scripts/check-pet-lab.cjs && node scripts/check-compile.cjs && node scripts/check-easycast.cjs && node scripts/check-room.cjs && node scripts/check-room-service.cjs && node scripts/check-room-ui.cjs && node scripts/check-room-activate.cjs && node scripts/check-builder.cjs && node scripts/check-trading.cjs && node scripts/check-tradingview.cjs && node scripts/check-mutlak.cjs && node scripts/check-books.cjs && node scripts/check-mt.cjs && node scripts/check-excel-vba.cjs && node scripts/check-preview-ui.cjs && node scripts/check-localdata.cjs",
     "check:excel-vba": "node scripts/check-excel-vba.cjs",
-    "check:preview-ui": "node scripts/check-preview-ui.cjs"
+    "check:preview-ui": "node scripts/check-preview-ui.cjs",
+    "check:localdata": "node scripts/check-localdata.cjs"
   },
   "dependencies": {
     "cfb": "^1.2.2",
@@ -1972,6 +2007,7 @@
     "jsdom": "^30.1.3",
     "jszip": "^3.10.2",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^3.11.174",
     "pptxgenjs": "^4.0.1",
     "socket.io": "^4.8.4",
     "socket.io-client": "^4.8.4",

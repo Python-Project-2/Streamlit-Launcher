@@ -33,3 +33,9 @@ tmp/**
 
 # Jangan ikutkan riwayat chat pengguna ke VSIX
 database/database*.txt
+
+# Jangan ikutkan isi LocalData (berkas pengguna) ke VSIX
+sql/**
+**/*.sqlite
+**/*.sqlite-*
+**/*.sqlite.tmp

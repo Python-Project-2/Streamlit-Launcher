@@ -22,6 +22,19 @@ try {
 } catch (err) {
 	console.warn('Gagal menyalin sql-wasm.wasm ke dist:', err);
 }
+// Pratinjau PDF di LocalData memakai pdf.js (berkas statis di media/).
+const pdfAssets = [
+    ['pdf.min.js', path.join(__dirname, 'node_modules', 'pdfjs-dist', 'legacy', 'build', 'pdf.min.js')],
+    ['pdf.worker.min.js', path.join(__dirname, 'node_modules', 'pdfjs-dist', 'legacy', 'build', 'pdf.worker.min.js')],
+];
+for (const [name, source] of pdfAssets) {
+    try {
+	if (!fs.existsSync(source)) { continue; }
+		fs.copyFileSync(source, path.join(__dirname, 'media', name));
+    } catch (err) {
+		console.warn('Gagal menyalin ' + name + ' ke media:', err);
+    }
+}
 const production = process.argv.includes('--production');
 const watch = process.argv.includes('--watch');
 
